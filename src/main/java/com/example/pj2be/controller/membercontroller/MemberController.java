@@ -1,4 +1,4 @@
-package com.example.pj2be.controller.boardcontroller;
+package com.example.pj2be.controller.membercontroller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/board")
-public class BoardController {
+@RequestMapping("/api/member")
+public class MemberController {
 
 }
