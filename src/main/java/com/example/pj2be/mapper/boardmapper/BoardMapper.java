@@ -4,6 +4,7 @@ import com.example.pj2be.domain.BoardDTO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -18,11 +19,22 @@ public interface BoardMapper {
                 #{title}, #{content}, #{link}, #{category}, #{writer}
             )
             """)
-    void boardWrite(BoardDTO board);
+    int boardWrite(BoardDTO board);
 
+    // 게시글 보기
     @Select("""
             SELECT * FROM board
             WHERE id = #{boardId}
             """)
     List<BoardDTO> getBoardById(Integer boardId);
+
+    // 게시글 수정
+    @Update("""
+            UPDATE board
+            SET title = #{title},
+                content = #{content},
+                link = #{link},
+            WHERE id = #{id}
+            """)
+    void updateBoardById(BoardDTO board);
 }

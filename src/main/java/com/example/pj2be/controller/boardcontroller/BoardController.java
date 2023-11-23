@@ -17,18 +17,22 @@ public class BoardController {
 
     // 게시판 작성 기능
     @PostMapping("/write")
-    public void boardWrite(@RequestBody BoardDTO board){
+    public ResponseEntity boardWrite(@RequestBody BoardDTO board){
 
         // TODO: 세션 객체 받아서 작성자 파라미터에 넣어주기
-        boardService.boardWrite(board);
+        // TODO: 권한, Http Status 상태 추가 작성
+        if( boardService.boardWrite(board)) {
+            return ResponseEntity.ok().build();
+        }
 
-        System.out.println("board = " + board);
+        return ResponseEntity.internalServerError().build();
     }
 
     // 게시글 불러오기
     @GetMapping("/{id}")
     public ResponseEntity getBoardById(@PathVariable("id")Integer id){
 
+        // TODO: 권한, Http Status 상태 추가 작성
         List<BoardDTO> list = boardService.getBoardById(id);
 
         return ResponseEntity.ok(list);
@@ -36,10 +40,18 @@ public class BoardController {
     }
 
     // 게시글 수정
+    @PutMapping("/update/{id}")
+    public void updateBoardById(@RequestBody BoardDTO board,
+                                @PathVariable("id")Integer id){
+
+        boardService.updateBoardById(board, id);
+
+    }
 
     // 게시글 삭제
     @DeleteMapping("/delete/{id}")
     public void deleteBoardById(@PathVariable("id")Integer id){
+        // TODO: 권한, Http Status 상태 추가 작성
         boardService.deleteBoardById(id);
     }
 

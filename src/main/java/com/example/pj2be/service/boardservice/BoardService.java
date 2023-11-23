@@ -18,12 +18,13 @@ public class BoardService {
 
     // 게시판 작성 기능
     // TODO: 사용자 세션 받아서 board.setWriter 해주기
-    public void boardWrite(BoardDTO board) {
-
+    public boolean boardWrite(BoardDTO board) {
+        
+        // 테스트 데이터 넣기
         board.setWriter("testadmin");
         board.setCategory("C001");
 
-        boardMapper.boardWrite(board);
+        return boardMapper.boardWrite(board) == 1;
 
     }
 
@@ -34,13 +35,19 @@ public class BoardService {
     }
 
 
-    // 게시글 수정
 
+    // 게시글 수정
+    public void updateBoardById(BoardDTO board, Integer id) {
+
+        board.setId(id);
+        boardMapper.updateBoardById(board);
+
+    }
 
     // 게시글 삭제
+
     public void deleteBoardById(Integer id) {
         // 진짜 삭제할건지 감출건지 고민하기
     }
-    
 
 }
