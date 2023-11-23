@@ -8,4 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(rollbackFor = Exception.class) // 모든 Exception 발생하면 RollBack
 public class PagingService {
+
+
 }
