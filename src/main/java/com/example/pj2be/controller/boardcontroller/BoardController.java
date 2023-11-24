@@ -5,6 +5,9 @@ import com.example.pj2be.service.boardservice.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/board")
@@ -16,6 +19,12 @@ public class BoardController {
     @PostMapping("add")
     public void add(BoardDTO board) {
         boardService.save(board);
+    }
+
+    // 게시글 목록
+    @GetMapping("list")
+    public List<BoardDTO> list() {
+        return boardService.list();
     }
 
     // 게시글 보기

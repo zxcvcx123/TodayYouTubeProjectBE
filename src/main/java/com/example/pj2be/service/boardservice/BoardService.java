@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(rollbackFor = Exception.class) // 모든 Exception 발생하면 RollBack
@@ -19,10 +22,17 @@ public class BoardService {
 
     }
 
+    // 게시글 리스트
+    public List<BoardDTO>  list() {
+
+        return boardMapper.selectAll();
+    }
+
     // 게시글 보기
     public BoardDTO get(Integer id) {
         BoardDTO board = boardMapper.selectById(id);
 
         return board;
     }
+
 }

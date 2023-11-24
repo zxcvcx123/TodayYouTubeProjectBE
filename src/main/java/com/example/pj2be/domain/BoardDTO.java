@@ -10,8 +10,8 @@ public class BoardDTO {
     private String title;
     private String content;
     private String link;
-    private String categoryCode;
-    private String memberId;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private String board_category_code;
+    private String board_member_id;
+    private LocalDateTime created_at;
+    private LocalDateTime updated_at;
 }
