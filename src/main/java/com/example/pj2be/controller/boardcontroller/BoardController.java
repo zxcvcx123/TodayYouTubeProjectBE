@@ -3,9 +3,7 @@ package com.example.pj2be.controller.boardcontroller;
 import com.example.pj2be.domain.BoardDTO;
 import com.example.pj2be.service.boardservice.BoardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,6 +16,12 @@ public class BoardController {
     @PostMapping("add")
     public void add(BoardDTO board) {
         boardService.save(board);
+    }
+
+    // 게시글 보기
+    @GetMapping("id/{id}")
+    public BoardDTO view(@PathVariable Integer id) {
+        return boardService.get(id);
     }
 
 }

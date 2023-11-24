@@ -3,6 +3,7 @@ package com.example.pj2be.mapper.boardmapper;
 import com.example.pj2be.domain.BoardDTO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface BoardMapper {
@@ -18,4 +19,11 @@ public interface BoardMapper {
                 )
         """)
     void insert(BoardDTO board);
+
+    @Select("""
+        SELECT id, title, content, link, board_category_code, board_member_id, created_at, updated_at
+        FROM board
+        WHERE id = #{id}
+        """)
+    BoardDTO selectById(Integer id);
 }

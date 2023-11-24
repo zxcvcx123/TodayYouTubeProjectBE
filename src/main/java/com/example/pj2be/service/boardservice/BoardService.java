@@ -18,4 +18,11 @@ public class BoardService {
         boardMapper.insert(board);
 
     }
+
+    // 게시글 보기
+    public BoardDTO get(Integer id) {
+        BoardDTO board = boardMapper.selectById(id);
+
+        return board;
+    }
 }
