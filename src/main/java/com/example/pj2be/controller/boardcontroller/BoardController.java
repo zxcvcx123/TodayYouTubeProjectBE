@@ -34,7 +34,7 @@ public class BoardController {
     }
 
     // 게시글 수정
-    @PutMapping("board/edit")
+    @PutMapping("edit")
     public void edit(@RequestBody BoardDTO board) {
         boardService.update(board);
     }
