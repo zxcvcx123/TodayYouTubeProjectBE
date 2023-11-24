@@ -33,4 +33,10 @@ public class BoardController {
         return boardService.get(id);
     }
 
+    // 게시글 수정
+    @PutMapping("board/edit")
+    public void edit(@RequestBody BoardDTO board) {
+        boardService.update(board);
+    }
+
 }

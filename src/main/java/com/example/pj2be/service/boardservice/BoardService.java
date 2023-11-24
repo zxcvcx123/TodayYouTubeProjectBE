@@ -35,4 +35,8 @@ public class BoardService {
         return board;
     }
 
+    // 게시글 수정
+    public void update(BoardDTO board) {
+        boardMapper.update(board);
+    }
 }
