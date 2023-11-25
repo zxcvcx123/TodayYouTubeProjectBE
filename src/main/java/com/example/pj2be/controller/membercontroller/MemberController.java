@@ -38,7 +38,8 @@ public class MemberController {
     // 중복 체크 시작
     // 아이디
     @GetMapping(value = "/signup/check", params = "member_id")
-    public ResponseEntity<?> checkMemberId(@RequestParam  Optional<String> member_id){
+    public ResponseEntity<?> checkMemberId(@RequestParam Optional<String> member_id){
+        System.out.println("MemberController.checkMemberId");
         // null 여부
         if(member_id.isPresent()) {
             // 중복되는 경우
