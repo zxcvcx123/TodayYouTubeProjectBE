@@ -29,19 +29,19 @@ public interface MemberMapper {
     int signup(MemberDTO memberDTO);
 
     @Select("""
-            SELECT member_id FROM member
+            SELECT * FROM member
             WHERE role_id = 2 AND member_id = #{member_id}
             """)
-    boolean select_member_id(String memberId);
+    String select_member_id(String memberId);
     @Select("""
-            SELECT nickname FROM member
+            SELECT * FROM member
             WHERE role_id = 2 AND nickname = #{nickname}
             """)
-    boolean select_nickname(String nickname);
+    String select_nickname(String nickname);
 
     @Select("""
-            SELECT email FROM member
+            SELECT * FROM member
             WHERE role_id = 2 AND email = #{email}
             """)
-    boolean select_Email(String email);
+    String select_Email(String email);
 }
