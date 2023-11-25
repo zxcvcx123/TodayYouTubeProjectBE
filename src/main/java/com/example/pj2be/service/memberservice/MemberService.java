@@ -21,15 +21,15 @@ public class MemberService {
 
     // 중복 체크 로직 시작
     public boolean getMemberId(String member_id) {
-        return mapper.select_member_id(member_id);
+        return mapper.select_member_id(member_id) != null;
     }
 
     public boolean getNickname(String nickname) {
-        return mapper.select_nickname(nickname);
+        return mapper.select_nickname(nickname) != null;
     }
 
     public boolean getEmail(String email) {
-        return mapper.select_Email(email);
+        return mapper.select_Email(email)!= null;
     }
     // 중복 체크 로직 끝
 }
