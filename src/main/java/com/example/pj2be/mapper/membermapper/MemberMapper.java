@@ -1,6 +1,6 @@
 package com.example.pj2be.mapper.membermapper;
 
-import com.example.pj2be.domain.MemberDTO;
+import com.example.pj2be.domain.member.MemberDTO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

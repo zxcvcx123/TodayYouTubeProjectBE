@@ -1,18 +1,15 @@
 package com.example.pj2be.controller.membercontroller;
 
-import com.example.pj2be.domain.MemberDTO;
+import com.example.pj2be.domain.member.MemberDTO;
 import com.example.pj2be.service.memberservice.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +21,6 @@ public class MemberController {
     @PostMapping("/signup")
     public ResponseEntity signup(@Valid @RequestBody MemberDTO memberDTO,
                                  BindingResult bindingResult) {
-        System.out.println("MemberController.signup");
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }

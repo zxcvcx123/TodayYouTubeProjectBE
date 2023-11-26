@@ -1,4 +1,4 @@
-package com.example.pj2be.domain;
+package com.example.pj2be.domain.member;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

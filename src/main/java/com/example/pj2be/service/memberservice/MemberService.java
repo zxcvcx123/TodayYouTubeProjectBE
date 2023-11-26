@@ -1,9 +1,8 @@
 package com.example.pj2be.service.memberservice;
 
-import com.example.pj2be.domain.MemberDTO;
+import com.example.pj2be.domain.member.MemberDTO;
 import com.example.pj2be.mapper.membermapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
