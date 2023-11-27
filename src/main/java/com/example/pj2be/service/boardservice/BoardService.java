@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
+
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +15,7 @@ import java.util.Map;
 public class BoardService {
 
     private final BoardMapper boardMapper;
+
 
     // 게시글 작성
     public void save(BoardDTO board) {
@@ -39,4 +40,6 @@ public class BoardService {
     public void update(BoardDTO board) {
         boardMapper.update(board);
     }
-}
+
+
+   

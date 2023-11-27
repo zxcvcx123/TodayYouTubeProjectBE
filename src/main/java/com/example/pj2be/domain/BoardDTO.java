@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class BoardDTO {
+
     private int id;
     private String title;
     private String content;
@@ -14,4 +15,5 @@ public class BoardDTO {
     private String board_member_id;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
+
 }
