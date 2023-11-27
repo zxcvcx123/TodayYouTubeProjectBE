@@ -14,6 +14,7 @@ import java.util.Map;
 public interface BoardMapper {
 
     // 게시글 저장
+    // TODO : 코드, 멤버ID 등 작성시 로그인 정보와 연동 되도록 하기.
     @Insert("""
         INSERT INTO board (title, link, content, board_category_code, board_member_id)
         VALUES (#{title}, 
@@ -25,19 +26,22 @@ public interface BoardMapper {
         """)
     void insert(BoardDTO board);
 
+    // 게시글 보기
     @Select("""
-        SELECT id, title, content, link, board_category_code, board_member_id, created_at, updated_at
+        SELECT *
         FROM board
         WHERE id = #{id}
         """)
     BoardDTO selectById(Integer id);
 
+    // 게시글 리스트
     @Select("""
         SELECT *
         FROM board
         """)
     List<BoardDTO> selectAll();
 
+    // 게시글 수정
     @Update("""
             UPDATE board
             SET title = #{title},
@@ -48,7 +52,7 @@ public interface BoardMapper {
             """)
     void update(BoardDTO board);
 
-
+    // 게시글 삭제 (Update 방식)
     @Update("""
         UPDATE board
         SET is_show = false
