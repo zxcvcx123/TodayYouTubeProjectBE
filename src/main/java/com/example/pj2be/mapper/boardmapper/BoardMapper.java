@@ -8,33 +8,46 @@ import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
+import java.util.Map;
+
 @Mapper
 public interface BoardMapper {
-    
+
     // 게시글 저장
     @Insert("""
-            INSERT INTO youtube.board (
-                title, content, link, board_category_code, board_member_id
-            ) VALUES (
-                #{title}, #{content}, #{link}, #{category}, #{writer}
-            )
-            """)
-    int boardWrite(BoardDTO board);
+        INSERT INTO board (title, link, content, board_category_code, board_member_id)
+        VALUES (#{title}, 
+                #{link}, 
+                #{content}, 
+                (SELECT code FROM category WHERE id = 1 ),
+                (SELECT member_id FROM member WHERE  id = 1)
+                )
+        """)
+    void insert(BoardDTO board);
 
-    // 게시글 보기
     @Select("""
-            SELECT * FROM board
-            WHERE id = #{boardId}
-            """)
-    List<BoardDTO> getBoardById(Integer boardId);
+        SELECT id, title, content, link, board_category_code, board_member_id, created_at, updated_at
+        FROM board
+        WHERE id = #{id}
+        """)
+    BoardDTO selectById(Integer id);
 
-    // 게시글 수정
+    @Select("""
+        SELECT *
+        FROM board
+        """)
+    List<BoardDTO> selectAll();
+
     @Update("""
             UPDATE board
             SET title = #{title},
-                content = #{content},
                 link = #{link},
+                content = #{content},
+                updated_at = #{updated_at}
             WHERE id = #{id}
             """)
-    void updateBoardById(BoardDTO board);
+    void update(BoardDTO board);
+
+
+
 }
