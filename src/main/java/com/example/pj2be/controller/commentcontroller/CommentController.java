@@ -5,6 +5,8 @@ import com.example.pj2be.service.commentservice.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/comment")
@@ -15,5 +17,10 @@ public class CommentController {
     @PostMapping("/add")
     public void commentAdd(@RequestBody CommentDTO comment) {
         service.add(comment);
+    }
+
+    @GetMapping("list")
+    private List<CommentDTO> commentList(@RequestParam("id") Integer board_id) {
+        return service.list(board_id);
     }
 }

@@ -6,6 +6,8 @@ import com.example.pj2be.mapper.commentmapper.CommentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -15,5 +17,10 @@ public class CommentService {
     public void add(CommentDTO comment) {
         comment.setMember_id("testadmin");
         mapper.insert(comment);
+    }
+
+
+    public List<CommentDTO> list(Integer board_id) {
+        return mapper.selectByBoard_id(board_id);
     }
 }
