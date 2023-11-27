@@ -15,5 +15,6 @@ public class BoardDTO {
     private String board_member_id;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
+    private Boolean is_show;
 
 }
