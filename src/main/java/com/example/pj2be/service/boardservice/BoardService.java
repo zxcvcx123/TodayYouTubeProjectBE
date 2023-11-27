@@ -42,8 +42,8 @@ public class BoardService {
     }
 
     // 게시글 삭제 (Update 형식)
-    public void remove(BoardDTO board) {
-        boardMapper.remove(board);
+    public void remove(Integer id) {
+        boardMapper.remove(id);
     }
 }
    

@@ -41,9 +41,9 @@ public class BoardController {
     }
 
     // 게시글 삭제 (Update 형식)
-    @PutMapping("remove")
-    public void remove(@RequestBody BoardDTO board) {
-        boardService.remove(board);
+    @PutMapping("remove/{id}")
+    public void remove(@PathVariable Integer id) {
+        boardService.remove(id);
     }
 
 }

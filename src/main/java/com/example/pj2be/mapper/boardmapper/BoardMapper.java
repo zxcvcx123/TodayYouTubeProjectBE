@@ -8,8 +8,6 @@ import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
-import java.util.Map;
-
 @Mapper
 public interface BoardMapper {
 
@@ -58,5 +56,5 @@ public interface BoardMapper {
         SET is_show = false
         WHERE id = #{id}
         """)
-    void remove(BoardDTO board);
+    void remove(Integer id);
 }
