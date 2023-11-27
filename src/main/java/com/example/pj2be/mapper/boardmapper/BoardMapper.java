@@ -58,5 +58,11 @@ public interface BoardMapper {
     void update(BoardDTO board);
 
 
+//    전체페이지 조회
 
+    @Select("""
+        SELECT COUNT(*)
+        FROM board;
+        """)
+    int selectAllpage();
 }
