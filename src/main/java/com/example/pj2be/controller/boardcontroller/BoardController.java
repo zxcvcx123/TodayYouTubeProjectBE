@@ -13,6 +13,7 @@ import java.util.List;
 @RequestMapping("/api/board")
 public class BoardController {
 
+
     private final BoardService boardService;
 
     // 게시판 작성 기능
@@ -54,5 +55,6 @@ public class BoardController {
         // TODO: 권한, Http Status 상태 추가 작성
         boardService.deleteBoardById(id);
     }
+
 
 }
