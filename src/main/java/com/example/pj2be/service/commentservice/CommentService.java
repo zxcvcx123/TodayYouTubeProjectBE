@@ -27,4 +27,8 @@ public class CommentService {
     public void remove(Integer id) {
         mapper.deleteById(id);
     }
+
+    public boolean update(CommentDTO comment) {
+        return mapper.update(comment) == 1;
+    }
 }

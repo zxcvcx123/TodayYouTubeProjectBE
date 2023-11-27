@@ -1,10 +1,7 @@
 package com.example.pj2be.mapper.commentmapper;
 
 import com.example.pj2be.domain.comment.CommentDTO;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -29,4 +26,12 @@ public interface CommentMapper {
             WHERE id = #{id}
             """)
     int deleteById(Integer id);
+
+
+    @Update("""
+            UPDATE comment
+            SET comment = #{comment}
+            WHERE id = #{id}
+            """)
+    int update(CommentDTO comment);
 }
