@@ -16,7 +16,14 @@ public interface CommentMapper {
 
 
     @Select("""
-            SELECT * FROM comment
+            SELECT c.id,
+                   c.board_id,
+                   c.member_id,
+                   c.comment,
+                   c.created_at,
+                   m.nickname nickname
+            FROM comment c
+                     JOIN member m ON c.member_id = m.member_id
             WHERE board_id = #{board_id}
             """)
     List<CommentDTO> selectByBoard_id(Integer boardId);

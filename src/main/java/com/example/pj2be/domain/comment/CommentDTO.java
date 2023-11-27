@@ -12,4 +12,5 @@ public class CommentDTO {
     private String comment;
     private LocalDateTime created_at;
     private LocalDateTime update_at;
+    private String nickname;
 }
