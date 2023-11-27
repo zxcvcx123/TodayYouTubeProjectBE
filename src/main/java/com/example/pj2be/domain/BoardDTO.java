@@ -16,5 +16,6 @@ public class BoardDTO {
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
     private Boolean is_show;
+    private LocalDateTime deleted_at;
 
 }

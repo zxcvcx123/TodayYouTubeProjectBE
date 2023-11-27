@@ -49,5 +49,10 @@ public interface BoardMapper {
     void update(BoardDTO board);
 
 
-
+    @Update("""
+        UPDATE board
+        SET is_show = false
+        WHERE id = #{id}
+        """)
+    void remove(BoardDTO board);
 }

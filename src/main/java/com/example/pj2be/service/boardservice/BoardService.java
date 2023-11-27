@@ -41,5 +41,9 @@ public class BoardService {
         boardMapper.update(board);
     }
 
+    // 게시글 삭제 (Update 형식)
+    public void remove(BoardDTO board) {
+        boardMapper.remove(board);
+    }
 }
    

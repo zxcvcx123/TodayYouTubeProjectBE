@@ -40,6 +40,10 @@ public class BoardController {
         boardService.update(board);
     }
 
-
+    // 게시글 삭제 (Update 형식)
+    @PutMapping("remove")
+    public void remove(@RequestBody BoardDTO board) {
+        boardService.remove(board);
+    }
 
 }
