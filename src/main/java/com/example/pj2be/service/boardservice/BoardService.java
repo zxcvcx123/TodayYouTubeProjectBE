@@ -39,7 +39,7 @@ public class BoardService {
     // 게시글 수정
     public void update(BoardDTO board) {
         boardMapper.update(board);
-    }
+    }}
 
 
    
