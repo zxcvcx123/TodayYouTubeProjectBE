@@ -33,8 +33,17 @@ public interface BoardMapper {
     BoardDTO selectById(Integer id);
 
     @Select("""
-        SELECT *
-        FROM board
+        SELECT b.id,
+                b.title,
+                b.content,
+                b.link,
+                b.board_category_code,
+                b.board_member_id,
+                b.created_at,
+                b.updated_at,
+                COUNT(DISTINCT bl.id) countlike
+        FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
+        GROUP BY b.id
         """)
     List<BoardDTO> selectAll();
 

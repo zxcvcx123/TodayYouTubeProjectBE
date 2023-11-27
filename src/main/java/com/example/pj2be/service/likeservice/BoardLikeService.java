@@ -20,7 +20,7 @@ public class BoardLikeService {
         dto.setBoard_id(id);
 
         // test계정 셋팅
-        dto.setMember_id("testadmin");
+        dto.setMember_id("test");
         boolean likey = false;
 
         // 계정의 좋아요 여부
@@ -35,5 +35,18 @@ public class BoardLikeService {
 
 
         return Map.of( "like", likey, "countlike", countlike);
+    }
+
+    public Map<String, Object> like(Integer id) {
+        BoardLikeDTO dto = new BoardLikeDTO();
+        dto.setMember_id("test");
+
+        int count = 0;
+        if (mapper.deleteByTestId(dto.getMember_id(), id) == 0){
+            mapper.insertByTestId(dto.getMember_id(), id);
+            count = 1;
+        }
+
+        return Map.of("like", count);
     }
 }
