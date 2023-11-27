@@ -23,4 +23,8 @@ public class CommentService {
     public List<CommentDTO> list(Integer board_id) {
         return mapper.selectByBoard_id(board_id);
     }
+
+    public void remove(Integer id) {
+        mapper.deleteById(id);
+    }
 }

@@ -15,12 +15,17 @@ public class CommentController {
     private final CommentService service;
 
     @PostMapping("/add")
-    public void commentAdd(@RequestBody CommentDTO comment) {
+    public void add(@RequestBody CommentDTO comment) {
         service.add(comment);
     }
 
     @GetMapping("list")
-    private List<CommentDTO> commentList(@RequestParam("id") Integer board_id) {
+    public List<CommentDTO> commentList(@RequestParam("id") Integer board_id) {
         return service.list(board_id);
+    }
+
+    @DeleteMapping("{id}")
+    public void remove(@PathVariable Integer id) {
+        service.remove(id);
     }
 }
