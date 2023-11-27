@@ -26,9 +26,9 @@ public interface BoardMapper {
     void insert(BoardDTO board);
 
     @Select("""
-        SELECT id, title, content, link, board_category_code, board_member_id, created_at, updated_at
-        FROM board
-        WHERE id = #{id}
+        SELECT b.id, title, content, link, board_category_code, board_member_id, created_at, updated_at, COUNT(DISTINCT bl.id) countlike
+        FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
+        WHERE b.id = #{id}
         """)
     BoardDTO selectById(Integer id);
 

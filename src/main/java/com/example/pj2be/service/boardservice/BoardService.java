@@ -24,7 +24,7 @@ public class BoardService {
     }
 
     // 게시글 리스트
-    public List<BoardDTO>  list() {
+    public List<BoardDTO> list() {
 
         return boardMapper.selectAll();
     }
@@ -40,6 +40,6 @@ public class BoardService {
     public void update(BoardDTO board) {
         boardMapper.update(board);
     }
-
+}
 
    
