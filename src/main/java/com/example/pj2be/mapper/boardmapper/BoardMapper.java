@@ -36,6 +36,7 @@ public interface BoardMapper {
     @Select("""
         SELECT *
         FROM board
+        ORDER BY id DESC;
         """)
     List<BoardDTO> selectAll();
 
