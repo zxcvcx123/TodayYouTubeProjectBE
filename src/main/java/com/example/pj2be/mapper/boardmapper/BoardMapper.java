@@ -46,13 +46,13 @@ public interface BoardMapper {
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
         <where>
             <if test="category == 'all' or category == 'title'">
-                OR b.title LIKE #{keyword}
+                OR b.title like #{keyword}
             </if>
             <if test="category == 'all' or category == 'content'">
-                OR b.content LIKE #{keyword}
+                 OR b.content like #{keyword}
             </if>
             <if test="category == 'all' or category == 'board_member_id'">
-            OR b.board_member_id LIKE #{keyword}
+                 OR b.board_member_id like #{keyword}
             </if>
         </where>
         GROUP BY b.id
@@ -90,13 +90,13 @@ public interface BoardMapper {
         FROM board
         <where>
             <if test="category == 'all' or category == 'title'">
-                OR title LIKE #{keyword}
+                OR title like #{keyword}
             </if>
             <if test="category == 'all' or category == 'content'">
-                OR content LIKE #{keyword}
+                OR content like #{keyword}
             </if>
             <if test="category == 'all' or category == 'board_member_id'">
-                OR board_member_id LIKE #{keyword}
+                OR board_member_id like #{keyword}
             </if>
         </where>
         </script>

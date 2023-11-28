@@ -34,7 +34,7 @@ public class BoardController {
             @RequestParam(value = "c", defaultValue = "all") String category,
             @RequestParam(value = "k", defaultValue = "") String keyword) {
 
-        return boardService.list(page,category,keyword);
+        return boardService.list(page,keyword,category);
     }
 
     // 게시글 보기
