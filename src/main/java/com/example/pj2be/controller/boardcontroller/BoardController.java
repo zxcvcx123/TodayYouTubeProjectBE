@@ -21,7 +21,7 @@ public class BoardController {
      // 게시글 작성
     @PostMapping("add")
     public void add(BoardDTO board,
-                    @RequestParam(value = "files[]", required = false) MultipartFile[] files) throws Exception {
+                    @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files) throws Exception {
 
         boardService.save(board, files);
     }

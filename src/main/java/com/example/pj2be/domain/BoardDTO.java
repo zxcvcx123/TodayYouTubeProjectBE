@@ -20,4 +20,6 @@ public class BoardDTO {
     private Integer countlike;
 
 
+
+
 }
