@@ -64,7 +64,7 @@ public interface BoardMapper {
             SET title = #{title},
                 link = #{link},
                 content = #{content},
-                updated_at = #{updated_at}
+                updated_at = CURRENT_TIMESTAMP
             WHERE id = #{id}
             """)
     void update(BoardDTO board);
