@@ -19,10 +19,10 @@ public class BoardController {
 
     private final BoardService boardService;
 
-     // 게시글 작성
+    // 게시글 작성
     @PostMapping("add")
     public void add(BoardDTO board,
-                    @RequestParam(value = "files[]", required = false) MultipartFile[] files) throws Exception {
+                    @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files) throws Exception {
 
         boardService.save(board, files);
     }
@@ -55,4 +55,12 @@ public class BoardController {
         boardService.remove(id);
     }
 
+    // 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트
+    @PostMapping("test")
+    public void test(@RequestParam(value = "file") MultipartFile file) {
+        System.out.println("file = " + file.getOriginalFilename());
+        System.out.println("file.getSize() = " + file.getSize());
+        System.out.println("file.getContentType() = " + file.getContentType());
+
+    }
 }

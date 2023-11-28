@@ -1,16 +1,24 @@
 package com.example.pj2be.service.boardservice;
 
 import com.example.pj2be.domain.BoardDTO;
+import com.example.pj2be.domain.file.CkFileDTO;
+import com.example.pj2be.domain.file.FileDTO;
 import com.example.pj2be.mapper.boardmapper.BoardMapper;
 import com.example.pj2be.service.fileservice.FileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 @Service
@@ -20,7 +28,6 @@ public class BoardService {
 
     private final BoardMapper boardMapper;
     private final FileService fileService;
-
 
     // 게시글 작성
     public void save(BoardDTO board, MultipartFile[] files) throws Exception {
@@ -76,5 +83,7 @@ public class BoardService {
     public void increaseViewCount(Integer id) {
         boardMapper.increaseViewCount(id);
     }
+
+
 }
    
