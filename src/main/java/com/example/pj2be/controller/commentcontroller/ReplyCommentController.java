@@ -14,14 +14,33 @@ public class ReplyCommentController {
 
     private final ReplyCommentService service;
 
-
     @PostMapping("/add")
-    public void reply_commentAdd(@RequestBody ReplyCommentDTO replycomment) {
-        service.add(replycomment);
+    public void reply_commentAdd(@RequestBody ReplyCommentDTO reply_comment) {
+        service.reply_commentAdd(reply_comment);
     }
 
     @GetMapping("list")
     public List<ReplyCommentDTO> reply_commnetList(@RequestParam("reply_id") Integer comment_id) {
-        return service.list(comment_id);
+        return service.reply_commentList(comment_id);
+    }
+
+    @DeleteMapping("{reply_id}")
+    public void reply_commentRemove(@PathVariable Integer reply_id) {
+        service.reply_commentRemove(reply_id);
+    }
+
+    @PutMapping("edit")
+    public void reply_commentUpdate(@RequestBody ReplyCommentDTO reply_comment) {
+        service.reply_commentUpdate(reply_comment);
     }
 }
+
+
+
+
+
+
+
+
+
+

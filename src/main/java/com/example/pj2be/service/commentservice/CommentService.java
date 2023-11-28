@@ -14,21 +14,24 @@ public class CommentService {
 
     private final CommentMapper mapper;
 
-    public void add(CommentDTO comment) {
+    public void commentAdd(CommentDTO comment) {
+        System.out.println("@@@@@@" + comment.getId() + " 댓글 작성 @@@@@@");
         comment.setMember_id("testadmin");
-        mapper.insert(comment);
+        mapper.commentInsert(comment);
     }
 
 
-    public List<CommentDTO> list(Integer board_id) {
-        return mapper.selectByBoard_id(board_id);
+    public List<CommentDTO> commentList(Integer board_id) {
+        return mapper.commentSelectByBoard_id(board_id);
     }
 
-    public void remove(Integer id) {
-        mapper.deleteById(id);
+    public void commentRemove(Integer comment_id) {
+        System.out.println("@@@@@@" + comment_id + "댓글 삭제 @@@@@@");
+        mapper.commentDeleteById(comment_id);
     }
 
-    public boolean update(CommentDTO comment) {
-        return mapper.update(comment) == 1;
+    public boolean commentUpdate(CommentDTO comment) {
+        System.out.println("@@@@@@" + comment.getId() + " 댓글 업뎃 @@@@@@");
+        return mapper.commentUpdate(comment) == 1;
     }
 }
