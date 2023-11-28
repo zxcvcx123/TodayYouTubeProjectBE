@@ -30,6 +30,7 @@ public class BoardService {
     private final FileService fileService;
 
     // 게시글 작성
+    // TODO : 타이틀, 본문 isBlank면 작성 되어서는 안됨
     public void save(BoardDTO board, MultipartFile[] files) throws Exception {
         boardMapper.insert(board);
 
