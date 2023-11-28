@@ -17,5 +17,7 @@ public class BoardDTO {
     private LocalDateTime updated_at;
     private Boolean is_show;
     private LocalDateTime deleted_at;
+    private Integer countlike;
+
 
 }

@@ -26,17 +26,27 @@ public interface BoardMapper {
 
     // 게시글 보기
     @Select("""
-        SELECT *
-        FROM board
-        WHERE id = #{id}
+        SELECT b.id, title, content, link, board_category_code, board_member_id, created_at, updated_at, COUNT(DISTINCT bl.id) countlike, is_show
+        FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
+        WHERE b.id = #{id}
         """)
     BoardDTO selectById(Integer id);
 
     // 게시글 리스트
     @Select("""
-        SELECT *
-        FROM board
-        ORDER BY id DESC;
+        SELECT b.id,
+                b.title,
+                b.content,
+                b.link,
+                b.board_category_code,
+                b.board_member_id,
+                b.created_at,
+                b.updated_at,
+                COUNT(DISTINCT bl.id) countlike,
+                is_show
+        FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
+        GROUP BY b.id 
+        ORDER BY id DESC
         """)
     List<BoardDTO> selectAll();
 
@@ -51,6 +61,7 @@ public interface BoardMapper {
             """)
     void update(BoardDTO board);
 
+
     // 게시글 삭제 (Update 방식)
     @Update("""
         UPDATE board
@@ -58,4 +69,13 @@ public interface BoardMapper {
         WHERE id = #{id}
         """)
     void remove(Integer id);
+
+
+    // 전체페이지 조회
+    @Select("""
+        SELECT COUNT(*)
+        FROM board;
+        """)
+    int selectAllpage();
+
 }
