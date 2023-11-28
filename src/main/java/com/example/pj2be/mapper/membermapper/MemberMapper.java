@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.Optional;
+
 @Mapper
 public interface MemberMapper {
     @Insert("""
@@ -44,4 +46,10 @@ public interface MemberMapper {
             WHERE role_id = 2 AND email = #{email}
             """)
     String select_Email(String email);
+
+    @Select("""
+            SELECT * FROM member
+            WHERE member_id = #{member_id};
+            """)
+    Optional<MemberDTO> findByMemberId(String member_id);
 }

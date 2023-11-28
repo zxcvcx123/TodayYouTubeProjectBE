@@ -8,12 +8,11 @@ import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
-import java.util.Map;
-
 @Mapper
 public interface BoardMapper {
 
     // 게시글 저장
+    // TODO : 코드, 멤버ID 등 작성시 로그인 정보와 연동 되도록 하기.
     @Insert("""
         INSERT INTO board (title, link, content, board_category_code, board_member_id)
         VALUES (#{title}, 
@@ -25,19 +24,33 @@ public interface BoardMapper {
         """)
     void insert(BoardDTO board);
 
+    // 게시글 보기
     @Select("""
-        SELECT id, title, content, link, board_category_code, board_member_id, created_at, updated_at
-        FROM board
-        WHERE id = #{id}
+        SELECT b.id, title, content, link, board_category_code, board_member_id, created_at, updated_at, COUNT(DISTINCT bl.id) countlike, is_show
+        FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
+        WHERE b.id = #{id}
         """)
     BoardDTO selectById(Integer id);
 
+    // 게시글 리스트
     @Select("""
-        SELECT *
-        FROM board
+        SELECT b.id,
+                b.title,
+                b.content,
+                b.link,
+                b.board_category_code,
+                b.board_member_id,
+                b.created_at,
+                b.updated_at,
+                COUNT(DISTINCT bl.id) countlike,
+                is_show
+        FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
+        GROUP BY b.id 
+        ORDER BY id DESC
         """)
     List<BoardDTO> selectAll();
 
+    // 게시글 수정
     @Update("""
             UPDATE board
             SET title = #{title},
@@ -49,5 +62,20 @@ public interface BoardMapper {
     void update(BoardDTO board);
 
 
+    // 게시글 삭제 (Update 방식)
+    @Update("""
+        UPDATE board
+        SET is_show = false
+        WHERE id = #{id}
+        """)
+    void remove(Integer id);
+
+
+    // 전체페이지 조회
+    @Select("""
+        SELECT COUNT(*)
+        FROM board;
+        """)
+    int selectAllpage();
 
 }
