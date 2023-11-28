@@ -24,9 +24,10 @@ public class MemberController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().build();
         }
-        if (service.signup(memberDTO)) {
+        try {
+            service.signup(memberDTO);
          return ResponseEntity.ok().build();
-        } else {
+        } catch (Exception e){
             return ResponseEntity.internalServerError().build();
         }
     }
@@ -84,4 +85,5 @@ public class MemberController {
     }
 
     // 중복 체크 끝
+
 }

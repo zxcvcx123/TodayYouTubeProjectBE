@@ -28,7 +28,7 @@ public class BoardController {
 
     // 게시글 목록
     @GetMapping("list")
-    public List<BoardDTO> list() {
+    public Map<String, Object> list() {
         return boardService.list();
     }
 
@@ -44,6 +44,10 @@ public class BoardController {
         boardService.update(board);
     }
 
-
+    // 게시글 삭제 (Update 형식)
+    @PutMapping("remove/{id}")
+    public void remove(@PathVariable Integer id) {
+        boardService.remove(id);
+    }
 
 }
