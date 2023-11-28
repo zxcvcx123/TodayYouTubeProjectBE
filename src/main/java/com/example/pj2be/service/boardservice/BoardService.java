@@ -55,8 +55,10 @@ public class BoardService {
     // 게시글 수정
     public void update(BoardDTO board) {
         boardMapper.update(board);
+
     }
-}
+
+
 
     // 게시글 삭제 (Update 형식)
     public void remove(Integer id) {
