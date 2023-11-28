@@ -25,6 +25,7 @@ public class BoardService {
 
     }
 
+
     // 게시글 리스트, 페이징
     public Map<String, Object> list() {
         Map<String, Object> map = new HashMap<>();
@@ -57,5 +58,6 @@ public class BoardService {
         boardMapper.update(board);
     }
 }
+
 
    
