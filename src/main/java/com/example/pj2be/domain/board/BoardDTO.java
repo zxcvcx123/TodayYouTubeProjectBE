@@ -1,4 +1,4 @@
-package com.example.pj2be.domain;
+package com.example.pj2be.domain.board;
 
 import lombok.Data;
 
