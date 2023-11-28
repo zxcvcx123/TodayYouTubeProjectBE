@@ -27,9 +27,14 @@ public class BoardController {
     }
 
     // 게시글 목록
+    // 페이징 수정했음, 검색카테고리 수정
     @GetMapping("list")
-    public Map<String, Object> list() {
-        return boardService.list();
+    public Map<String, Object> list(
+            @RequestParam(value = "p", defaultValue = "1") Integer page,
+            @RequestParam(value = "c", defaultValue = "all") String category,
+            @RequestParam(value = "k", defaultValue = "") String keyword) {
+
+        return boardService.list(page,category,keyword);
     }
 
     // 게시글 보기

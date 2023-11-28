@@ -15,7 +15,7 @@ public class BoardLikeService {
 
     private final BoardLikeMapper mapper;
 
-    public Map<String, Object> getLike(Integer id) {
+    public Map<String, Object> getBoardLike(Integer id) {
         BoardLikeDTO dto = new BoardLikeDTO();
         dto.setBoard_id(id);
 
@@ -37,7 +37,7 @@ public class BoardLikeService {
         return Map.of( "like", likey, "countlike", countlike);
     }
 
-    public Map<String, Object> like(Integer id) {
+    public Map<String, Object> boardLike(Integer id) {
         BoardLikeDTO dto = new BoardLikeDTO();
         dto.setMember_id("test");
 
