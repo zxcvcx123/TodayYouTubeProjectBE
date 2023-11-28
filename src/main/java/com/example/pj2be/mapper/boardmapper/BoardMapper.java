@@ -33,7 +33,8 @@ public interface BoardMapper {
                created_at, 
                updated_at, 
                COUNT(DISTINCT bl.id) countlike, 
-               is_show
+               is_show,
+               views
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
         WHERE b.id = #{id}
         """)
