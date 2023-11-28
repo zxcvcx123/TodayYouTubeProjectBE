@@ -15,6 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("/api/member")
 public class MemberController {
+
     private final MemberService service;
 
     // 회원 가입

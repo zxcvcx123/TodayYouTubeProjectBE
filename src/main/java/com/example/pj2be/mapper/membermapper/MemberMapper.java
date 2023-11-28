@@ -11,13 +11,13 @@ import java.util.Optional;
 public interface MemberMapper {
     @Insert("""
             INSERT INTO member(
-            member_id, 
-            password, 
-            nickname, 
-            email, 
-            phone_number, 
-           gender, 
-           birth_date) 
+            member_id,
+            password,
+            nickname,
+            email,
+            phone_number,
+           gender,
+           birth_date)
            VALUES (
            #{member_id},
            #{password},
