@@ -31,7 +31,6 @@ public class BoardService {
                 fileService.s3Upload(file, board.getId());
             }
         }
-
     }
 
     // 게시글 리스트, 페이징
@@ -39,15 +38,12 @@ public class BoardService {
         Map<String, Object> map = new HashMap<>();
         Map<String, Object> pageInfo = new HashMap<>();
 
-
         // 페이징 필요한 것들
         // 전체페이지, 보여줄페이지 수, 왼쪽끝페이지, 오른쪽끝페이지
         int countAll;
         countAll = boardMapper.selectAllpage();
         int slice = 5;
         int lastPageNumber = countAll / 5;
-
-
 
         map.put("boardList", boardMapper.selectAll());
         map.put("pageInfo", pageInfo);
@@ -65,17 +61,18 @@ public class BoardService {
     // 게시글 수정
     public void update(BoardDTO board) {
 
-
         boardMapper.update(board);
 
     }
 
-
-
-
     // 게시글 삭제 (Update 형식)
     public void remove(Integer id) {
         boardMapper.remove(id);
+    }
+
+    // 게시글 조회수 증가
+    public void increaseViewCount(Integer id) {
+        boardMapper.increaseViewCount(id);
     }
 }
    

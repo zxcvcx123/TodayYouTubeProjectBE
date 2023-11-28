@@ -35,6 +35,9 @@ public class BoardController {
     // 게시글 보기
     @GetMapping("id/{id}")
     public BoardDTO view(@PathVariable Integer id) {
+        // 게시글 조회수 증가
+        boardService.increaseViewCount(id);
+
         return boardService.get(id);
     }
 

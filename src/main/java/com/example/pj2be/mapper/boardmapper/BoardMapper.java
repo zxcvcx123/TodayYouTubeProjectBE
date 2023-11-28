@@ -24,7 +24,16 @@ public interface BoardMapper {
 
     // 게시글 보기
     @Select("""
-        SELECT b.id, title, content, link, board_category_code, board_member_id, created_at, updated_at, COUNT(DISTINCT bl.id) countlike, is_show
+        SELECT b.id, 
+               title, 
+               content, 
+               link, 
+               board_category_code, 
+               board_member_id, 
+               created_at, 
+               updated_at, 
+               COUNT(DISTINCT bl.id) countlike, 
+               is_show
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
         WHERE b.id = #{id}
         """)
@@ -76,4 +85,11 @@ public interface BoardMapper {
         """)
     int selectAllpage();
 
+    // 게시글 조회수 증가
+    @Update("""
+        UPDATE board
+        SET views = views + 1
+        WHERE id = #{id}
+        """)
+    int increaseViewCount(Integer id);
 }
