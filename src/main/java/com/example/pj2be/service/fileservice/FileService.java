@@ -56,7 +56,6 @@ public class FileService {
                 // mapper 실행전 FileDTO 세팅
                 FileDTO fileDTO = new FileDTO();
                 fileDTO.setBoard_id(2);
-
                 fileDTO.setFilename(file.getOriginalFilename());
 
                 // mapper 실행

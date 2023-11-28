@@ -22,7 +22,6 @@ public class FileController {
     @GetMapping("list/{id}")
     public ResponseEntity getFile(@PathVariable Integer id){
 
-        System.out.println("@@@@@@ 파일 가져오기: " + id);
         List<FileDTO> fileList = fileService.getFile(id);
 
         return ResponseEntity.ok(fileList);
