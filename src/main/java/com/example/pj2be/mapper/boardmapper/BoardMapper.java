@@ -26,15 +26,24 @@ public interface BoardMapper {
     void insert(BoardDTO board);
 
     @Select("""
-        SELECT id, title, content, link, board_category_code, board_member_id, created_at, updated_at
-        FROM board
-        WHERE id = #{id}
+        SELECT b.id, title, content, link, board_category_code, board_member_id, created_at, updated_at, COUNT(DISTINCT bl.id) countlike
+        FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
+        WHERE b.id = #{id}
         """)
     BoardDTO selectById(Integer id);
 
     @Select("""
-        SELECT *
-        FROM board
+        SELECT b.id,
+                b.title,
+                b.content,
+                b.link,
+                b.board_category_code,
+                b.board_member_id,
+                b.created_at,
+                b.updated_at,
+                COUNT(DISTINCT bl.id) countlike
+        FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
+        GROUP BY b.id
         """)
     List<BoardDTO> selectAll();
 
@@ -49,5 +58,11 @@ public interface BoardMapper {
     void update(BoardDTO board);
 
 
+//    전체페이지 조회
 
+    @Select("""
+        SELECT COUNT(*)
+        FROM board;
+        """)
+    int selectAllpage();
 }

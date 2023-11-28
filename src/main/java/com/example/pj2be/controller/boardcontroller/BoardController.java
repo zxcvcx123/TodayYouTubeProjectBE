@@ -24,7 +24,7 @@ public class BoardController {
 
     // 게시글 목록
     @GetMapping("list")
-    public List<BoardDTO> list() {
+    public Map<String, Object> list() {
         return boardService.list();
     }
 
