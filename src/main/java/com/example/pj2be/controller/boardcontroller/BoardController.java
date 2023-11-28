@@ -5,6 +5,8 @@ import com.example.pj2be.service.boardservice.BoardService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 import java.util.Map;
 
@@ -18,8 +20,10 @@ public class BoardController {
 
      // 게시글 작성
     @PostMapping("add")
-    public void add(BoardDTO board) {
-        boardService.save(board);
+    public void add(BoardDTO board,
+                    @RequestParam(value = "files[]", required = false) MultipartFile[] files) throws Exception {
+
+        boardService.save(board, files);
     }
 
     // 게시글 목록
