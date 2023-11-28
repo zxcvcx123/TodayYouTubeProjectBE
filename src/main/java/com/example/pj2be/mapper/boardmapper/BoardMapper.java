@@ -1,10 +1,7 @@
 package com.example.pj2be.mapper.boardmapper;
 
 import com.example.pj2be.domain.BoardDTO;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -23,6 +20,7 @@ public interface BoardMapper {
                 (SELECT member_id FROM member WHERE  id = 1)
                 )
         """)
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     void insert(BoardDTO board);
 
     @Select("""
