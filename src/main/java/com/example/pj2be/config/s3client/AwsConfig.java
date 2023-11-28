@@ -1,4 +1,4 @@
-package com.example.pj2be.config.security.s3client;
+package com.example.pj2be.config.s3client;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
