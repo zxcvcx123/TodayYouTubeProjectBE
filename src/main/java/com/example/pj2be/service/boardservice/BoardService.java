@@ -52,6 +52,7 @@ public class BoardService {
     }
 
     // 게시글 보기
+    @Transactional(readOnly = true)
     public BoardDTO get(Integer id) {
         BoardDTO board = boardMapper.selectById(id);
 
@@ -71,6 +72,7 @@ public class BoardService {
     }
 
     // 게시글 조회수 증가
+    @Transactional
     public void increaseViewCount(Integer id) {
         boardMapper.increaseViewCount(id);
     }

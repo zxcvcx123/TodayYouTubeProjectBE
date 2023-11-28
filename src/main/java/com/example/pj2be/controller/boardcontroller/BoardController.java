@@ -4,6 +4,7 @@ import com.example.pj2be.domain.BoardDTO;
 import com.example.pj2be.service.boardservice.BoardService;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +34,7 @@ public class BoardController {
     }
 
     // 게시글 보기
+    @Transactional
     @GetMapping("id/{id}")
     public BoardDTO view(@PathVariable Integer id) {
         // 게시글 조회수 증가
