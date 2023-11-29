@@ -3,7 +3,6 @@ package com.example.pj2be.controller.commentcontroller;
 import com.example.pj2be.domain.comment.CommentDTO;
 import com.example.pj2be.service.commentservice.CommentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,7 +15,7 @@ public class CommentController {
     private final CommentService service;
 
     @PostMapping("/add")
-    public void add(@RequestBody CommentDTO comment) {
+    public void commentAdd(@RequestBody CommentDTO comment) {
         service.add(comment);
     }
 
@@ -26,12 +25,12 @@ public class CommentController {
     }
 
     @DeleteMapping("{id}")
-    public void remove(@PathVariable Integer id) {
+    public void commentRemove(@PathVariable Integer id) {
         service.remove(id);
     }
 
     @PutMapping("edit")
-    public void update(@RequestBody CommentDTO comment) {
+    public void commentUpdate(@RequestBody CommentDTO comment) {
         service.update(comment);
     }
 }
