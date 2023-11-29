@@ -39,4 +39,10 @@ public interface ReplyCommentMapper {
             WHERE id = #{id}
             """)
     int reply_commentUpdate(ReplyCommentDTO reply_comment);
+
+    @Delete("""
+            DELETE FROM reply_comment
+            WHERE comment_id = #{comment_id}
+            """)
+    int DeleteByCommentId(Integer comment_id);
 }
