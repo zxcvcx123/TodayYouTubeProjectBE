@@ -15,15 +15,15 @@ public class BoardLikeController {
     private final BoardLikeService service;
 
     @GetMapping("{id}")
-    public ResponseEntity<Map<String, Object>> getLike(@PathVariable Integer id) {
+    public ResponseEntity<Map<String, Object>> getBoardLike(@PathVariable Integer id) {
 
-        return ResponseEntity.ok(service.getLike(id));
+        return ResponseEntity.ok(service.getBoardLike(id));
     }
 
     @PostMapping("{id}")
-    public ResponseEntity<Map<String, Object>> like(@PathVariable Integer id) {
+    public ResponseEntity<Map<String, Object>> boardLike(@PathVariable Integer id) {
 
-        return ResponseEntity.ok(service.like(id));
+        return ResponseEntity.ok(service.boardLike(id));
     }
 
 }
