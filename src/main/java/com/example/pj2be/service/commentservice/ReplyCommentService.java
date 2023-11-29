@@ -29,7 +29,7 @@ public class ReplyCommentService {
     }
 
     public boolean reply_commentUpdate(ReplyCommentDTO reply_comment) {
-        System.out.println("@@@@@@" + comment.getId() + " 댓글 업뎃 @@@@@@");
+        System.out.println("@@@@@@" + reply_comment.getId() + " 댓글 업뎃 @@@@@@");
         return mapper.reply_commentUpdate(reply_comment) == 1;
     }
 }
