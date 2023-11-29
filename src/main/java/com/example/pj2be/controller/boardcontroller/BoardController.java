@@ -32,9 +32,11 @@ public class BoardController {
     public Map<String, Object> list(
             @RequestParam(value = "p", defaultValue = "1") Integer page,
             @RequestParam(value = "c", defaultValue = "all") String category,
-            @RequestParam(value = "k", defaultValue = "") String keyword) {
+            @RequestParam(value = "k", defaultValue = "") String keyword,
+            @RequestParam(value = "s", defaultValue = "10") Integer slice) {
 
-        return boardService.list(page,keyword,category);
+
+        return boardService.list(page,keyword,category,slice);
     }
 
     // 게시글 보기
