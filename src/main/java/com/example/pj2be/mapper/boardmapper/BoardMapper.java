@@ -1,6 +1,6 @@
 package com.example.pj2be.mapper.boardmapper;
 
-import com.example.pj2be.domain.BoardDTO;
+import com.example.pj2be.domain.board.BoardDTO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

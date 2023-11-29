@@ -13,9 +13,9 @@ public interface FileMapper {
 
     @Insert("""
             INSERT INTO file (
-                board_id, filename
+                board_id, filename, fileurl
             ) VALUES (
-            #{board_id}, #{filename}
+            #{board_id}, #{filename}, #{fileurl}
             )
             """)
     void upload(FileDTO file);
@@ -26,8 +26,4 @@ public interface FileMapper {
             """)
     List<FileDTO> getFile(Integer boardId);
 
-    @Select("""
-            SELECT MAX(id) FROM board
-            """)
-    Integer getLastBoardId();
 }
