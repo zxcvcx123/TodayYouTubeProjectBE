@@ -45,4 +45,5 @@ public interface ReplyCommentMapper {
             WHERE comment_id = #{comment_id}
             """)
     int DeleteByCommentId(Integer comment_id);
+
 }
