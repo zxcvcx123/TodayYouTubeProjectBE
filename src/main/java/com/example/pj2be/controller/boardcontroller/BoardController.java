@@ -4,6 +4,7 @@ import com.example.pj2be.domain.board.BoardDTO;
 import com.example.pj2be.service.boardservice.BoardService;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,7 +18,7 @@ public class BoardController {
 
     private final BoardService boardService;
 
-     // 게시글 작성
+    // 게시글 작성
     @PostMapping("add")
     public void add(BoardDTO board,
                     @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files) throws Exception {
@@ -37,8 +38,12 @@ public class BoardController {
     }
 
     // 게시글 보기
+    @Transactional
     @GetMapping("id/{id}")
     public BoardDTO view(@PathVariable Integer id) {
+        // 게시글 조회수 증가
+        boardService.increaseViewCount(id);
+
         return boardService.get(id);
     }
 
@@ -54,4 +59,12 @@ public class BoardController {
         boardService.remove(id);
     }
 
+    // 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트
+    @PostMapping("test")
+    public void test(@RequestParam(value = "file") MultipartFile file) {
+        System.out.println("file = " + file.getOriginalFilename());
+        System.out.println("file.getSize() = " + file.getSize());
+        System.out.println("file.getContentType() = " + file.getContentType());
+
+    }
 }

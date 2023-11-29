@@ -1,5 +1,6 @@
 package com.example.pj2be.service.fileservice;
 
+import com.example.pj2be.domain.file.CkFileDTO;
 import com.example.pj2be.domain.file.FileDTO;
 import com.example.pj2be.mapper.filemapper.FileMapper;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 
 @Service
@@ -32,22 +34,21 @@ public class FileService {
     private String urlPrefix;
 
 
-
     // 로컬에 저장 테스트 로직
-    public void localUpload(MultipartFile[] files, Integer boardId) throws Exception{
+    public void localUpload(MultipartFile[] files, Integer boardId) throws Exception {
 
         System.out.println("===== 파일(로컬) 업로드 시작 =====");
         // 파일경로
         File f = new File("C:\\study\\testFolder" + boardId);
 
         // 경로에 폴더 없으면 폴더만들기
-        if(!f.exists()){
+        if (!f.exists()) {
             f.mkdirs();
         }
 
 
-        for (MultipartFile file : files){
-            if(file.getSize() > 0){
+        for (MultipartFile file : files) {
+            if (file.getSize() > 0) {
 
                 String path = f.getAbsolutePath() + "\\" + file.getOriginalFilename();
                 File des = new File(path);
@@ -100,5 +101,38 @@ public class FileService {
     public List<FileDTO> getFile(Integer boardId){
 
         return fileMapper.getFile(boardId);
+    }
+
+    // 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트
+    public CkFileDTO ckS3Upload(MultipartFile file) throws Exception {
+
+        System.out.println("===== ck파일(s3) 업로드 시작 =====");
+        String uuid = String.valueOf(UUID.randomUUID());
+
+        // aws s3에 저장
+        String key = "fileserver/" + uuid + "/" + file.getOriginalFilename();
+
+        PutObjectRequest objectRequest = PutObjectRequest.builder()
+                .bucket(bucket)   // 버킷이름
+                .key(key)         // key(파일경로)
+                .acl(ObjectCannedACL.PUBLIC_READ) // 권한
+                .build();
+
+        s3.putObject(objectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+
+        // mapper 실행전 FileDTO 세팅
+        CkFileDTO ckfileDTO = new CkFileDTO();
+        ckfileDTO.setFilename(file.getOriginalFilename());
+        ckfileDTO.setCkuri(urlPrefix + "fileserver/" + uuid + "/" + file.getOriginalFilename());
+        ckfileDTO.setUuid(uuid);
+        System.out.println("ckfileDTO = " + ckfileDTO);
+
+        System.out.println("===== ck파일(s3) 업로드 종료 =====");
+
+        if(fileMapper.ckUpload(ckfileDTO) == 1){
+            return fileMapper.getCkFile(uuid);
+        }
+
+        return null;
     }
 }
