@@ -1,6 +1,6 @@
 package com.example.pj2be.mapper.boardmapper;
 
-import com.example.pj2be.domain.BoardDTO;
+import com.example.pj2be.domain.board.BoardDTO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -42,6 +42,7 @@ public interface BoardMapper {
 
     // 게시글 리스트
     @Select("""
+        <script>
         SELECT b.id,
                 b.title,
                 b.content,
@@ -54,10 +55,23 @@ public interface BoardMapper {
                 is_show,
                 views
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
-        GROUP BY b.id 
-        ORDER BY id DESC
+        <where>
+            <if test="category == 'all' or category == 'title'">
+                OR b.title like #{keyword}
+            </if>
+            <if test="category == 'all' or category == 'content'">
+                 OR b.content like #{keyword}
+            </if>
+            <if test="category == 'all' or category == 'board_member_id'">
+                 OR b.board_member_id like #{keyword}
+            </if>
+        </where>
+        GROUP BY b.id
+        ORDER BY b.id DESC
+        LIMIT #{from}, #{slice}
+        </script>
         """)
-    List<BoardDTO> selectAll();
+    List<BoardDTO> selectAll(Integer from, Integer slice, String keyword, String category);
 
     // 게시글 수정
     @Update("""
@@ -82,10 +96,23 @@ public interface BoardMapper {
 
     // 전체페이지 조회
     @Select("""
+        <script>
         SELECT COUNT(*)
-        FROM board;
+        FROM board
+        <where>
+            <if test="category == 'all' or category == 'title'">
+                OR title like #{keyword}
+            </if>
+            <if test="category == 'all' or category == 'content'">
+                OR content like #{keyword}
+            </if>
+            <if test="category == 'all' or category == 'board_member_id'">
+                OR board_member_id like #{keyword}
+            </if>
+        </where>
+        </script>
         """)
-    int selectAllpage();
+    int selectAllpage(String keyword, String category);
 
     // 게시글 조회수 증가
     @Update("""

@@ -1,4 +1,4 @@
-package com.example.pj2be.domain;
+package com.example.pj2be.domain.board;
 
 import lombok.Data;
 
@@ -19,6 +19,8 @@ public class BoardDTO {
     private LocalDateTime deleted_at;
     private Integer countlike;
     private Integer views;
+
+
 
 
 }

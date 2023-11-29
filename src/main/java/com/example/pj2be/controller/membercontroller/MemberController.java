@@ -1,7 +1,11 @@
 package com.example.pj2be.controller.membercontroller;
 
+import com.example.pj2be.config.security.SecurityUtil;
+import com.example.pj2be.domain.member.JwtToken;
 import com.example.pj2be.domain.member.MemberDTO;
+import com.example.pj2be.domain.member.MemberLoginDTO;
 import com.example.pj2be.service.memberservice.MemberService;
+import com.example.pj2be.service.memberservice.MemberSignupService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +20,8 @@ import java.util.Optional;
 @RequestMapping("/api/member")
 public class MemberController {
 
-    private final MemberService service;
+    private final MemberService memberService;
+    private final MemberSignupService service;
 
     // 회원 가입
     @PostMapping("/signup")
@@ -26,6 +31,7 @@ public class MemberController {
             return ResponseEntity.badRequest().build();
         }
         try {
+            memberDTO.setRole_id(2);
             service.signup(memberDTO);
          return ResponseEntity.ok().build();
         } catch (Exception e){
@@ -87,4 +93,22 @@ public class MemberController {
 
     // 중복 체크 끝
 
+
+
+    // 로그인
+    @PostMapping("/login")
+    public JwtToken login(@RequestBody MemberLoginDTO memberLoginDTO){
+        String member_id = memberLoginDTO.getMember_id();
+        String password = memberLoginDTO.getPassword();
+        JwtToken jwtToken = memberService.login(member_id, password);
+        System.out.println("member_id = " + member_id);
+        System.out.println("password = " + password);
+        return jwtToken;
+    }
+    // 테스트
+    @PostMapping("/test")
+    public String test(){
+
+        return SecurityUtil.getCurrentMemberId();
+    }
 }

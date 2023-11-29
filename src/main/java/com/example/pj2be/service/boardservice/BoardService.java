@@ -3,6 +3,7 @@ package com.example.pj2be.service.boardservice;
 import com.example.pj2be.domain.BoardDTO;
 import com.example.pj2be.domain.file.CkFileDTO;
 import com.example.pj2be.domain.file.FileDTO;
+import com.example.pj2be.domain.board.BoardDTO;
 import com.example.pj2be.mapper.boardmapper.BoardMapper;
 import com.example.pj2be.service.fileservice.FileService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,6 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -42,19 +42,45 @@ public class BoardService {
     }
 
     // 게시글 리스트, 페이징
-    public Map<String, Object> list() {
+    public Map<String, Object> list(Integer page, String keyword, String category) {
         Map<String, Object> map = new HashMap<>();
         Map<String, Object> pageInfo = new HashMap<>();
 
         // 페이징 필요한 것들
-        // 전체페이지, 보여줄페이지 수, 왼쪽끝페이지, 오른쪽끝페이지
+        // 전체페이지, 보여줄페이지 수, 왼쪽끝페이지, 오른쪽끝페이지, 담페이지, 이전페이지,
         int countAll;
-        countAll = boardMapper.selectAllpage();
+        countAll = boardMapper.selectAllpage("%" + keyword + "%", category);
         int slice = 5;
-        int lastPageNumber = countAll / 5;
+        int lastPageNumber = (countAll - 1) / slice + 1;
+        int startPageNumber = (page - 1) / slice * slice + 1;
+        int endPageNumber = (startPageNumber + (slice - 1));
+        endPageNumber = Math.min(endPageNumber, lastPageNumber);
+        int prevPageNumber = startPageNumber - slice;
+        int nextPageNumber = endPageNumber + 1;
+        int initialPage = 1;
+
+        // 넘겨줄 것들 put
 
         map.put("boardList", boardMapper.selectAll());
+        pageInfo.put("currentPageNumber", page);
+        pageInfo.put("startPageNumber", startPageNumber);
+        pageInfo.put("endPageNumber", endPageNumber);
+
+        if (prevPageNumber > 0) {
+            pageInfo.put("prevPageNumber", prevPageNumber);
+            pageInfo.put("initialPage", initialPage);
+        }
+        if (nextPageNumber <= lastPageNumber) {
+            pageInfo.put("nextPageNumber", nextPageNumber);
+            pageInfo.put("lastPageNumber", lastPageNumber);
+        }
+
+        int from = (page - 1) * slice;
+
+
+        map.put("boardList", boardMapper.selectAll(from, slice, "%" + keyword + "%", category));
         map.put("pageInfo", pageInfo);
+
 
         return map;
     }
