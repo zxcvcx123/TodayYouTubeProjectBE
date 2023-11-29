@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -69,7 +70,7 @@ public class FileService {
     }
 
     // s3 파일 업로드
-    public void s3Upload(MultipartFile file, Integer boardId) throws Exception{
+    public void s3Upload(MultipartFile file, Integer boardId) throws Exception {
 
         System.out.println("===== 파일(s3) 업로드 시작 =====");
 
@@ -88,7 +89,7 @@ public class FileService {
         FileDTO fileDTO = new FileDTO();
         fileDTO.setBoard_id(boardId);
         fileDTO.setFilename(file.getOriginalFilename());
-        fileDTO.setFileurl(urlPrefix + "youtube/" + boardId +"/"+file.getOriginalFilename());
+        fileDTO.setFileurl(urlPrefix + "youtube/" + boardId + "/" + file.getOriginalFilename());
 
         System.out.println("fileDTO = " + fileDTO);
 
@@ -98,7 +99,7 @@ public class FileService {
     }
 
     // 게시판번호에 따른 파일 가져오기
-    public List<FileDTO> getFile(Integer boardId){
+    public List<FileDTO> getFile(Integer boardId) {
 
         return fileMapper.getFile(boardId);
     }
@@ -129,10 +130,31 @@ public class FileService {
 
         System.out.println("===== ck파일(s3) 업로드 종료 =====");
 
-        if(fileMapper.ckUpload(ckfileDTO) == 1){
+        if (fileMapper.ckUpload(ckfileDTO) == 1) {
             return fileMapper.getCkFile(uuid);
         }
 
         return null;
+    }
+
+    // s3와 db에서 파일 삭제
+    public Boolean deleteFileById(Integer id) {
+
+        FileDTO file = fileMapper.getFileById(id);
+
+        // S3 파일 삭제 key
+        String key = "youtube/" + file.getBoard_id() + "/" + file.getFilename();
+
+        System.out.println("@@@@@@@@@ " + key + " @@@@@@@@@ S3에서 삭제");
+        // S3 파일 삭제
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                .bucket(bucket)
+                .key(key)
+                .build();
+
+        s3.deleteObject(deleteObjectRequest);
+        System.out.println("@@@@@@@@@ " + key + " @@@@@@@@@ S3에서 완료");
+
+        return fileMapper.deleteFileById(id)== 1;
     }
 }

@@ -84,7 +84,13 @@ public class BoardService {
     }
 
     // 게시글 수정
-    public void update(BoardDTO board) {
+    public void update(BoardDTO board, MultipartFile[] files) throws Exception {
+
+        if(files != null) {
+            for (MultipartFile file : files) {
+                fileService.s3Upload(file, board.getId());
+            }
+        }
 
         boardMapper.update(board);
 

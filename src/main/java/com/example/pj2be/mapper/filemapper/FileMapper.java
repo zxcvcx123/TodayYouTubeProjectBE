@@ -2,10 +2,7 @@ package com.example.pj2be.mapper.filemapper;
 
 import com.example.pj2be.domain.file.CkFileDTO;
 import com.example.pj2be.domain.file.FileDTO;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,4 +41,16 @@ public interface FileMapper {
             WHERE uuid = #{uuid}
             """)
     CkFileDTO getCkFile(String uuid);
+
+    @Delete("""
+            DELETE FROM file
+            WHERE id = #{id}
+            """)
+    int deleteFileById(Integer id);
+
+    @Select("""
+            SELECT * FROM file
+            WHERE id = #{id}
+            """)
+    FileDTO getFileById(Integer id);
 }

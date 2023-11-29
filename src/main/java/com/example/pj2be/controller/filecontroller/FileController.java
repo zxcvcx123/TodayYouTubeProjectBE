@@ -4,10 +4,8 @@ import com.example.pj2be.domain.file.FileDTO;
 import com.example.pj2be.service.fileservice.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,5 +23,24 @@ public class FileController {
         List<FileDTO> fileList = fileService.getFile(id);
 
         return ResponseEntity.ok(fileList);
+    }
+
+    // CK 에디터 이미지 업로드
+    @PostMapping("ckupload")
+    public ResponseEntity ckUpload(@RequestParam(value = "file") MultipartFile file) throws Exception {
+
+        return ResponseEntity.ok(fileService.ckS3Upload(file));
+    }
+
+    // 수정 화면에서 기존 파일 삭제
+    @DeleteMapping("delete/{boardId}/{id}")
+    public ResponseEntity deleteFileById(@PathVariable Integer boardId,
+                                         @PathVariable Integer id){
+
+        if(fileService.deleteFileById(id)){
+            return ResponseEntity.ok(fileService.getFile(boardId));
+        } else {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }
