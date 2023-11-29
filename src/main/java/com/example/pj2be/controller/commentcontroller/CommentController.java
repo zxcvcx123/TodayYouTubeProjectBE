@@ -16,22 +16,22 @@ public class CommentController {
 
     @PostMapping("/add")
     public void commentAdd(@RequestBody CommentDTO comment) {
-        service.add(comment);
+        service.commentAdd(comment);
     }
 
     @GetMapping("list")
-    public List<CommentDTO> commentList(@RequestParam("id") Integer board_id) {
-        return service.list(board_id);
+    public List<CommentDTO> commentList(@RequestParam("board_id") Integer board_id) {
+        return service.commentList(board_id);
     }
 
-    @DeleteMapping("{id}")
-    public void commentRemove(@PathVariable Integer id) {
-        service.remove(id);
+    @DeleteMapping("{comment_id}")
+    public void commentRemove(@PathVariable Integer comment_id) {
+        service.commentRemove(comment_id);
     }
 
     @PutMapping("edit")
     public void commentUpdate(@RequestBody CommentDTO comment) {
-        service.update(comment);
+        service.commentUpdate(comment);
     }
 }
 

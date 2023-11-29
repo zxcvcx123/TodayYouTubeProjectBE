@@ -12,7 +12,7 @@ public interface CommentMapper {
              INSERT INTO comment (board_id, comment, member_id) 
         VALUES (#{board_id}, #{comment}, #{member_id})
             """)
-    int insert(CommentDTO comment);
+    int commentInsert(CommentDTO comment);
 
 
     @Select("""
@@ -26,13 +26,13 @@ public interface CommentMapper {
                      JOIN member m ON c.member_id = m.member_id
             WHERE board_id = #{board_id}
             """)
-    List<CommentDTO> selectByBoard_id(Integer boardId);
+    List<CommentDTO> commentSelectByBoard_id(Integer board_id);
 
     @Delete("""
             DELETE FROM comment
             WHERE id = #{id}
             """)
-    int deleteById(Integer id);
+    int commentDeleteById(Integer comment_id);
 
 
     @Update("""
@@ -40,5 +40,5 @@ public interface CommentMapper {
             SET comment = #{comment}
             WHERE id = #{id}
             """)
-    int update(CommentDTO comment);
+    int commentUpdate(CommentDTO comment);
 }
