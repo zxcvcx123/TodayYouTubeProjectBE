@@ -2,7 +2,7 @@ package com.example.pj2be.domain.member;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.*;
 
 import java.math.BigInteger;
 import java.time.LocalDate;

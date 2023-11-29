@@ -1,4 +1,4 @@
-package com.example.pj2be.service.memberservice;
+package com.example.pj2be.config.security;
 
 import com.example.pj2be.domain.member.MemberDTO;
 import com.example.pj2be.domain.member.MemberRole;
@@ -30,15 +30,15 @@ public class MemberSecurityService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername( String member_id) throws UsernameNotFoundException {
-        log.debug("Loading user by member_id : {}", member_id);
+
         Optional<MemberDTO> _member = memberMapper.findByMemberId(member_id);
         if(_member.isEmpty()){
-            log.error("User not found with member_id: {}", member_id);
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다");
         }
 
         MemberDTO member = _member.get();
-        log.debug("User found: {}", member);
+
+
         List<GrantedAuthority> authorities = new ArrayList<>();
 
         if (member.getRole_id() == 1) {
@@ -48,6 +48,6 @@ public class MemberSecurityService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(MemberRole.GENERAL_MEMBER.getValue()));
         }
 
-        return new User(member.getMember_id(), member.getPassword(), authorities);
+return new User(member.getMember_id(), member.getPassword(), authorities);
     }
 }
