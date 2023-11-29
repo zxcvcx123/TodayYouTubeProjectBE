@@ -25,6 +25,7 @@ public class CommentService {
         return mapper.commentSelectByBoard_id(board_id);
     }
 
+
     public void commentRemove(Integer comment_id) {
         System.out.println("@@@@@@" + comment_id + "댓글 삭제 @@@@@@");
         mapper.commentDeleteById(comment_id);

@@ -56,7 +56,6 @@ public class FileService {
                 // mapper 실행전 FileDTO 세팅
                 FileDTO fileDTO = new FileDTO();
                 fileDTO.setBoard_id(2);
-
                 fileDTO.setFilename(file.getOriginalFilename());
 
                 // mapper 실행
@@ -68,6 +67,7 @@ public class FileService {
 
     }
 
+    // s3 파일 업로드
     public void s3Upload(MultipartFile file, Integer boardId) throws Exception{
 
         System.out.println("===== 파일(s3) 업로드 시작 =====");
@@ -87,10 +87,18 @@ public class FileService {
         FileDTO fileDTO = new FileDTO();
         fileDTO.setBoard_id(boardId);
         fileDTO.setFilename(file.getOriginalFilename());
+        fileDTO.setFileurl(urlPrefix + "youtube/" + boardId +"/"+file.getOriginalFilename());
+
         System.out.println("fileDTO = " + fileDTO);
 
         fileMapper.upload(fileDTO);
 
         System.out.println("===== 파일(s3) 업로드 종료 =====");
+    }
+
+    // 게시판번호에 따른 파일 가져오기
+    public List<FileDTO> getFile(Integer boardId){
+
+        return fileMapper.getFile(boardId);
     }
 }
