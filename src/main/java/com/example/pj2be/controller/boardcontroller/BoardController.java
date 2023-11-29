@@ -2,6 +2,7 @@ package com.example.pj2be.controller.boardcontroller;
 
 import com.example.pj2be.domain.board.BoardDTO;
 import com.example.pj2be.service.boardservice.BoardService;
+import com.example.pj2be.service.fileservice.FileService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -17,13 +18,15 @@ import java.util.Map;
 public class BoardController {
 
     private final BoardService boardService;
+    private final FileService fileService;
 
     // 게시글 작성
     @PostMapping("add")
     public void add(BoardDTO board,
-                    @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files) throws Exception {
+                    @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files,
+                    @RequestParam(value = "uuSrc[]", required = false) String[] uuSrc) throws Exception {
 
-        boardService.save(board, files);
+        boardService.save(board, files, uuSrc);
     }
 
     // 게시글 목록
@@ -34,7 +37,7 @@ public class BoardController {
             @RequestParam(value = "c", defaultValue = "all") String category,
             @RequestParam(value = "k", defaultValue = "") String keyword) {
 
-        return boardService.list(page,keyword,category);
+        return boardService.list(page, keyword, category);
     }
 
     // 게시글 보기

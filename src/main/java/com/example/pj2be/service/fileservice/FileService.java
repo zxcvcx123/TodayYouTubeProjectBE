@@ -69,7 +69,7 @@ public class FileService {
     }
 
     // s3 파일 업로드
-    public void s3Upload(MultipartFile file, Integer boardId) throws Exception{
+    public void s3Upload(MultipartFile file, Integer boardId) throws Exception {
 
         System.out.println("===== 파일(s3) 업로드 시작 =====");
 
@@ -88,7 +88,7 @@ public class FileService {
         FileDTO fileDTO = new FileDTO();
         fileDTO.setBoard_id(boardId);
         fileDTO.setFilename(file.getOriginalFilename());
-        fileDTO.setFileurl(urlPrefix + "youtube/" + boardId +"/"+file.getOriginalFilename());
+        fileDTO.setFileurl(urlPrefix + "youtube/" + boardId + "/" + file.getOriginalFilename());
 
         System.out.println("fileDTO = " + fileDTO);
 
@@ -98,7 +98,7 @@ public class FileService {
     }
 
     // 게시판번호에 따른 파일 가져오기
-    public List<FileDTO> getFile(Integer boardId){
+    public List<FileDTO> getFile(Integer boardId) {
 
         return fileMapper.getFile(boardId);
     }
@@ -121,6 +121,7 @@ public class FileService {
         s3.putObject(objectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
         // mapper 실행전 FileDTO 세팅
+        // CKEditor에서 업로드된 파일을 AWS S3에 저장한 후, 해당 파일 정보를 데이터베이스에 기록
         CkFileDTO ckfileDTO = new CkFileDTO();
         ckfileDTO.setFilename(file.getOriginalFilename());
         ckfileDTO.setCkuri(urlPrefix + "fileserver/" + uuid + "/" + file.getOriginalFilename());
@@ -129,10 +130,16 @@ public class FileService {
 
         System.out.println("===== ck파일(s3) 업로드 종료 =====");
 
-        if(fileMapper.ckUpload(ckfileDTO) == 1){
+        if (fileMapper.ckUpload(ckfileDTO) == 1) {
             return fileMapper.getCkFile(uuid);
         }
 
         return null;
+    }
+
+    public void ckS3Update(String[] uuSrc, Integer boardId) {
+        for (String src : uuSrc) {
+            fileMapper.ckS3Update(src, boardId);
+        }
     }
 }

@@ -22,7 +22,7 @@ public class BoardService {
 
     // 게시글 작성
     // TODO : 타이틀, 본문 isBlank면 작성 되어서는 안됨
-    public void save(BoardDTO board, MultipartFile[] files) throws Exception {
+    public void save(BoardDTO board, MultipartFile[] files, String[] uuSrc) throws Exception {
         boardMapper.insert(board);
 
         if(files != null) {
@@ -30,6 +30,8 @@ public class BoardService {
                 fileService.s3Upload(file, board.getId());
             }
         }
+
+        fileService.ckS3Update(uuSrc, board.getId());
     }
 
     // 게시글 리스트, 페이징
