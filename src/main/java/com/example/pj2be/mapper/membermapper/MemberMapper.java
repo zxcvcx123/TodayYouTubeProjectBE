@@ -31,18 +31,18 @@ public interface MemberMapper {
     int signup(MemberDTO memberDTO);
 
     @Select("""
-            SELECT * FROM member
+            SELECT member_id FROM member
             WHERE role_id = 2 AND member_id = #{member_id}
             """)
     String select_member_id(String memberId);
     @Select("""
-            SELECT * FROM member
+            SELECT nickname FROM member
             WHERE role_id = 2 AND nickname = #{nickname}
             """)
     String select_nickname(String nickname);
 
     @Select("""
-            SELECT * FROM member
+            SELECT email FROM member
             WHERE role_id = 2 AND email = #{email}
             """)
     String select_Email(String email);
@@ -52,4 +52,12 @@ public interface MemberMapper {
             WHERE member_id = #{member_id};
             """)
     Optional<MemberDTO> findByMemberId(String member_id);
+
+
+    @Select("""
+            SELECT * FROM member
+            WHERE member_id = #{member_id};
+            """)
+    MemberDTO findLoginInfoByMemberId(String member_id);
+
 }

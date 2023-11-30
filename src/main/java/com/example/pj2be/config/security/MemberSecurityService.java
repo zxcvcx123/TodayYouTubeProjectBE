@@ -31,23 +31,28 @@ public class MemberSecurityService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername( String member_id) throws UsernameNotFoundException {
 
+        log.info("loadUserByUsername 실행됨.");
         Optional<MemberDTO> _member = memberMapper.findByMemberId(member_id);
         if(_member.isEmpty()){
+            log.info("loadUserByUsername 실행됨 -> 가입되지 않은 사용자인 경우");
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다");
         }
 
         MemberDTO member = _member.get();
-
-
+        System.out.println("로그인 시도한 아이디의 실제 계정 = " + member);
         List<GrantedAuthority> authorities = new ArrayList<>();
-
         if (member.getRole_id() == 1) {
 
             authorities.add(new SimpleGrantedAuthority(MemberRole.ADMIN.getValue()));
+            System.out.println("loadUserByUsername 실행됨 -> 권한 등록 : " + authorities);
         }else if(member.getRole_id() == 2) {
             authorities.add(new SimpleGrantedAuthority(MemberRole.GENERAL_MEMBER.getValue()));
+            System.out.println("loadUserByUsername 실행됨 -> 권한 등록 : "+ authorities);
         }
 
-return new User(member.getMember_id(), member.getPassword(), authorities);
+        User userInfo = new User(member.getMember_id(), member.getPassword(), authorities);
+        System.out.println("loadUserByUsername 실행됨 User객체에 저장될 값 = " + userInfo);
+
+return userInfo;
     }
 }

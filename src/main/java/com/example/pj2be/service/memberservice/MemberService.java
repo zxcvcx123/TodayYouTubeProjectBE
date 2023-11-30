@@ -4,13 +4,17 @@ import com.example.pj2be.config.jwt.JwtTokenProvider;
 import com.example.pj2be.domain.member.JwtToken;
 import com.example.pj2be.mapper.membermapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -18,20 +22,31 @@ public class MemberService {
     private final MemberMapper memberMapper;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
-
     @Transactional
-    public JwtToken login(String member_id, String password){
-        // 로그인 id/pw 기반 Authentication 객체 생성
-        // authentication는 인증 여부를 확인하는 authenticated값이 false
+    public Map<String, Object> login(String member_id, String password){
+        log.info("login이 실행됨!!!");
+
+        // UsernamePasswordAuthenticationToken 객체에 사용자 id와 비밀번호 저장를 저장
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(member_id, password);
-
-        // 실제 검증 (사용자 비밀번호 체크)
-        // authenticate 메서드 실행 시 loadUserByUsername 메서드가 실행
+        System.out.println("MemberService의 authenticationToken이 실행됨!! " + authenticationToken );
+        // 실제 검증
+        // MemberSecurityService loadUserByUsername 호출해서 로그인 요청한 id와 비밀번호와 db에 저장된 정보와 검증을함
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        log.info("login 다시 돌아옴");
+        System.out.println("loadUserByUsername을 Authentication 객체로 저장 = " + authentication );
 
-        // 인증 정보 기반 JWT 토큰 생성
+        // 권한만 추출
+        System.out.println("authentication.getAuthorities() = " + authentication.getAuthorities());
+        // JWT 토큰 생성
         JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
+        log.info("login 다시 돌아옴");
+        System.out.println("MemberService의 jwtToken 실행됨!! " + jwtToken );
 
-        return jwtToken;
+        Map<String, Object> jwtTokenAuthenticationMap = new HashMap<String, Object>();
+        jwtTokenAuthenticationMap.put("token", jwtToken);
+        jwtTokenAuthenticationMap.put("authentication", authentication.getAuthorities());
+        jwtTokenAuthenticationMap.put("memberInfo", member_id);
+
+        return jwtTokenAuthenticationMap;
     }
 }

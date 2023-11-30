@@ -30,31 +30,42 @@ public class JwtTokenProvider {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
+    // 로그인 시에 토큰 값 생성
     // Member 정보를 가져와서 AccessToken, RefreshToken을 생성
     public JwtToken generateToken(Authentication authentication) {
-    log.info("generateToken(토큰 생성 ) 실행됨");
+        log.info("generateToken(토큰 생성 코드) 실행됨!!!");
+
         // 권한 로드
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-
+        System.out.println("JwtTokenProvider generateToken의 authorities =" + authorities);
         long now = (new Date()).getTime();
 
         // Access 토큰 생성
-        Date accessTokenExpiresIn = new Date(now + 180000); // 테스트 용 시간
+        Date accessTokenExpiresIn = new Date(now + 1800000); // 테스트 용 시간
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
+                // 클레임명을 auth라는 이름으로 저장, 실제값: GENERAL_MEMBER
                 .claim("auth",authorities)
                 .setExpiration(accessTokenExpiresIn)
+                // 서명 정보 HS256알고리즘
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+        System.out.println("생성된 accessToken =" + accessToken);
 
         // Refresh 토큰 생성
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + 360000)) // 테스트 용 시간
+                .setExpiration(new Date(now + 3600000)) // 테스트 용 시간
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
+        System.out.println("생성된 refreshToken =" + refreshToken);
+        System.out.println("생성된 jwtToken 반환" + JwtToken.builder()
+                .grantType("Bearer")
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build());
         // JwtToken 객체 설정
         return JwtToken.builder()
                 .grantType("Bearer")
@@ -65,7 +76,8 @@ public class JwtTokenProvider {
 
     // Jwt 토큰을 디코딩하여 권한 정보 확인
     public Authentication getAuthentication(String accessToken){
-        log.info("getAuthentication(토큰 디코딩) 실행됨");
+        log.info("getAuthentication(권한정보확인) 실행됨!!!");
+
         // Jwt 토큰 디코딩
         Claims claims = parseClaims(accessToken);
 
@@ -89,15 +101,16 @@ public class JwtTokenProvider {
     // 토큰 정보 검증 메서드
     public boolean validateToken(String token){
 
-        log.info("validateToken(토큰 검증) 실행됨");
+        log.info("validateToken(토큰 검증) 실행됨!!!");
         try{
+            // 토큰 유효성 확인
             Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token);
             return true;
         }catch (SecurityException | MalformedJwtException e){
-            log.info("권한없는 JWT Token", e);
+            log.info(" 권한없는 JWT Token", e);
         }catch (ExpiredJwtException e){
             log.info("만료된 JWT Token", e);
         }catch (UnsupportedJwtException e){
@@ -105,13 +118,15 @@ public class JwtTokenProvider {
         }catch (IllegalArgumentException e){
             log.info("JWT claims string is empty", e);
         }
+        System.out.println("valiateToken 결과는 false");
         return false;
     }
 
     // jwt 디코딩
     private Claims parseClaims(String accessToken){
+        log.info("parseClaims(토큰 디코딩) 실행됨!!!");
         try{
-            log.info("jwt 디코딩 과정 진행중");
+            log.info("parseClaims 디코딩 과정 진행중");
             return Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
