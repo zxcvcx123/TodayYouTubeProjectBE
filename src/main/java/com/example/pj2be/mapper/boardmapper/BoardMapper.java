@@ -1,6 +1,7 @@
 package com.example.pj2be.mapper.boardmapper;
 
 import com.example.pj2be.domain.board.BoardDTO;
+import com.example.pj2be.domain.board.BoardEditDTO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -74,15 +75,16 @@ public interface BoardMapper {
     List<BoardDTO> selectAll(Integer from, Integer slice, String keyword, String category);
 
     // 게시글 수정
+    // BoardEditDTO 내부에 BoardDTO가 있음.
     @Update("""
             UPDATE board
-            SET title = #{title},
-                link = #{link},
-                content = #{content},
+            SET title = #{board.title},
+                link = #{board.link},
+                content = #{board.content},
                 updated_at = CURRENT_TIMESTAMP
-            WHERE id = #{id}
+            WHERE id = #{board.id}
             """)
-    void update(BoardDTO board);
+    void update(BoardEditDTO board);
 
 
     // 게시글 삭제 (Update 방식)

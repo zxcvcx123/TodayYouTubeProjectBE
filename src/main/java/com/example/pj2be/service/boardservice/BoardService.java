@@ -1,6 +1,7 @@
 package com.example.pj2be.service.boardservice;
 
 import com.example.pj2be.domain.board.BoardDTO;
+import com.example.pj2be.domain.board.BoardEditDTO;
 import com.example.pj2be.mapper.boardmapper.BoardMapper;
 import com.example.pj2be.service.fileservice.FileService;
 import lombok.RequiredArgsConstructor;
@@ -87,8 +88,8 @@ public class BoardService {
     }
 
     // 게시글 수정
-    public void update(BoardDTO board) {
-
+    public void update(BoardEditDTO board) {
+        System.out.println(board.getBoard().getId() + "번 게시물 수정 시작 (서비스)");
         boardMapper.update(board);
 
     }
