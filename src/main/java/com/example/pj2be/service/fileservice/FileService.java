@@ -146,7 +146,7 @@ public class FileService {
     }
 
     // 임시 이미지 파일 전부 삭제 (board_id = 0 인 것)
-    public void ckS3DeleteTempImg(String[] uuSrc) {
+    public void ckS3DeleteTempImg() {
         System.out.println("===== ck임시파일(s3) 삭제 시작 =====");
 
         // board_id가 0인 이미지 목록 List<String>으로 담아 오기

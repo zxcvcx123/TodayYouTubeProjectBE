@@ -36,7 +36,7 @@ public class BoardService {
         fileService.ckS3Update(uuSrc, board.getId());
 
         // 임시로 저장된 이미지 삭제 ( board_id = 0 인 것 )
-        fileService.ckS3DeleteTempImg(uuSrc);
+        fileService.ckS3DeleteTempImg();
     }
 
     // 게시글 리스트, 페이징
@@ -99,8 +99,11 @@ public class BoardService {
 
         boardMapper.update(board);
 
-        /* 본문 ck에디터영역에 실제로 저장된 이미지 소스코드와 게시물ID 보내기 */
+        /* 본문 ck에디터영역에 실제로 저장된 이미지 소스코드와 게시물ID 보내기, 업로드 이미지에 게시물id 부여 */
         fileService.ckS3Update(uuSrc, board.getBoard().getId());
+
+        // 임시로 저장된 이미지 삭제 ( board_id = 0 인 것 )
+        fileService.ckS3DeleteTempImg();
     }
 
     // 게시글 삭제 (Update 형식)
