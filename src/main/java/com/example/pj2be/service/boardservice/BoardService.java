@@ -40,7 +40,7 @@ public class BoardService {
     }
 
     // 게시글 리스트, 페이징
-    public Map<String, Object> list(Integer page, String keyword, String category) {
+    public Map<String, Object> list(Integer page, String keyword, String category, Integer slice) {
         Map<String, Object> map = new HashMap<>();
         Map<String, Object> pageInfo = new HashMap<>();
 
@@ -48,10 +48,9 @@ public class BoardService {
         // 전체페이지, 보여줄페이지 수, 왼쪽끝페이지, 오른쪽끝페이지, 담페이지, 이전페이지,
         int countAll;
         countAll = boardMapper.selectAllpage("%" + keyword + "%", category);
-        int slice = 5;
         int lastPageNumber = (countAll - 1) / slice + 1;
-        int startPageNumber = (page - 1) / slice * slice + 1;
-        int endPageNumber = (startPageNumber + (slice - 1));
+        int startPageNumber = (page - 1) / 5 * 5 + 1;
+        int endPageNumber = (startPageNumber + (5 - 1));
         endPageNumber = Math.min(endPageNumber, lastPageNumber);
         int prevPageNumber = startPageNumber - slice;
         int nextPageNumber = endPageNumber + 1;
