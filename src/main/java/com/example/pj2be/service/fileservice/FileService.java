@@ -154,19 +154,19 @@ public class FileService {
 
         for (String uri : ckUris) {
             String key = uri.substring(uri.indexOf("/fileserver/") + "/fileserver/".length());
+            key = "fileserver/" + key;
+            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                    .bucket(bucket)
+                    .key(key)
+                    .build();
 
-//            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
-//                    .bucket(bucket)
-//                    .key(key)
-//                    .build();
-//
-//            // S3에서 객체 삭제
-//            s3.deleteObject(deleteObjectRequest);
+            // S3에서 객체 삭제
+            s3.deleteObject(deleteObjectRequest);
             System.out.println("객체 삭제 됨 - key: " + key);
         }
 
 
-//        fileMapper.ckS3DeleteTempImg();
+        fileMapper.ckS3DeleteTempImg();
 
         System.out.println("===== ck임시파일(s3) 삭제 완료 =====");
     }
