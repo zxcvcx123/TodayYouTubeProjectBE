@@ -26,18 +26,23 @@ public interface BoardMapper {
     // 게시글 보기
     @Select("""
         SELECT b.id, 
-               title, 
-               content, 
-               link, 
-               board_category_code, 
-               board_member_id, 
-               created_at, 
-               updated_at, 
+               b.title, 
+               b.content, 
+               b.link, 
+               b.board_category_code, 
+               b.board_member_id, 
+               b.created_at, 
+               b.updated_at, 
                COUNT(DISTINCT bl.id) countlike, 
-               is_show,
-               views
+               COUNT(DISTINCT c.comment) count_comment, 
+              
+               b.is_show,
+               b.views
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
+                     LEFT JOIN comment c ON b.id = c.board_id
+                    
         WHERE b.id = #{id}
+        GROUP BY b.id ORDER BY b.id DESC;
         """)
     BoardDTO selectById(Integer id);
 
@@ -53,9 +58,11 @@ public interface BoardMapper {
                 b.created_at,
                 b.updated_at,
                 COUNT(DISTINCT bl.id) countlike,
+                COUNT(DISTINCT c.id) count_comment, 
                 is_show,
                 views
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
+                     LEFT JOIN comment c ON b.id = c.board_id
         <where>
             <if test="category == 'all' or category == 'title'">
                 OR b.title like #{keyword}

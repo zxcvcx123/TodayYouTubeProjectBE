@@ -21,8 +21,11 @@ public interface ReplyCommentMapper {
                    r.reply_comment,
                    r.created_at,
                    m.nickname
+                
             FROM reply_comment r
             JOIN member m ON r.member_id = m.member_id
+            
+          
             WHERE comment_id = #{comment_id}
             """)
     List<ReplyCommentDTO> reply_commentSelectByComment_id(Integer comment_id);
@@ -39,4 +42,11 @@ public interface ReplyCommentMapper {
             WHERE id = #{id}
             """)
     int reply_commentUpdate(ReplyCommentDTO reply_comment);
+
+    @Delete("""
+            DELETE FROM reply_comment
+            WHERE comment_id = #{comment_id}
+            """)
+    int DeleteByCommentId(Integer comment_id);
+
 }

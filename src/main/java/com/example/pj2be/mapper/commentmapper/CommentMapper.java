@@ -21,9 +21,14 @@ public interface CommentMapper {
                    c.member_id,
                    c.comment,
                    c.created_at,
-                   m.nickname nickname
+                   m.nickname nickname,
+                   (SELECT COUNT(cl.id) FROM comment_like cl WHERE cl.comment_id = c.id) count_comment_like
+                                           
             FROM comment c
                      JOIN member m ON c.member_id = m.member_id
+                     
+                     
+                     
             WHERE board_id = #{board_id}
             """)
     List<CommentDTO> commentSelectByBoard_id(Integer board_id);

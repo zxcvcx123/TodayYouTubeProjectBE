@@ -3,6 +3,7 @@ package com.example.pj2be.service.commentservice;
 
 import com.example.pj2be.domain.comment.CommentDTO;
 import com.example.pj2be.mapper.commentmapper.CommentMapper;
+import com.example.pj2be.mapper.commentmapper.ReplyCommentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.List;
 public class CommentService {
 
     private final CommentMapper mapper;
+    private final ReplyCommentMapper replyCommentMapper;
 
     public void commentAdd(CommentDTO comment) {
         System.out.println("@@@@@@" + comment.getId() + " 댓글 작성 @@@@@@");
@@ -28,6 +30,10 @@ public class CommentService {
 
     public void commentRemove(Integer comment_id) {
         System.out.println("@@@@@@" + comment_id + "댓글 삭제 @@@@@@");
+
+        // 대댓글 레코드 먼저 지우기
+        replyCommentMapper.DeleteByCommentId(comment_id);
+
         mapper.commentDeleteById(comment_id);
     }
 

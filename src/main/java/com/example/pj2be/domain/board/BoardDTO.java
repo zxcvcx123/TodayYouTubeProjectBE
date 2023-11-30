@@ -19,6 +19,7 @@ public class BoardDTO {
     private Boolean is_show;
     private LocalDateTime deleted_at;
     private Integer countlike;
+    private Integer count_comment;
     private Integer views;
     private List<String> uuSrc;
 
