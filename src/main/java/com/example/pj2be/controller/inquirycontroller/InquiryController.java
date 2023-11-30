@@ -25,6 +25,7 @@ public class InquiryController {
     @PostMapping("write")
     public ResponseEntity write(@RequestBody InquiryDTO dto) {
 
+//        로그인 객체 되면 수정
         dto.setInquiry_member_id("testadmin");
 
         if (!service.validate(dto)) {
@@ -41,5 +42,20 @@ public class InquiryController {
         dto.setInquiry_member_id("testadmin");
 
         return service.get(id);
+    }
+
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity delete(@PathVariable Integer id) {
+
+        service.delete(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("edit")
+    public ResponseEntity edit(@RequestBody InquiryDTO dto) {
+        dto.setInquiry_member_id("testadmin");
+
+        service.update(dto);
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,10 +1,7 @@
 package com.example.pj2be.mapper.inquirymapper;
 
 import com.example.pj2be.domain.inquiry.InquiryDTO;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Map;
@@ -51,4 +48,21 @@ public interface InquiryMapper {
         WHERE i.id = #{id}
         """)
     InquiryDTO selectByInquiryId(Integer id);
+
+
+    @Delete("""
+        DELETE FROM inquiry
+        WHERE id = #{id}
+        """)
+    int deleteByInquiryId(Integer id);
+
+
+    @Update("""
+        UPDATE inquiry
+        SET id = #{id},
+            title = #{title},
+            content = #{content},
+            inquiry_category = #{inquiry_category}
+        """)
+    int update(InquiryDTO dto);
 }
