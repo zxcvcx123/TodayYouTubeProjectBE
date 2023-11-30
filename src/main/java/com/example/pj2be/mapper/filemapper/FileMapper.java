@@ -42,6 +42,8 @@ public interface FileMapper {
             """)
     CkFileDTO getCkFile(String uuid);
 
+
+    /* 본문 ck에디터영역에 실제로 저장된 이미지의 게시판 번호 업데이트 (임시저장 기본값 : 0) */
     @Update("""
             UPDATE ck_s3 
             SET board_id = #{boardId}

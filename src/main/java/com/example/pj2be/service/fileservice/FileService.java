@@ -137,6 +137,7 @@ public class FileService {
         return null;
     }
 
+    /* 본문 ck에디터영역에 실제로 저장된 이미지의 게시판 번호 업데이트 */
     public void ckS3Update(String[] uuSrc, Integer boardId) {
         for (String src : uuSrc) {
             fileMapper.ckS3Update(src, boardId);

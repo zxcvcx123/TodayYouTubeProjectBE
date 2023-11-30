@@ -31,6 +31,7 @@ public class BoardService {
             }
         }
 
+        /* 본문 ck에디터영역에 실제로 저장된 이미지 소스코드와 게시물ID 보내기 */
         fileService.ckS3Update(uuSrc, board.getId());
     }
 
