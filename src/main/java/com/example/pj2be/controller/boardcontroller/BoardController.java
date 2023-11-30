@@ -55,9 +55,10 @@ public class BoardController {
 
     // 게시글 수정e
     @PutMapping("edit")
-    public void edit(@RequestBody BoardEditDTO board) {
+    public void edit(BoardEditDTO board,
+                    @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files) throws Exception {
         System.out.println(board.getBoard().getId() + "번 게시물 수정 시작 (컨트롤러)");
-        boardService.update(board);
+        boardService.update(board, files);
     }
 
     // 게시글 삭제 (Update 형식)

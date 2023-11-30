@@ -91,11 +91,17 @@ public class BoardService {
     }
 
     // 게시글 수정
-    public void update(BoardEditDTO board) {
+    public void update(BoardEditDTO board, MultipartFile[] files) throws Exception {
         System.out.println(board.getBoard().getId() + "번 게시물 수정 시작 (서비스)");
 
         /* BoardEditDTO의 List<String>타입의 uuSrc를 배열에 담는다. */
         String[] uuSrc = board.getUuSrc().toArray(new String[0]);
+  
+        if(files != null) {
+            for (MultipartFile file : files) {
+                fileService.s3Upload(file, board.getBoard().getId());
+            }
+        }
 
         boardMapper.update(board);
 

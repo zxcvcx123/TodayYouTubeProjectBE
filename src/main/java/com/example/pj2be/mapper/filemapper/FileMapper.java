@@ -42,6 +42,17 @@ public interface FileMapper {
             """)
     CkFileDTO getCkFile(String uuid);
 
+    @Delete("""
+            DELETE FROM file
+            WHERE id = #{id}
+            """)
+    int deleteFileById(Integer id);
+
+    @Select("""
+            SELECT * FROM file
+            WHERE id = #{id}
+            """)
+    FileDTO getFileById(Integer id);
 
     /* 본문 ck에디터영역에 실제로 저장된 이미지의 게시판 번호 업데이트 (임시저장 기본값 : 0) */
     @Update("""

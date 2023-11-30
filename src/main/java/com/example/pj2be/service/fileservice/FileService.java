@@ -138,6 +138,26 @@ public class FileService {
         return null;
     }
 
+    // s3와 db에서 파일 삭제
+    public Boolean deleteFileById(Integer id) {
+
+        FileDTO file = fileMapper.getFileById(id);
+
+        // S3 파일 삭제 key
+        String key = "youtube/" + file.getBoard_id() + "/" + file.getFilename();
+
+        System.out.println("@@@@@@@@@ " + key + " @@@@@@@@@ S3에서 삭제");
+        // S3 파일 삭제
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                .bucket(bucket)
+                .key(key)
+                .build();
+
+        s3.deleteObject(deleteObjectRequest);
+        System.out.println("@@@@@@@@@ " + key + " @@@@@@@@@ S3에서 완료");
+
+        return fileMapper.deleteFileById(id)== 1;
+
     /* 본문 ck에디터영역에 실제로 저장된 이미지의 게시판 번호 업데이트 */
     public void ckS3Update(String[] uuSrc, Integer boardId) {
         for (String src : uuSrc) {
@@ -165,9 +185,7 @@ public class FileService {
             System.out.println("객체 삭제 됨 - key: " + key);
         }
 
-
         fileMapper.ckS3DeleteTempImg();
 
-        System.out.println("===== ck임시파일(s3) 삭제 완료 =====");
     }
 }
