@@ -15,7 +15,6 @@ public class MemberDTO {
     @NotEmpty
     @Size(min = 6, max = 50)
     private String member_id;
-    @NotEmpty
     private String password;
     @NotEmpty
     private String nickname;

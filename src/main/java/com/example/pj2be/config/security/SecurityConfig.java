@@ -3,6 +3,7 @@ package com.example.pj2be.config.security;
 import com.example.pj2be.config.jwt.JwtAuthenticationFilter;
 import com.example.pj2be.config.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,19 +29,21 @@ import java.util.Collections;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity  // Spring Security 설정 활성화
 @RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
-    @Value("${login.success.url}")
-    private String logSuccessUrl;
+    @Value("${react.accsess.url}")
+    private String reactAccsessUrl;
     // HTTP 보안 설정 구성
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
+               .cors(cors -> cors.configurationSource(corsConfigurationSource())) // 요청 도메인의 리소스 접근 활성화
                 .csrf(AbstractHttpConfigurer::disable)
                 // 세션 미사용
                 .sessionManagement((sessionManagemet) ->
@@ -48,28 +51,8 @@ public class SecurityConfig {
                 // 접근 가능 경로 설정
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
-                                .requestMatchers(new AntPathRequestMatcher("/**")).permitAll());
-
-        http
-                .authorizeHttpRequests((authorizeHttpRequest) ->
-                        authorizeHttpRequest
-                                .requestMatchers("/member/login").permitAll()
-                                .anyRequest().authenticated()
-                        )
+                                .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-                 //폼 기반 인증 구성
-//                 //로그인 처리
-//                .formLogin((formLogin) -> formLogin
-//                        .loginProcessingUrl("/member/login")
-//                        .usernameParameter("member_id")
-//                        .passwordParameter("password")
-//                        .loginPage("/member/login")
-//                      .defaultSuccessUrl(logSuccessUrl, true))
-//                // 로그 아웃 처리
-//                .logout((logout) -> logout
-//                        .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
-//                        .logoutSuccessUrl(logSuccessUrl)
-//                        .invalidateHttpSession(true));
 
         return http.build();
     }
@@ -81,9 +64,27 @@ public class SecurityConfig {
     }
 
     // MemberSecurityService에서 가져온 사용자 정보와 PasswordEncode를 사용하여 사용자 정보 인증
+
+
+    // 인증 처리
     @Bean
+
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        log.info("authenticationManager 실행");
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    // 외부 도메인 리소스 접근 허용 설정
+    @Bean CorsConfigurationSource corsConfigurationSource(){
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedOrigins(Arrays.asList(("*")));
+        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        corsConfiguration.setAllowedHeaders(Arrays.asList("Authoriztion", "Cotent-Type"));
+        corsConfiguration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration); // 모든 경로에 허용
+        return source;
     }
 
 }
