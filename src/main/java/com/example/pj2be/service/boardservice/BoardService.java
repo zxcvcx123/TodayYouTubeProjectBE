@@ -90,8 +90,14 @@ public class BoardService {
     // 게시글 수정
     public void update(BoardEditDTO board) {
         System.out.println(board.getBoard().getId() + "번 게시물 수정 시작 (서비스)");
+
+        /* BoardEditDTO의 List<String>타입의 uuSrc를 배열에 담는다. */
+        String[] uuSrc = board.getUuSrc().toArray(new String[0]);
+
         boardMapper.update(board);
 
+        /* 본문 ck에디터영역에 실제로 저장된 이미지 소스코드와 게시물ID 보내기 */
+        fileService.ckS3Update(uuSrc, board.getBoard().getId());
     }
 
     // 게시글 삭제 (Update 형식)
