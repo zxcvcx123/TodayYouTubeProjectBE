@@ -2,10 +2,7 @@ package com.example.pj2be.mapper.filemapper;
 
 import com.example.pj2be.domain.file.CkFileDTO;
 import com.example.pj2be.domain.file.FileDTO;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,4 +41,30 @@ public interface FileMapper {
             WHERE uuid = #{uuid}
             """)
     CkFileDTO getCkFile(String uuid);
+
+
+    /* 본문 ck에디터영역에 실제로 저장된 이미지의 게시판 번호 업데이트 (임시저장 기본값 : 0) */
+    @Update("""
+            UPDATE ck_s3 
+            SET board_id = #{boardId}
+            WHERE uuid = #{src}
+            """)
+    void ckS3Update(String src, Integer boardId);
+
+    // board_id = 0 인 임시 이미지 파일 리턴하기
+    @Select("""
+            SELECT ckuri
+            FROM ck_s3
+            WHERE board_id = 0;
+            """)
+    List<String> ckS3getTempImg();
+
+    // board_id=0 인 임시 이미지 파일 전부 삭제
+    @Delete("""
+            DELETE FROM ck_s3
+            WHERE board_id = 0;
+            """)
+    void ckS3DeleteTempImg();
+
+
 }
