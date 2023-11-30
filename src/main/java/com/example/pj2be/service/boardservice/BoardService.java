@@ -90,22 +90,22 @@ public class BoardService {
     }
 
     // 게시글 수정
-    public void update(BoardEditDTO board, MultipartFile[] files) throws Exception {
-        System.out.println(board.getBoard().getId() + "번 게시물 수정 시작 (서비스)");
+    public void update(BoardDTO board, MultipartFile[] files) throws Exception {
+        System.out.println(board.getId() + "번 게시물 수정 시작 (서비스)");
 
         /* BoardEditDTO의 List<String>타입의 uuSrc를 배열에 담는다. */
         String[] uuSrc = board.getUuSrc().toArray(new String[0]);
   
         if(files != null) {
             for (MultipartFile file : files) {
-                fileService.s3Upload(file, board.getBoard().getId());
+                fileService.s3Upload(file, board.getId());
             }
         }
 
         boardMapper.update(board);
 
         /* 본문 ck에디터영역에 실제로 저장된 이미지 소스코드와 게시물ID 보내기, 업로드 이미지에 게시물id 부여 */
-        fileService.ckS3Update(uuSrc, board.getBoard().getId());
+        fileService.ckS3Update(uuSrc, board.getId());
 
         // 임시로 저장된 이미지 삭제 ( board_id = 0 인 것 )
         fileService.ckS3DeleteTempImg();

@@ -156,7 +156,8 @@ public class FileService {
         s3.deleteObject(deleteObjectRequest);
         System.out.println("@@@@@@@@@ " + key + " @@@@@@@@@ S3에서 완료");
 
-        return fileMapper.deleteFileById(id)== 1;
+        return fileMapper.deleteFileById(id) == 1;
+    }
 
     /* 본문 ck에디터영역에 실제로 저장된 이미지의 게시판 번호 업데이트 */
     public void ckS3Update(String[] uuSrc, Integer boardId) {

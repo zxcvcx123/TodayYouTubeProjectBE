@@ -85,13 +85,13 @@ public interface BoardMapper {
     // BoardEditDTO 내부에 BoardDTO가 있음.
     @Update("""
             UPDATE board
-            SET title = #{board.title},
-                link = #{board.link},
-                content = #{board.content},
+            SET title = #{title},
+                link = #{link},
+                content = #{content},
                 updated_at = CURRENT_TIMESTAMP
-            WHERE id = #{board.id}
+            WHERE id = #{id}
             """)
-    void update(BoardEditDTO board);
+    void update(BoardDTO board);
 
 
     // 게시글 삭제 (Update 방식)

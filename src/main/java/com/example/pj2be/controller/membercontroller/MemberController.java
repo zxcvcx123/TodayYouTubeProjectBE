@@ -1,29 +1,20 @@
 package com.example.pj2be.controller.membercontroller;
 
 import com.example.pj2be.config.security.SecurityUtil;
-import com.example.pj2be.domain.member.JwtToken;
 import com.example.pj2be.domain.member.MemberDTO;
 import com.example.pj2be.domain.member.MemberLoginDTO;
 import com.example.pj2be.domain.member.MemberRole;
-import com.example.pj2be.service.memberservice.MemberLoginService;
 import com.example.pj2be.service.memberservice.MemberService;
 import com.example.pj2be.service.memberservice.MemberSignupService;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -34,7 +25,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MemberSignupService service;
-    private final MemberLoginService memberLoginService;
+    // private final MemberLoginService memberLoginService;
 
     // 회원 가입
     @PostMapping("/signup")
@@ -133,17 +124,17 @@ public class MemberController {
         return ResponseEntity.internalServerError().build() ;
     }
 
-    // 로그인 유지
-    @GetMapping("/loginProvider")
-    public ResponseEntity<MemberDTO> loginProvider(@RequestBody Optional<MemberLoginDTO> memberLoginDTO){
-        try{
-            MemberDTO memberDTO = memberLoginService.getLoginInfo(memberLoginDTO.get().getMember_id());
-            System.out.println("memberDTO = " + memberDTO);
-            return ResponseEntity.ok().body(memberDTO);
-        }catch (Exception e){
-            return ResponseEntity.badRequest().build();
-        }
-    }
+//    // 로그인 유지
+//    @GetMapping("/loginProvider")
+//    public ResponseEntity<MemberDTO> loginProvider(@RequestBody Optional<MemberLoginDTO> memberLoginDTO){
+//        try{
+//            MemberDTO memberDTO = memberLoginService.getLoginInfo(memberLoginDTO.get().getMember_id());
+//            System.out.println("memberDTO = " + memberDTO);
+//            return ResponseEntity.ok().body(memberDTO);
+//        }catch (Exception e){
+//            return ResponseEntity.badRequest().build();
+//        }
+//    }
 
     // 테스트
     @PostMapping("/test")
