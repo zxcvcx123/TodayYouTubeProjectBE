@@ -13,4 +13,5 @@ public class CommentDTO {
     private LocalDateTime created_at;
     private LocalDateTime update_at;
     private String nickname;
+    private Integer count_comment_like;
 }

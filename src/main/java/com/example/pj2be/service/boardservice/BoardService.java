@@ -1,6 +1,7 @@
 package com.example.pj2be.service.boardservice;
 
 import com.example.pj2be.domain.board.BoardDTO;
+import com.example.pj2be.domain.board.BoardEditDTO;
 import com.example.pj2be.mapper.boardmapper.BoardMapper;
 import com.example.pj2be.service.fileservice.FileService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class BoardService {
 
     // 게시글 작성
     // TODO : 타이틀, 본문 isBlank면 작성 되어서는 안됨
-    public void save(BoardDTO board, MultipartFile[] files) throws Exception {
+    public void save(BoardDTO board, MultipartFile[] files, String[] uuSrc) throws Exception {
         boardMapper.insert(board);
 
         if(files != null) {
@@ -30,6 +31,12 @@ public class BoardService {
                 fileService.s3Upload(file, board.getId());
             }
         }
+
+        /* 본문 ck에디터영역에 실제로 저장된 이미지 소스코드와 게시물ID 보내기 */
+        fileService.ckS3Update(uuSrc, board.getId());
+
+        // 임시로 저장된 이미지 삭제 ( board_id = 0 인 것 )
+        fileService.ckS3DeleteTempImg();
     }
 
     // 게시글 리스트, 페이징
@@ -83,10 +90,25 @@ public class BoardService {
     }
 
     // 게시글 수정
-    public void update(BoardDTO board) {
+    public void update(BoardEditDTO board, MultipartFile[] files) throws Exception {
+        System.out.println(board.getBoard().getId() + "번 게시물 수정 시작 (서비스)");
+
+        /* BoardEditDTO의 List<String>타입의 uuSrc를 배열에 담는다. */
+        String[] uuSrc = board.getUuSrc().toArray(new String[0]);
+  
+        if(files != null) {
+            for (MultipartFile file : files) {
+                fileService.s3Upload(file, board.getBoard().getId());
+            }
+        }
 
         boardMapper.update(board);
 
+        /* 본문 ck에디터영역에 실제로 저장된 이미지 소스코드와 게시물ID 보내기, 업로드 이미지에 게시물id 부여 */
+        fileService.ckS3Update(uuSrc, board.getBoard().getId());
+
+        // 임시로 저장된 이미지 삭제 ( board_id = 0 인 것 )
+        fileService.ckS3DeleteTempImg();
     }
 
     // 게시글 삭제 (Update 형식)
