@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -150,7 +151,19 @@ public class FileService {
 
         // board_id가 0인 이미지 목록 List<String>으로 담아 오기
         List<String> ckUris = fileMapper.ckS3getTempImg();
-        System.out.println("ckUris = " + ckUris);
+
+        for (String uri : ckUris) {
+            String key = uri.substring(uri.indexOf("/fileserver/") + "/fileserver/".length());
+
+//            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+//                    .bucket(bucket)
+//                    .key(key)
+//                    .build();
+//
+//            // S3에서 객체 삭제
+//            s3.deleteObject(deleteObjectRequest);
+            System.out.println("객체 삭제 됨 - key: " + key);
+        }
 
 
 //        fileMapper.ckS3DeleteTempImg();
