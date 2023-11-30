@@ -122,6 +122,7 @@ public class FileService {
         s3.putObject(objectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
         // mapper 실행전 FileDTO 세팅
+        // CKEditor에서 업로드된 파일을 AWS S3에 저장한 후, 해당 파일 정보를 데이터베이스에 기록
         CkFileDTO ckfileDTO = new CkFileDTO();
         ckfileDTO.setFilename(file.getOriginalFilename());
         ckfileDTO.setCkuri(urlPrefix + "fileserver/" + uuid + "/" + file.getOriginalFilename());
@@ -156,5 +157,35 @@ public class FileService {
         System.out.println("@@@@@@@@@ " + key + " @@@@@@@@@ S3에서 완료");
 
         return fileMapper.deleteFileById(id)== 1;
+
+    /* 본문 ck에디터영역에 실제로 저장된 이미지의 게시판 번호 업데이트 */
+    public void ckS3Update(String[] uuSrc, Integer boardId) {
+        for (String src : uuSrc) {
+            fileMapper.ckS3Update(src, boardId);
+        }
+    }
+
+    // 임시 이미지 파일 전부 삭제 (board_id = 0 인 것)
+    public void ckS3DeleteTempImg() {
+        System.out.println("===== ck임시파일(s3) 삭제 시작 =====");
+
+        // board_id가 0인 이미지 목록 List<String>으로 담아 오기
+        List<String> ckUris = fileMapper.ckS3getTempImg();
+
+        for (String uri : ckUris) {
+            String key = uri.substring(uri.indexOf("/fileserver/") + "/fileserver/".length());
+            key = "fileserver/" + key;
+            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                    .bucket(bucket)
+                    .key(key)
+                    .build();
+
+            // S3에서 객체 삭제
+            s3.deleteObject(deleteObjectRequest);
+            System.out.println("객체 삭제 됨 - key: " + key);
+        }
+
+        fileMapper.ckS3DeleteTempImg();
+
     }
 }

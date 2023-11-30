@@ -3,6 +3,7 @@ package com.example.pj2be.domain.board;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class BoardDTO {
@@ -19,6 +20,7 @@ public class BoardDTO {
     private LocalDateTime deleted_at;
     private Integer countlike;
     private Integer views;
+    private List<String> uuSrc;
 
 
 
