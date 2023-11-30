@@ -15,12 +15,17 @@ public class CommentLikeService {
 
     private final CommentLikeMapper mapper;
 
-    public Map<String, Object> getLike(Integer id) {
-        CommentLikeDTO dto = new CommentLikeDTO();
-        dto.setMember_id("testadmin");
+    public Map<String, Object> update(CommentLikeDTO commentLike) {
+        int count = 0;
+        if (mapper.delete(commentLike) == 0) {
+            count = mapper.insert(commentLike);
+        }
 
-        mapper.selectByBoardId(id, dto.getMember_id());
+        int countCommentLike = mapper.countByCommentId(commentLike.getComment_id());
 
-        return null;
+        return Map.of("commentLike", count == 1,
+                "countCommentLike", countCommentLike);
     }
+
+
 }
