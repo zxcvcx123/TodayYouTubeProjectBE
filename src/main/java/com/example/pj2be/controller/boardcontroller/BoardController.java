@@ -1,6 +1,7 @@
 package com.example.pj2be.controller.boardcontroller;
 
 import com.example.pj2be.domain.board.BoardDTO;
+import com.example.pj2be.domain.board.BoardEditDTO;
 import com.example.pj2be.service.boardservice.BoardService;
 import com.example.pj2be.service.fileservice.FileService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.Map;
 
 
@@ -51,10 +53,11 @@ public class BoardController {
         return boardService.get(id);
     }
 
-    // 게시글 수정
+    // 게시글 수정e
     @PutMapping("edit")
-    public void edit(@RequestBody BoardDTO board) {
-        boardService.update(board);
+    public void edit(@RequestBody BoardEditDTO board) {
+        System.out.println("uuSrc = " + board);
+//        boardService.update(board, uuSrc);
     }
 
     // 게시글 삭제 (Update 형식)
