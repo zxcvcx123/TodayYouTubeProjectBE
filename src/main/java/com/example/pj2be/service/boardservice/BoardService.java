@@ -34,6 +34,9 @@ public class BoardService {
 
         /* 본문 ck에디터영역에 실제로 저장된 이미지 소스코드와 게시물ID 보내기 */
         fileService.ckS3Update(uuSrc, board.getId());
+
+        // 임시로 저장된 이미지 삭제 ( board_id = 0 인 것 )
+        fileService.ckS3DeleteTempImg(uuSrc);
     }
 
     // 게시글 리스트, 페이징

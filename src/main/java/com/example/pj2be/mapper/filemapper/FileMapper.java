@@ -50,4 +50,21 @@ public interface FileMapper {
             WHERE uuid = #{src}
             """)
     void ckS3Update(String src, Integer boardId);
+
+    // board_id = 0 인 임시 이미지 파일 리턴하기
+    @Select("""
+            SELECT ckuri
+            FROM ck_s3
+            WHERE board_id = 0;
+            """)
+    List<String> ckS3getTempImg();
+
+    // board_id=0 인 임시 이미지 파일 전부 삭제
+    @Delete("""
+            DELETE FROM ck_s3
+            WHERE board_id = 0;
+            """)
+    void ckS3DeleteTempImg();
+
+
 }
