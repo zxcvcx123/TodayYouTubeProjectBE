@@ -25,30 +25,42 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     // jwt 토큰 추출 및 유효성 검증
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        log.info("doFilter가 실행됨!!");
-        String token = resolveToken((HttpServletRequest) request);
-        System.out.println("doFilter가 실행됨!! token = " + token);
+        try{
+            HttpServletRequest req = (HttpServletRequest) request;
+            String path = req.getServletPath();
+            if(path.contains("/api/member")){
+                System.out.println("요청된 URL은 ? = " + path);
+                System.out.println("(JwtAuthenticationFilter: doFilter)유효성 검증 시작 ==========================================");
+                String token = resolveToken(req);
+                // 토큰이 존재하는 경우 권한 검사
+                if(token != null && jwtTokenProvider.validateToken(token)){
+                    Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                    // SecurtiyContext에 인증 정보 설정
+                    System.out.println("(dofilter)권한 등록 실행, 권한은? = " + authentication);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
 
-        // 토큰 유효성 검사
-        if(token != null && jwtTokenProvider.validateToken(token)){
-            Authentication authentication = jwtTokenProvider.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            System.out.println("JwtAuthenticationFilter dofilter의 if문 실행");
+                // 로그인 요청 처리 후, Security Config의 filter 체인에게 전달
+
+            }
+            else{
+                System.out.println(path + " = 검증 경로가 아님");
+            }
+            System.out.println( path + " = 유효성 검증 끝 ================================");
+        }catch (Exception e){
+                System.out.println(" (JwtAuthenticationFilter: doFilter) 예외 발생");
+//                System.out.println("(JwtAuthenticationFilter: doFilter) 유효성 검증 끝 ================================");
         }
+        // 로그인 요청 처리 후, filter 체인에게 전달
 
-        // 로그인 요청 처리 후, Security Config의 filter 체인에게 전달
         chain.doFilter(request, response);
-        System.out.println("doFilter로 돌아옴 chain.dofilter(request ="+request+", response "+response);
     }
 
     // 요청 헤더에서 토큰 정보 추출
     private String resolveToken(HttpServletRequest request){
-        log.info("resolveToken 실행됨!!");
-        log.info(request.getRequestURI());
         String bearerToken = request.getHeader("Authorization");
-        System.out.println("resolveToken의 bearerToken = " + bearerToken);
+        System.out.println("JwtAuthenticationFilter resolveToken 토큰 추출 결과 = " + bearerToken);
         if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")){
-            System.out.println("resolveToken의 반환값 " + bearerToken.substring(7));
             return bearerToken.substring(7);
         }
         return null;

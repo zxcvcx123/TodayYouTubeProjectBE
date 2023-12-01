@@ -46,6 +46,7 @@ public class MemberService {
         jwtTokenAuthenticationMap.put("token", jwtToken);
         jwtTokenAuthenticationMap.put("authentication", authentication.getAuthorities());
         jwtTokenAuthenticationMap.put("memberInfo", member_id);
+        System.out.println("jwtTokenAuthenticationMap.get(\"memberInfo\") = " + jwtTokenAuthenticationMap.get("memberInfo"));
 
         return jwtTokenAuthenticationMap;
     }

@@ -43,7 +43,7 @@ public class JwtTokenProvider {
         long now = (new Date()).getTime();
 
         // Access 토큰 생성
-        Date accessTokenExpiresIn = new Date(now + 1800000); // 테스트 용 시간
+        Date accessTokenExpiresIn = new Date(now + 180000000); // 테스트 용 시간
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 // 클레임명을 auth라는 이름으로 저장, 실제값: GENERAL_MEMBER
@@ -52,15 +52,15 @@ public class JwtTokenProvider {
                 // 서명 정보 HS256알고리즘
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
-        System.out.println("생성된 accessToken =" + accessToken);
+
 
         // Refresh 토큰 생성
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + 3600000)) // 테스트 용 시간
+                .setExpiration(new Date(now + 360000000)) // 테스트 용 시간
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
-        System.out.println("생성된 refreshToken =" + refreshToken);
+
         System.out.println("생성된 jwtToken 반환" + JwtToken.builder()
                 .grantType("Bearer")
                 .accessToken(accessToken)
@@ -94,14 +94,14 @@ public class JwtTokenProvider {
         // UserDetails 객체를 만들어서 Authentication을 리턴
         // User는 UserDetails를 구현한 class
         UserDetails principal = new User(claims.getSubject(),"",authorities);
-        log.info("사용자가 가진 출처 확인", principal);
         return new UsernamePasswordAuthenticationToken(principal,"",authorities);
     }
 
     // 토큰 정보 검증 메서드
     public boolean validateToken(String token){
 
-        log.info("validateToken(토큰 검증) 실행됨!!!");
+        System.out.println("JwtTokenProvider validateToken 토큰 유효성 검증 시작 ==================================== ");
+
         try{
             // 토큰 유효성 확인
             Jwts.parserBuilder()
@@ -118,7 +118,7 @@ public class JwtTokenProvider {
         }catch (IllegalArgumentException e){
             log.info("JWT claims string is empty", e);
         }
-        System.out.println("valiateToken 결과는 false");
+        System.out.println("JwtTokenProvider validateToken 결과 = 유효하지 않은 토큰");
         return false;
     }
 

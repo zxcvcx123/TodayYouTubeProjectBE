@@ -45,7 +45,8 @@ public class SecurityConfig {
                 // 접근 가능 경로 설정
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
-                                .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
+                                .requestMatchers(new AntPathRequestMatcher("/member/info")).hasAuthority("ROLE_GENERAL_MEMBER")
+                                .anyRequest().permitAll())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

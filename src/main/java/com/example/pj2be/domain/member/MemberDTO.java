@@ -24,5 +24,7 @@ public class MemberDTO {
     private String phone_number;
     private String gender;
     private LocalDate birth_date;
+    private String role_name;
+    private int total_like;
 
 }

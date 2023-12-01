@@ -55,9 +55,15 @@ public interface MemberMapper {
 
 
     @Select("""
-            SELECT * FROM member
-            WHERE member_id = #{member_id};
-            """)
+        
+            SELECT COUNT(bl.board_id) AS total_like, m.id, m.member_id, m.nickname, m.email, m.phone_number, r.role_name
+            FROM member m
+                     LEFT JOIN roles r ON m.role_id = r.role_id
+                    LEFT JOIN board b ON b.board_member_id = m.member_id
+                     LEFT JOIN boardlike bl ON b.id = bl.board_id
+            WHERE m.id = 31
+            GROUP BY m.member_id = #{member_id};
+                """)
     MemberDTO findLoginInfoByMemberId(String member_id);
 
 }
