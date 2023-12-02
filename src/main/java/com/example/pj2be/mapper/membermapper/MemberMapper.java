@@ -61,7 +61,7 @@ public interface MemberMapper {
                      LEFT JOIN roles r ON m.role_id = r.role_id
                     LEFT JOIN board b ON b.board_member_id = m.member_id
                      LEFT JOIN boardlike bl ON b.id = bl.board_id
-            WHERE m.id = 31
+            WHERE m.member_id = #{member_id}
             GROUP BY m.member_id = #{member_id};
                 """)
     MemberDTO findLoginInfoByMemberId(String member_id);
