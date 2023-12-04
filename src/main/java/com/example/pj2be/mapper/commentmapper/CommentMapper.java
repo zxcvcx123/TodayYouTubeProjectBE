@@ -21,6 +21,7 @@ public interface CommentMapper {
                    c.member_id,
                    c.comment,
                    c.created_at,
+                   
                    m.nickname nickname,
                    (SELECT COUNT(cl.id) FROM comment_like cl WHERE cl.comment_id = c.id) count_comment_like
                                            

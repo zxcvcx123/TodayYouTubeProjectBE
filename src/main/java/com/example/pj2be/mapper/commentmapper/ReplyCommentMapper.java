@@ -10,9 +10,9 @@ public interface ReplyCommentMapper {
 
     @Insert("""
             INSERT INTO reply_comment (comment_id, reply_comment, member_id)
-            VALUES (#{comment_id}, #{reply_comment}, #{member_id})
+            VALUES (#{reply_comment.comment_id}, #{reply_comment.reply_comment}, #{reply_comment.member_id})
             """)
-    int reply_commentInsert(ReplyCommentDTO reply_comment);
+    int reply_commentInsert(ReplyCommentDTO reply_comment, String member_id);
 
     @Select("""
             SELECT r.id,

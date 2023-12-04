@@ -15,8 +15,9 @@ public class CommentController {
     private final CommentService service;
 
     @PostMapping("/add")
-    public void commentAdd(@RequestBody CommentDTO comment) {
-        service.commentAdd(comment);
+    public void commentAdd(@RequestBody CommentDTO comment, String member_id) {
+        System.out.println("member_id = " + member_id);
+        service.commentAdd(comment, member_id);
     }
 
     @GetMapping("list")
