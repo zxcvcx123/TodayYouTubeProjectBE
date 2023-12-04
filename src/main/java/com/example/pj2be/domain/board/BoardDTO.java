@@ -1,5 +1,6 @@
 package com.example.pj2be.domain.board;
 
+import com.example.pj2be.utill.ChangeTimeStamp;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,10 @@ public class BoardDTO {
     private Integer count_comment;
     private Integer views;
     private List<String> uuSrc;
+
+    public String getAgo() {
+        return ChangeTimeStamp.getAgo(updated_at);
+    }
 
 
 
