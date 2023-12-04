@@ -4,15 +4,21 @@ import com.example.pj2be.config.security.SecurityUtil;
 import com.example.pj2be.domain.member.MemberDTO;
 import com.example.pj2be.domain.member.MemberLoginDTO;
 import com.example.pj2be.domain.member.MemberRole;
+import com.example.pj2be.service.memberservice.MemberLoginService;
 import com.example.pj2be.service.memberservice.MemberService;
 import com.example.pj2be.service.memberservice.MemberSignupService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Map;
 import java.util.Optional;
@@ -24,84 +30,11 @@ import java.util.Optional;
 public class MemberController {
 
     private final MemberService memberService;
-    private final MemberSignupService service;
-    // private final MemberLoginService memberLoginService;
-
-    // 회원 가입
-    @PostMapping("/signup")
-    public ResponseEntity signup(@Valid @RequestBody MemberDTO memberDTO,
-                                 BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().build();
-        }
-        try {
-            memberDTO.setRole_id(2);
-            service.signup(memberDTO);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
-    }
-
-    // 중복 체크 시작
-    // 아이디
-    @GetMapping(value = "/signup/check", params = "member_id")
-    public ResponseEntity<?> checkMemberId(@RequestParam Optional<String> member_id) {
-        System.out.println("MemberController.checkMemberId");
-        // null 여부
-        if (member_id.isPresent()) {
-            // 중복되는 경우
-            if (service.getMemberId(member_id.get())) {
-                // 409 : 리소스 충돌을 나타내는 상태코드
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 존재하는 아이디입니다");
-            } else {
-                return ResponseEntity.ok().body("사용 가능한 아이디입니다");
-            }
-        } else {
-            return ResponseEntity.badRequest().body("잘못된 요청입니다");
-        }
-    }
-
-    // 닉네임
-    @GetMapping(value = "/signup/check", params = "nickname")
-    public ResponseEntity<?> checkNickName(@RequestParam Optional<String> nickname) {
-        // null 여부
-        if (nickname.isPresent()) {
-            // 중복되는 경우
-            if (service.getNickname(nickname.get())) {
-                // 409 : 리소스 충돌을 나타내는 상태코드
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 존재하는 별명입니다");
-            } else {
-                return ResponseEntity.ok().body("사용 가능한 별명입니다");
-            }
-        } else {
-            return ResponseEntity.badRequest().body("잘못된 요청입니다");
-        }
-    }
-
-    // 이메일
-    @GetMapping(value = "/signup/check", params = "email")
-    public ResponseEntity<?> checkEmail(@RequestParam Optional<String> email) {
-        // null 여부
-        if (email.isPresent()) {
-            // 중복되는 경우
-            if (service.getEmail(email.get())) {
-                // 409 : 리소스 충돌을 나타내는 상태코드
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 존재하는 이메일입니다");
-            } else {
-                return ResponseEntity.ok().body("등록 가능한 이메일입니다");
-            }
-        } else {
-            return ResponseEntity.badRequest().body("잘못된 요청입니다");
-        }
-    }
-
-    // 중복 체크 끝
-
+     private final MemberLoginService memberLoginService;
 
     //  로그인
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@Valid @RequestBody MemberLoginDTO memberLoginDTO, BindingResult bindingResult) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody MemberLoginDTO memberLoginDTO, BindingResult bindingResult) {
         log.info("login controller 실행됨");
 
         String member_id = memberLoginDTO.getMember_id();
@@ -112,11 +45,8 @@ public class MemberController {
             // 권한 정보
             String tmp = jwtTokenAuthentication.get("authentication").toString();
             String Auth = String.valueOf(tmp.substring(1, tmp.length()-1));
-
-            if( Auth.equals(MemberRole.GENERAL_MEMBER.getValue()) ){
-                System.out.println("실행 여부 확인");
+            if( Auth.equals(MemberRole.GENERAL_MEMBER.getValue() )|| Auth.equals(MemberRole.ADMIN.getValue()) ){
                 // TODO: 추후 권한에 따른 로직 설정
-                System.out.println("jwtTokenAuthentication.get = " + jwtTokenAuthentication.get("memberInfo"));
                 return ResponseEntity.ok().body(jwtTokenAuthentication);
             };
 
@@ -125,17 +55,39 @@ public class MemberController {
     }
 
 //    // 로그인 유지
-//    @GetMapping("/loginProvider")
-//    public ResponseEntity<MemberDTO> loginProvider(@RequestBody Optional<MemberLoginDTO> memberLoginDTO){
-//        try{
-//            MemberDTO memberDTO = memberLoginService.getLoginInfo(memberLoginDTO.get().getMember_id());
-//            System.out.println("memberDTO = " + memberDTO);
-//            return ResponseEntity.ok().body(memberDTO);
-//        }catch (Exception e){
-//            return ResponseEntity.badRequest().build();
-//        }
-//    }
+    @PostMapping("/loginProvider")
+    public ResponseEntity<MemberDTO> loginProvider(String member_id){
+        try {
+            if (member_id != null) {
+                MemberDTO memberDTO = memberLoginService.getLoginInfo(member_id);
+                return ResponseEntity.ok().body(memberDTO);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+        }catch(Exception e){
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        }
 
+
+        // 회원 정보
+    @GetMapping("/info")
+    public ResponseEntity info(@RequestBody String member_id){
+        // SecurityContext에서 인증 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("authentication.getPrincipal() = " + authentication.getPrincipal());
+
+        // 인증되지 않은 경우
+        if (authentication.getPrincipal() == member_id) {
+            System.out.println("인증된 사용자 = "+ authentication.getPrincipal());
+            return ResponseEntity.ok().build();
+        }else if(authentication.getPrincipal() == "anonymousUser") {
+            System.out.println("인증되지 않은 사용자");
+            System.out.println(authentication.getPrincipal());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.internalServerError().build();
+    }
     // 테스트
     @PostMapping("/test")
     public String test() {

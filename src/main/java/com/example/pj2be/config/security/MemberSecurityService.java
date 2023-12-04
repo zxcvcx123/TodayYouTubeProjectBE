@@ -29,7 +29,7 @@ public class MemberSecurityService implements UserDetailsService {
     private final MemberMapper memberMapper;
 
     @Override
-    public UserDetails loadUserByUsername( String member_id) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String member_id) throws UsernameNotFoundException {
 
         log.info("loadUserByUsername 실행됨.");
         Optional<MemberDTO> _member = memberMapper.findByMemberId(member_id);
@@ -39,19 +39,19 @@ public class MemberSecurityService implements UserDetailsService {
         }
 
         MemberDTO member = _member.get();
-        System.out.println("로그인 시도한 아이디의 실제 계정 = " + member);
+        System.out.println("로그인 시도한 사용자 = " + member);
         List<GrantedAuthority> authorities = new ArrayList<>();
         if (member.getRole_id() == 1) {
 
             authorities.add(new SimpleGrantedAuthority(MemberRole.ADMIN.getValue()));
-            System.out.println("loadUserByUsername 실행됨 -> 권한 등록 : " + authorities);
+            System.out.println("loadUserByUsername 실행됨 -> 시용자 권한 등록증 : " + authorities);
         }else if(member.getRole_id() == 2) {
             authorities.add(new SimpleGrantedAuthority(MemberRole.GENERAL_MEMBER.getValue()));
             System.out.println("loadUserByUsername 실행됨 -> 권한 등록 : "+ authorities);
         }
 
         User userInfo = new User(member.getMember_id(), member.getPassword(), authorities);
-        System.out.println("loadUserByUsername 실행됨 User객체에 저장될 값 = " + userInfo);
+        System.out.println("loadUserByUsername 검증 완료 : 유저의 정보 = " + userInfo);
 
 return userInfo;
     }
