@@ -22,9 +22,6 @@ public class MemberInfoController {
                                            @RequestParam("ob") String categoryOrdedBy,
                                            @RequestParam("ct") String categoryTopics
     ){
-        System.out.println(member_id);
-        System.out.println(categoryOrdedBy);
-        System.out.println(categoryTopics);
         Map<String, Object> myBoardList = memberInfoService.getMyBoardList(member_id, categoryTopics, categoryOrdedBy);
 
         return myBoardList;
