@@ -33,7 +33,6 @@ public class JwtTokenProvider {
     // 로그인 시에 토큰 값 생성
     // Member 정보를 가져와서 AccessToken, RefreshToken을 생성
     public JwtToken generateToken(Authentication authentication) {
-        log.info("generateToken(토큰 생성 코드) 실행됨!!!");
 
         // 권한 로드
         String authorities = authentication.getAuthorities().stream()
@@ -76,8 +75,6 @@ public class JwtTokenProvider {
 
     // Jwt 토큰을 디코딩하여 권한 정보 확인
     public Authentication getAuthentication(String accessToken){
-        log.info("getAuthentication(권한정보확인) 실행됨!!!");
-
         // Jwt 토큰 디코딩
         Claims claims = parseClaims(accessToken);
 
@@ -124,9 +121,7 @@ public class JwtTokenProvider {
 
     // jwt 디코딩
     private Claims parseClaims(String accessToken){
-        log.info("parseClaims(토큰 디코딩) 실행됨!!!");
         try{
-            log.info("parseClaims 디코딩 과정 진행중");
             return Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()

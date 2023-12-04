@@ -29,24 +29,20 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             HttpServletRequest req = (HttpServletRequest) request;
             String path = req.getServletPath();
             if(path.contains("/api/member")){
-                System.out.println("요청된 URL은 ? = " + path);
                 System.out.println("(JwtAuthenticationFilter: doFilter)유효성 검증 시작 ==========================================");
                 String token = resolveToken(req);
                 // 토큰이 존재하는 경우 권한 검사
                 if(token != null && jwtTokenProvider.validateToken(token)){
                     Authentication authentication = jwtTokenProvider.getAuthentication(token);
                     // SecurtiyContext에 인증 정보 설정
-                    System.out.println("(dofilter)권한 등록 실행, 권한은? = " + authentication);
+                    System.out.println("(dofilter)권한은? = " + authentication);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
 
                 // 로그인 요청 처리 후, Security Config의 filter 체인에게 전달
 
+                System.out.println( path + " = 유효성 검증 끝 ================================");
             }
-            else{
-                System.out.println(path + " = 검증 경로가 아님");
-            }
-            System.out.println( path + " = 유효성 검증 끝 ================================");
         }catch (Exception e){
                 System.out.println(" (JwtAuthenticationFilter: doFilter) 예외 발생");
 //                System.out.println("(JwtAuthenticationFilter: doFilter) 유효성 검증 끝 ================================");

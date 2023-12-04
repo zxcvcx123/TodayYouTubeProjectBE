@@ -46,7 +46,6 @@ public class MemberController {
             String tmp = jwtTokenAuthentication.get("authentication").toString();
             String Auth = String.valueOf(tmp.substring(1, tmp.length()-1));
             if( Auth.equals(MemberRole.GENERAL_MEMBER.getValue() )|| Auth.equals(MemberRole.ADMIN.getValue()) ){
-                System.out.println("실행 여부 확인");
                 // TODO: 추후 권한에 따른 로직 설정
                 return ResponseEntity.ok().body(jwtTokenAuthentication);
             };
@@ -59,10 +58,8 @@ public class MemberController {
     @PostMapping("/loginProvider")
     public ResponseEntity<MemberDTO> loginProvider(String member_id){
         try {
-            System.out.println("memberLoginDTO = " + member_id);
             if (member_id != null) {
                 MemberDTO memberDTO = memberLoginService.getLoginInfo(member_id);
-                System.out.println("memberDTO = " + member_id);
                 return ResponseEntity.ok().body(memberDTO);
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

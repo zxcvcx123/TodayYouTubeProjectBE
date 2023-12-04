@@ -10,23 +10,20 @@ import java.util.List;
 public interface MemberInfoMapper {
 
     @Select("""
-            SELECT
+                SELECT
+                b.id,
                 b.title,
-                b.content,
+                b.link,
+                m.nickname,
                 b.created_at,
-                b.board_member_id,
-                
-                COUNT(l.id) AS total_like
-                
-            FROM
-                board b
-                LEFT JOIN boardlike l ON b.id = l.board_id
-                INNER JOIN member m ON b.board_member_id = m.member_id
-            WHERE
-                m.member_id = #{member_id}
-            GROUP BY
-                b.id
-                ORDER BY  DESC;
-            """)
-    List<BoardDTO> getMyBoardList(String member_id);
+                b.views,
+                COUNT(DISTINCT l.id) AS countlike
+            FROM board b
+                     JOIN member m ON b.board_member_id = m.member_id
+                     LEFT JOIN boardlike l on b.id = l.board_id
+            WHERE  b.board_member_id = #{member_id}
+            GROUP BY b.id
+           
+                        """)
+    List<BoardDTO> getMyBoardList(String member_id, String categoryOrdedBy, String categoryTopics);
 }
