@@ -26,17 +26,19 @@ public class BoardService {
     public void save(BoardDTO board, MultipartFile[] files, String[] uuSrc) throws Exception {
         boardMapper.insert(board);
 
-        if(files != null) {
+        if (files != null) {
             for (MultipartFile file : files) {
                 fileService.s3Upload(file, board.getId());
             }
         }
 
         /* 본문 ck에디터영역에 실제로 저장된 이미지 소스코드와 게시물ID 보내기 */
-        fileService.ckS3Update(uuSrc, board.getId());
+        if (uuSrc != null) {
+            fileService.ckS3Update(uuSrc, board.getId());
 
-        // 임시로 저장된 이미지 삭제 ( board_id = 0 인 것 )
-        fileService.ckS3DeleteTempImg();
+            // 임시로 저장된 이미지 삭제 ( board_id = 0 인 것 )
+            fileService.ckS3DeleteTempImg();
+        }
     }
 
     // 게시글 리스트, 페이징
@@ -93,10 +95,20 @@ public class BoardService {
     public void update(BoardDTO board, MultipartFile[] files) throws Exception {
         System.out.println(board.getId() + "번 게시물 수정 시작 (서비스)");
 
-        /* BoardEditDTO의 List<String>타입의 uuSrc를 배열에 담는다. */
-        String[] uuSrc = board.getUuSrc().toArray(new String[0]);
-  
-        if(files != null) {
+        if (board.getUuSrc() != null) {
+            /* BoardEditDTO의 List<String>타입의 uuSrc를 배열에 담는다. */
+            String[] uuSrc = board.getUuSrc().toArray(new String[0]);
+
+            if (uuSrc != null) {
+                /* 본문 ck에디터영역에 실제로 저장된 이미지 소스코드와 게시물ID 보내기, 업로드 이미지에 게시물id 부여 */
+                fileService.ckS3Update(uuSrc, board.getId());
+
+                // 임시로 저장된 이미지 삭제 ( board_id = 0 인 것 )
+                fileService.ckS3DeleteTempImg();
+            }
+        }
+
+        if (files != null) {
             for (MultipartFile file : files) {
                 fileService.s3Upload(file, board.getId());
             }
@@ -104,11 +116,6 @@ public class BoardService {
 
         boardMapper.update(board);
 
-        /* 본문 ck에디터영역에 실제로 저장된 이미지 소스코드와 게시물ID 보내기, 업로드 이미지에 게시물id 부여 */
-        fileService.ckS3Update(uuSrc, board.getId());
-
-        // 임시로 저장된 이미지 삭제 ( board_id = 0 인 것 )
-        fileService.ckS3DeleteTempImg();
     }
 
     // 게시글 삭제 (Update 형식)
