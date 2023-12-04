@@ -17,14 +17,16 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 public class WebSocketController {
-   
-//    // 정상 작동되는 로직
+
 //    @MessageMapping("/hello")
 //    @SendTo("/topic/greetings")
-//    public Greeting greeting(HelloMessage message) throws Exception {
+//    public ChatDTO greeting(ChatDTO chatDTO) throws Exception {
 //        System.out.println("소켓테스트확인됨");
-//        Thread.sleep(1000); // simulated delay
-//        return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
+//        System.out.println(chatDTO);
+//        System.out.println("아이디: " + chatDTO.getId());
+//        System.out.println("내용: " + chatDTO.getChat());
+//
+//        return chatDTO;
 //    }
 
     @MessageMapping("/hello")
@@ -37,5 +39,7 @@ public class WebSocketController {
 
         return chatDTO;
     }
+
+
 
 }

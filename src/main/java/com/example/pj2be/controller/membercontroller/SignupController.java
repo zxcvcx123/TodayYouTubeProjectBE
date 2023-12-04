@@ -41,6 +41,7 @@ public class SignupController {
         @GetMapping(value = "/check", params = "member_id")
         public ResponseEntity<?> checkMemberId(@RequestParam Optional<String> member_id) {
             System.out.println("MemberController.checkMemberId");
+            System.out.println("@@@@@@@@@@@@로그인 체크" + member_id);
             // null 여부
             if (member_id.isPresent()) {
                 // 중복되는 경우
