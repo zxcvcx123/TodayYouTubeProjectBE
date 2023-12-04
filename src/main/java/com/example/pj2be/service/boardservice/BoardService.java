@@ -52,7 +52,7 @@ public class BoardService {
         int startPageNumber = (page - 1) / 5 * 5 + 1;
         int endPageNumber = (startPageNumber + (5 - 1));
         endPageNumber = Math.min(endPageNumber, lastPageNumber);
-        int prevPageNumber = startPageNumber - slice;
+        int prevPageNumber = startPageNumber - 5;
         int nextPageNumber = endPageNumber + 1;
         int initialPage = 1;
 

@@ -3,7 +3,6 @@ package com.example.pj2be.service.inquiryservice;
 import com.example.pj2be.domain.inquiry.InquiryDTO;
 import com.example.pj2be.mapper.inquirymapper.InquiryMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,5 +49,14 @@ public class InquiryService {
 
     public InquiryDTO get(Integer id) {
         return mapper.selectByInquiryId(id);
+    }
+
+    public void delete(Integer id) {
+        mapper.deleteByInquiryId(id);
+    }
+
+    public void update(InquiryDTO dto) {
+
+        mapper.update(dto);
     }
 }
