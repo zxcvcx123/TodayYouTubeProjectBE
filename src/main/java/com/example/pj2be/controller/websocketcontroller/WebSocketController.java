@@ -32,16 +32,16 @@ public class WebSocketController {
 //        return chatDTO;
 //    }
 
-//    @MessageMapping("/hello")
-//    @SendTo("/topic/greetings")
-//    public ChatDTO greeting(ChatDTO chatDTO) throws Exception {
-//        System.out.println("소켓테스트확인됨");
-//        System.out.println(chatDTO);
-//        System.out.println("아이디: " + chatDTO.getId());
-//        System.out.println("내용: " + chatDTO.getChat());
-//
-//        return chatDTO;
-//    }
+    @MessageMapping("/hello")
+    @SendTo("/topic/greetings")
+    public ChatDTO greeting(ChatDTO chatDTO) throws Exception {
+        System.out.println("소켓테스트확인됨");
+        System.out.println(chatDTO);
+        System.out.println("아이디: " + chatDTO.getId());
+        System.out.println("내용: " + chatDTO.getChat());
+
+        return chatDTO;
+    }
 
     @MessageMapping("/like")
     @SendTo("/topic/greetings")
