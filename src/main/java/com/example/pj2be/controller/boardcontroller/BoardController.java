@@ -28,7 +28,7 @@ public class BoardController {
     public void add(BoardDTO board,
                     @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files,
                     @RequestParam(value = "uuSrc[]", required = false) String[] uuSrc) throws Exception {
-
+        System.out.println("@@@@@@@@@@@@@@@@@@" + board.getBoard_member_id() + "님이 게시글 작성함.");
         boardService.save(board, files, uuSrc);
     }
 
