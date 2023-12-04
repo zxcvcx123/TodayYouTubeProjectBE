@@ -1,7 +1,6 @@
-package com.example.pj2be.domain.soket;
+package com.example.pj2be.domain.socket;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
