@@ -30,6 +30,8 @@ public class BoardDTO {
     private Integer views;
     private List<String> uuSrc;
 
+    private String login_member_id;
+
     public String getAgo() {
         return ChangeTimeStamp.getAgo(updated_at);
     }

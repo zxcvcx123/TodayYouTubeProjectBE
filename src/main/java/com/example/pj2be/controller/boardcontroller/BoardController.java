@@ -35,9 +35,9 @@ public class BoardController {
     // @Valid 어노테이션과 BindingResult 객체를 통해 유효성 검증
     @PostMapping("add")
     public ResponseEntity add(@Valid BoardDTO board,
-                                      BindingResult bindingResult,
-                                      @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files,
-                                      @RequestParam(value = "uuSrc[]", required = false) String[] uuSrc) throws Exception {
+                              BindingResult bindingResult,
+                              @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files,
+                              @RequestParam(value = "uuSrc[]", required = false) String[] uuSrc) throws Exception {
         System.out.println("##################board = " + board);
 
         // BoardDTO title, content 유효성 검증 실패시 에러(400) 반환
@@ -83,27 +83,27 @@ public class BoardController {
     // 게시글 수정
     //@PreAuthorize("isAuthenticated() and ((#board.getBoard_member_id() == #login_member_id) and hasRole('ROLE_GENERAL_MEMBER'))")
     @PutMapping("edit")
-    public ResponseEntity edit(BoardDTO board, String login_member_id,
-                                       @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files) throws Exception {
+    public ResponseEntity edit(BoardDTO board,
+                               @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files) throws Exception {
         System.out.println(board.getId() + "번 게시물 수정 시작 (컨트롤러)");
         System.out.println("게시글을 작성했던 사용자 아이디 = " + board.getBoard_member_id());
-        System.out.println("로그인 중인 사용자 아이디 = " + login_member_id);
+        System.out.println("로그인 중인 사용자 아이디 = " + board.getLogin_member_id());
 
         // 게시글 작성자 id와 로그인 사용자 id를 비교하여 유효성 검증
-        if (MemberChecked(login_member_id, board.getBoard_member_id()) == 0) {
+        if (MemberChecked(board.getLogin_member_id(), board.getBoard_member_id()) == 0) {
             boardService.update(board, files);
             return ResponseEntity.ok().build();
         }
 
-        if (MemberChecked(login_member_id, board.getBoard_member_id()) == 1) {
+        if (MemberChecked(board.getLogin_member_id(), board.getBoard_member_id()) == 1) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        if (MemberChecked(login_member_id, board.getBoard_member_id()) == 2) {
+        if (MemberChecked(board.getLogin_member_id(), board.getBoard_member_id()) == 2) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        if (MemberChecked(login_member_id, board.getBoard_member_id()) == 3) {
+        if (MemberChecked(board.getLogin_member_id(), board.getBoard_member_id()) == 3) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
@@ -112,8 +112,10 @@ public class BoardController {
 
     // 게시글 삭제 (Update 형식)
     @PutMapping("remove/{id}")
-    public void remove(@PathVariable Integer id) {
-        boardService.remove(id);
+    public void remove(@PathVariable Integer id, @RequestBody BoardDTO board) {
+        System.out.println("board = " + board);
+        System.out.println("login_member_id = " + board.getLogin_member_id());
+//        boardService.remove(id);
     }
 
     // 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트
