@@ -24,8 +24,8 @@ public class CommentService {
     }
 
 
-    public List<CommentDTO> commentList(Integer board_id) {
-        return mapper.commentSelectByBoard_id(board_id);
+    public List<CommentDTO> commentList(Integer board_id, String member_id) {
+        return mapper.commentSelectByBoard_id(board_id, member_id);
     }
 
 

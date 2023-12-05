@@ -21,8 +21,9 @@ public class CommentController {
     }
 
     @GetMapping("list")
-    public List<CommentDTO> commentList(@RequestParam("board_id") Integer board_id) {
-        return service.commentList(board_id);
+    public List<CommentDTO> commentList(@RequestParam("board_id") Integer board_id,
+                                        @RequestParam(value = "member_id", defaultValue = "") String member_id) {
+        return service.commentList(board_id, member_id);
     }
 
     @DeleteMapping("{comment_id}")

@@ -14,5 +14,5 @@ public class CommentDTO {
     private LocalDateTime update_at;
     private String nickname;
     private Integer count_comment_like;
-
+    private Boolean likeHeart;
 }
