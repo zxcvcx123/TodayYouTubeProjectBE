@@ -112,10 +112,28 @@ public class BoardController {
 
     // 게시글 삭제 (Update 형식)
     @PutMapping("remove/{id}")
-    public void remove(@PathVariable Integer id, @RequestBody BoardDTO board) {
-        System.out.println("board = " + board);
-        System.out.println("login_member_id = " + board.getLogin_member_id());
-//        boardService.remove(id);
+    public ResponseEntity remove(@PathVariable Integer id, @RequestBody BoardDTO board) {
+        System.out.println("@@@@@@@@@" + board.getLogin_member_id() + " 사용자가 " + board.getId() + "번 게시글 삭제.");
+
+        // 게시글 작성자 id와 로그인 사용자 id를 비교하여 유효성 검증
+        if (MemberChecked(board.getLogin_member_id(), board.getBoard_member_id()) == 0) {
+            boardService.remove(id);
+            return ResponseEntity.ok().build();
+        }
+
+        if (MemberChecked(board.getLogin_member_id(), board.getBoard_member_id()) == 1) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        if (MemberChecked(board.getLogin_member_id(), board.getBoard_member_id()) == 2) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        if (MemberChecked(board.getLogin_member_id(), board.getBoard_member_id()) == 3) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     // 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트
