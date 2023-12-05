@@ -22,7 +22,7 @@ public class BoardDTO {
     private Integer count_comment;
     private Integer views;
     private List<String> uuSrc;
-
+    private String nickname;
 
 
 

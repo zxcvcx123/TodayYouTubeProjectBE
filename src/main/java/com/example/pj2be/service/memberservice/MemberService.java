@@ -33,7 +33,6 @@ public class MemberService {
         // MemberSecurityService loadUserByUsername 호출해서 로그인 요청한 id와 비밀번호와 db에 저장된 정보와 검증을함
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         log.info("login 다시 돌아옴");
-        System.out.println("loadUserByUsername을 Authentication 객체로 저장 = " + authentication );
 
         // 권한만 추출
         System.out.println("authentication.getAuthorities() = " + authentication.getAuthorities());
