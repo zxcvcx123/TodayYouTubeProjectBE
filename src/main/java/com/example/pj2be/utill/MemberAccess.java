@@ -1,6 +1,6 @@
 package com.example.pj2be.utill;
 
-public class MemeberAccess {
+public class MemberAccess {
 
     public static boolean IsLoginMember(String loginId) {
         // memberId 넣으면 로그인 여부 확인 가능
