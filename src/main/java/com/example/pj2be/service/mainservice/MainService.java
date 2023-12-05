@@ -62,8 +62,6 @@ public class MainService {
 
 
 
-        if (sort.equals("daily") || sort.equals("weekly")) {
-
             if (sort.equals("daily")) {
                 startDay = SeoulTime.with(LocalTime.MIDNIGHT);
                 endDay = startDay.plusDays(1);
@@ -73,7 +71,7 @@ public class MainService {
                 endDay = startDay.plusDays(6);
         }
 
-        } else if (sort.equals("monthly")) {
+         else if (sort.equals("monthly")) {
             startDay = SeoulTime.with(TemporalAdjusters.firstDayOfMonth()).with(LocalTime.MIDNIGHT);
             endDay = SeoulTime.with(TemporalAdjusters.lastDayOfMonth()).with(LocalTime.MIDNIGHT);
         }

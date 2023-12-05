@@ -26,7 +26,7 @@ public interface MainMapper {
                views
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
                      LEFT JOIN comment c ON b.id = c.board_id
-        WHERE board_category_code = #{c} AND b.created_at > #{rankingTime}
+        WHERE board_category_code = #{c} AND b.created_at >= #{rankingTime}
         GROUP BY b.id
         ORDER BY countlike desc
         LIMIT 4 OFFSET 1;
@@ -49,7 +49,7 @@ public interface MainMapper {
                views
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
                      LEFT JOIN comment c ON b.id = c.board_id
-        WHERE board_category_code = #{c} AND b.created_at > #{rankingTime}
+        WHERE board_category_code = #{c} AND b.created_at >= #{rankingTime}
         GROUP BY b.id
         ORDER BY countlike desc
         LIMIT 0, 1 ;
@@ -72,7 +72,7 @@ public interface MainMapper {
                views
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
                      LEFT JOIN comment c ON b.id = c.board_id
-        WHERE b.created_at > #{rankingTime}
+        WHERE b.created_at >= #{rankingTime}
         GROUP BY b.id
         ORDER BY countlike desc
         LIMIT 0, 1 ;
@@ -95,7 +95,7 @@ public interface MainMapper {
                views
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
                      LEFT JOIN comment c ON b.id = c.board_id
-        WHERE b.created_at > #{rankingTime}
+        WHERE b.created_at >= #{rankingTime}
         GROUP BY b.id
         ORDER BY countlike desc
         LIMIT 4 OFFSET 1;
@@ -118,7 +118,7 @@ public interface MainMapper {
                views
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
                      LEFT JOIN comment c ON b.id = c.board_id
-        WHERE b.created_at > #{startDay} AND b.created_at < #{endDay}
+        WHERE b.created_at >= #{startDay} AND b.created_at <= #{endDay}
         GROUP BY b.id
         ORDER BY countlike desc
         LIMIT 4 OFFSET 1;
@@ -141,12 +141,12 @@ public interface MainMapper {
                views
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
                      LEFT JOIN comment c ON b.id = c.board_id
-        WHERE b.created_at > #{startDay} AND b.created_at < #{endDay}
+        WHERE b.created_at >= #{startDay} AND b.created_at <= #{endDay}
         GROUP BY b.id
         ORDER BY countlike desc
         LIMIT 0, 1 ;
         """)
-    List<BoardDTO> selectFirstByAll2(LocalDateTime startDay, LocalDateTime endDay);
+    BoardDTO selectFirstByAll2(LocalDateTime startDay, LocalDateTime endDay);
 
 
     @Select("""
@@ -164,7 +164,7 @@ public interface MainMapper {
                views
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
                      LEFT JOIN comment c ON b.id = c.board_id
-        WHERE board_category_code = #{c} AND b.created_at > #{startDay} AND b.created_at < #{endDay}
+        WHERE board_category_code = #{c} AND b.created_at >= #{startDay} AND b.created_at <= #{endDay}
         GROUP BY b.id
         ORDER BY countlike desc
         LIMIT 4 OFFSET 1;
@@ -187,10 +187,10 @@ public interface MainMapper {
                views
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
                      LEFT JOIN comment c ON b.id = c.board_id
-        WHERE board_category_code = #{c} AND b.created_at > #{startDay} AND b.created_at < #{endDay}
+        WHERE board_category_code = #{c} AND b.created_at >= #{startDay} AND b.created_at <= #{endDay}
         GROUP BY b.id
         ORDER BY countlike desc
         LIMIT 0, 1 ;
         """)
-    List<BoardDTO> selectFirstByCategory2(String c, LocalDateTime startDay, LocalDateTime endDay);
+    BoardDTO selectFirstByCategory2(String c, LocalDateTime startDay, LocalDateTime endDay);
 }
