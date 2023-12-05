@@ -26,6 +26,7 @@ public class MainService {
 //        rankingTime = (현재날짜 - ?일) 동안 최다 추천수 받은 날짜
         LocalDateTime rankingTime = b.minusDays(7);
 
+
         Map<String, Object> map = new HashMap<>();
 
 
