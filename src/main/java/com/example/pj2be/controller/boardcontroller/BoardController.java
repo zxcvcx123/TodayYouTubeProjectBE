@@ -31,7 +31,7 @@ public class BoardController {
     // ckeditor 영역에 업로드된 이미지의 소스코드를 배열 형태로 받아옴.
     // @Valid 어노테이션과 BindingResult 객체를 통해 유효성 검증
     @PostMapping("add")
-    public ResponseEntity<String> add(@Valid BoardDTO board,
+    public ResponseEntity add(@Valid BoardDTO board,
                                       BindingResult bindingResult,
                                       @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files,
                                       @RequestParam(value = "uuSrc[]", required = false) String[] uuSrc) throws Exception {
@@ -39,7 +39,7 @@ public class BoardController {
 
         // BoardDTO 유효성 검증 실패시 에러(400) 반환
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("게시글 작성에 실패했습니다. 유효성 검증 오류가 있습니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
         System.out.println("@@@@@@@@@@@@@@@@@@" + board.getBoard_member_id() + "님이 게시글 작성함.");
@@ -74,7 +74,7 @@ public class BoardController {
     // 게시글 수정
     //@PreAuthorize("isAuthenticated() and ((#board.getBoard_member_id() == #login_member_id) and hasRole('ROLE_GENERAL_MEMBER'))")
     @PutMapping("edit")
-    public ResponseEntity<String> edit(BoardDTO board, String login_member_id,
+    public ResponseEntity edit(BoardDTO board, String login_member_id,
                                        @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files) throws Exception {
         System.out.println(board.getId() + "번 게시물 수정 시작 (컨트롤러)");
 
@@ -87,10 +87,10 @@ public class BoardController {
             return ResponseEntity.ok().body("게시글 수정 완료");
         } else if (login_member_id.isBlank()) {
             System.out.println("@@@@@@@@@@@@@@@@@@로그인 중인 사용자 아이디 없음");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한 정보가 없습니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } else {
             System.out.println("@@@@@@@@@@@@@@@@@@작성자와 로그인 사용자 아이디 다름");
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("게시글 수정 접근 권한이 없습니다.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
