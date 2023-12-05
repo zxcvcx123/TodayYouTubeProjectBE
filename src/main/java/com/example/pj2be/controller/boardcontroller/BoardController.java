@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -70,13 +71,27 @@ public class BoardController {
         return boardService.get(id);
     }
 
-    // 게시글 수정e
+    // 게시글 수정
+    //@PreAuthorize("isAuthenticated() and ((#board.getBoard_member_id() == #login_member_id) and hasRole('ROLE_GENERAL_MEMBER'))")
     @PutMapping("edit")
-    public void edit(BoardDTO board,
-                     @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files) throws Exception {
-        System.out.println("@@@@@@@@@@@@@@@@@게시판 테스트: " + board);
+    public ResponseEntity<String> edit(BoardDTO board, String login_member_id,
+                                       @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files) throws Exception {
         System.out.println(board.getId() + "번 게시물 수정 시작 (컨트롤러)");
-        boardService.update(board, files);
+
+        System.out.println("게시글을 작성했던 사용자 아이디 = " + board.getBoard_member_id());
+        System.out.println("로그인 중인 사용자 아이디 = " + login_member_id);
+
+        // 게시글 작성자 id와 로그인 사용자 id를 비교하여 유효성 검증
+        if (board.getBoard_member_id().equals(login_member_id)) {
+            boardService.update(board, files);
+            return ResponseEntity.ok().body("게시글 수정 완료");
+        } else if (login_member_id.isBlank()) {
+            System.out.println("@@@@@@@@@@@@@@@@@@로그인 중인 사용자 아이디 없음");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한 정보가 없습니다.");
+        } else {
+            System.out.println("@@@@@@@@@@@@@@@@@@작성자와 로그인 사용자 아이디 다름");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("게시글 수정 접근 권한이 없습니다.");
+        }
     }
 
     // 게시글 삭제 (Update 형식)
