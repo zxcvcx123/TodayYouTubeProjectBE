@@ -1,6 +1,7 @@
 package com.example.pj2be.domain.board;
 
 import com.example.pj2be.utill.ChangeTimeStamp;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -10,8 +11,13 @@ import java.util.List;
 public class BoardDTO {
 
     private Integer id;
+
+    @NotBlank
     private String title;
+
+    @NotBlank
     private String content;
+
     private String link;
     private String board_category_code;
     private String board_member_id;

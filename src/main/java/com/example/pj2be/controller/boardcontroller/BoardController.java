@@ -4,9 +4,13 @@ import com.example.pj2be.domain.board.BoardDTO;
 import com.example.pj2be.domain.board.BoardEditDTO;
 import com.example.pj2be.service.boardservice.BoardService;
 import com.example.pj2be.service.fileservice.FileService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,12 +28,21 @@ public class BoardController {
 
     // 게시글 작성
     // ckeditor 영역에 업로드된 이미지의 소스코드를 배열 형태로 받아옴.
+    // @Valid 어노테이션과 BindingResult 객체를 통해 유효성 검증
     @PostMapping("add")
-    public void add(BoardDTO board,
-                    @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files,
-                    @RequestParam(value = "uuSrc[]", required = false) String[] uuSrc) throws Exception {
+    public ResponseEntity<String> add(@Valid @RequestBody BoardDTO board,
+                              BindingResult bindingResult,
+                              @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files,
+                              @RequestParam(value = "uuSrc[]", required = false) String[] uuSrc) throws Exception {
+        // BoardDTO 유효성 검증 실패시 에러(400) 반환
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("게시글 작성에 실패했습니다. 유효성 검증 오류가 있습니다.");
+        }
+
         System.out.println("@@@@@@@@@@@@@@@@@@" + board.getBoard_member_id() + "님이 게시글 작성함.");
         boardService.save(board, files, uuSrc);
+
+        return ResponseEntity.ok().body("BoardDto 객체 _ title, content 검증 완료");
     }
 
     // 게시글 목록
