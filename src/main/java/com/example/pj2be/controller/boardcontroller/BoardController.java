@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Arrays;
 import java.util.Map;
 
+import static com.example.pj2be.utill.MemberAccess.IsLoginMember;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -37,10 +39,16 @@ public class BoardController {
                                       @RequestParam(value = "uuSrc[]", required = false) String[] uuSrc) throws Exception {
         System.out.println("##################board = " + board);
 
-        // BoardDTO 유효성 검증 실패시 에러(400) 반환
+        // BoardDTO title, content 유효성 검증 실패시 에러(400) 반환
         if (bindingResult.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+
+        // 글쓰기 버튼 클릭했는데, 로그인 아이디가 null로 오는 것 검증, 비로그인 사용자는 401 반환
+        if (!IsLoginMember(board.getBoard_member_id())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
 
         System.out.println("@@@@@@@@@@@@@@@@@@" + board.getBoard_member_id() + "님이 게시글 작성함.");
         boardService.save(board, files, uuSrc);

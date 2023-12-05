@@ -4,7 +4,7 @@ public class MemberAccess {
 
     public static boolean IsLoginMember(String loginId) {
         // memberId 넣으면 로그인 여부 확인 가능
-        if (loginId != null) {
+        if ((loginId != null) && (loginId.length() > 0) && (!loginId.isBlank())) {
             return true;
         } else {
             return false;
