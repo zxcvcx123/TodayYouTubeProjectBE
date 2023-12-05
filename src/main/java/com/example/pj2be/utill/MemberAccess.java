@@ -5,6 +5,10 @@ import org.springframework.http.ResponseEntity;
 
 public class MemberAccess {
 
+    /** 파라미터 = 로그인 정보 아이디, <br>
+     * 로그인 정보 있을 시 true <br>
+     * 로그인 정보 없을 시 false <br>
+     */
     public static boolean IsLoginMember(String loginId) {
         // memberId 넣으면 로그인 여부 확인 가능
         if ((loginId != null) && (loginId.length() > 0) && (!loginId.isBlank())) {
