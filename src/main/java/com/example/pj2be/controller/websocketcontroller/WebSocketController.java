@@ -43,14 +43,14 @@ public class WebSocketController {
         return chatDTO;
     }
 
-    @MessageMapping("/like")
-    @SendTo("/topic/greetings")
-    public Map<String, Object> testLike(@RequestBody String addLike){
-        System.out.println(addLike);
-        service.addLike();
-        return service.testLike();
-        
-    }
+//    @MessageMapping("/like")
+//    @SendTo("/topic/greetings")
+//    public Map<String, Object> testLike(@RequestBody String addLike){
+//        System.out.println(addLike);
+//        service.addLike();
+//        return service.testLike();
+//
+//    }
 
 
 
