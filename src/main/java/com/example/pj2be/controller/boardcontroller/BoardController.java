@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import static com.example.pj2be.utill.MemberAccess.IsLoginMember;
+import static com.example.pj2be.utill.MemberAccess.MemberChecked;
 
 
 @RestController
@@ -85,21 +86,28 @@ public class BoardController {
     public ResponseEntity edit(BoardDTO board, String login_member_id,
                                        @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files) throws Exception {
         System.out.println(board.getId() + "번 게시물 수정 시작 (컨트롤러)");
-
         System.out.println("게시글을 작성했던 사용자 아이디 = " + board.getBoard_member_id());
         System.out.println("로그인 중인 사용자 아이디 = " + login_member_id);
 
         // 게시글 작성자 id와 로그인 사용자 id를 비교하여 유효성 검증
-        if (board.getBoard_member_id().equals(login_member_id)) {
+        if (MemberChecked(login_member_id, board.getBoard_member_id()) == 0) {
             boardService.update(board, files);
-            return ResponseEntity.ok().body("게시글 수정 완료");
-        } else if (login_member_id.isBlank()) {
-            System.out.println("@@@@@@@@@@@@@@@@@@로그인 중인 사용자 아이디 없음");
+            return ResponseEntity.ok().build();
+        }
+
+        if (MemberChecked(login_member_id, board.getBoard_member_id()) == 1) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        } else {
-            System.out.println("@@@@@@@@@@@@@@@@@@작성자와 로그인 사용자 아이디 다름");
+        }
+
+        if (MemberChecked(login_member_id, board.getBoard_member_id()) == 2) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
+
+        if (MemberChecked(login_member_id, board.getBoard_member_id()) == 3) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     // 게시글 삭제 (Update 형식)

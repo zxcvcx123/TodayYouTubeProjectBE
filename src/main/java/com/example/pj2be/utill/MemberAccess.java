@@ -1,5 +1,8 @@
 package com.example.pj2be.utill;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 public class MemberAccess {
 
     public static boolean IsLoginMember(String loginId) {
@@ -11,19 +14,26 @@ public class MemberAccess {
         }
 
     }
+    /** 첫번째 파라미터 = 로그인 정보 아이디, <br>
+     * 두번째 파라미터 = 작성자 아이디 <br>
+     * 두 파라미터가 서로 같은지 검증하여 ResponseEntity타입 반환 <br>
+     * 전부 통과 : 0 반환 <br>
+     * 로그인 정보 아이디 없음 : 1반환 <br>
+     * 아이디가 서로 다름 : 2 반환 <br>
+     * 다 실패 : 3 반환
+     */
+    public static Integer MemberChecked(String loginId, String writerId) {
 
-    public static boolean MemberChecked(String loginId, String writerId) {
-        // memberId가 있는경우 첫번째 파라미터에 넣고
-        // 작성자를 두번째 파라미터에 넣어서 서로 같은지 검증
-
-        if (loginId.length() > 0 && writerId.length() > 0) {
+        if ((loginId.length() > 0) && (writerId.length() > 0)) {
             if (loginId.equals(writerId)) {
-                return true;
-            } else {
-                return false;
+                return 0;
             }
+            if (loginId.isBlank()) {
+                return 1;
+            }
+            return 2;
         }
-        return false;
+        return 3;
     }
 
 }
