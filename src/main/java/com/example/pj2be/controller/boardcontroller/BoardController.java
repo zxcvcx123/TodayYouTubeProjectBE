@@ -30,10 +30,12 @@ public class BoardController {
     // ckeditor 영역에 업로드된 이미지의 소스코드를 배열 형태로 받아옴.
     // @Valid 어노테이션과 BindingResult 객체를 통해 유효성 검증
     @PostMapping("add")
-    public ResponseEntity<String> add(@Valid @RequestBody BoardDTO board,
-                              BindingResult bindingResult,
-                              @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files,
-                              @RequestParam(value = "uuSrc[]", required = false) String[] uuSrc) throws Exception {
+    public ResponseEntity<String> add(@Valid BoardDTO board,
+                                      BindingResult bindingResult,
+                                      @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files,
+                                      @RequestParam(value = "uuSrc[]", required = false) String[] uuSrc) throws Exception {
+        System.out.println("##################board = " + board);
+
         // BoardDTO 유효성 검증 실패시 에러(400) 반환
         if (bindingResult.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("게시글 작성에 실패했습니다. 유효성 검증 오류가 있습니다.");
@@ -55,8 +57,7 @@ public class BoardController {
             @RequestParam(value = "s", defaultValue = "10") Integer slice) {
 
 
-
-        return boardService.list(page,keyword,category,slice);
+        return boardService.list(page, keyword, category, slice);
     }
 
     // 게시글 보기
@@ -72,7 +73,7 @@ public class BoardController {
     // 게시글 수정e
     @PutMapping("edit")
     public void edit(BoardDTO board,
-                    @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files) throws Exception {
+                     @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files) throws Exception {
         System.out.println("@@@@@@@@@@@@@@@@@게시판 테스트: " + board);
         System.out.println(board.getId() + "번 게시물 수정 시작 (컨트롤러)");
         boardService.update(board, files);
