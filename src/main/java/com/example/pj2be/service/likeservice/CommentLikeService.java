@@ -22,7 +22,8 @@ public class CommentLikeService {
         }
 
         int countCommentLike = mapper.countByCommentId(commentLike.getComment_id());
-
+        System.out.println("countCommentLike = " + countCommentLike);
+        System.out.println("commentLike = " + commentLike);
         return Map.of("commentLike", count == 1,
                 "countCommentLike", countCommentLike);
     }
