@@ -16,9 +16,10 @@ public class MainController {
     private final MainService service;
 
     @GetMapping
-    public Map<String, Object> get(@RequestParam String c) {
+    public Map<String, Object> get(@RequestParam String c,
+                                   @RequestParam String sort) {
 
-        return service.select(c);
+        return service.select(c, sort);
 
     }
 }
