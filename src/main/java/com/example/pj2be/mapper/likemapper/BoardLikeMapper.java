@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface BoardLikeMapper {
 
@@ -22,19 +24,27 @@ public interface BoardLikeMapper {
         FROM boardlike
         WHERE member_id = #{member_id} AND board_id = #{board_id}
         """)
-    int selectByTestId(BoardLikeDTO dto);
+    int selectById(BoardLikeDTO boardLikeDTO);
 
 
     @Delete("""
         DELETE FROM boardlike
-        WHERE board_id = #{id}
-            AND member_id = #{memberId}
+        WHERE board_id = #{board_id}
+            AND member_id = #{member_id}
         """)
-    int deleteByTestId(String memberId, Integer id);
+    int deleteById(BoardLikeDTO boardLikeDTO);
 
     @Insert("""
         INSERT INTO boardlike (board_id, member_id)
-        VALUES (#{id}, #{memberId})
+        VALUES (#{board_id}, #{member_id})
         """)
-    int insertByTestId(String memberId, Integer id);
+    int insertById(BoardLikeDTO boardLikeDTO);
+
+    @Select("""
+            SELECT member_id FROM boardlike
+            WHERE board_id = #{board_id}
+            """)
+    List<String> getCheckListId(Integer board_id);
+
 }
+

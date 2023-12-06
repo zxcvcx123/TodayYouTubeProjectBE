@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -15,35 +16,23 @@ public class BoardLikeService {
 
     private final BoardLikeMapper mapper;
 
-    public Map<String, Object> getBoardLike(Integer id) {
-        BoardLikeDTO dto = new BoardLikeDTO();
-        dto.setBoard_id(id);
+    public Map<String, Object> getBoardLike(BoardLikeDTO boardLikeDTO) {
 
-        // test계정 셋팅
-        dto.setMember_id("test");
-        boolean likey = false;
 
-        // 계정의 좋아요 여부
-        if (mapper.selectByTestId(dto) == 1) {
-          likey = true;
-        } else {
-            likey = false;
-        }
 
         // 게시글 좋아요 갯수
-        int countlike = mapper.countLikeByBoardId(dto);
+        int countlike = mapper.countLikeByBoardId(boardLikeDTO);
 
 
-        return Map.of( "like", likey, "countlike", countlike);
+        return Map.of( "countlike", countlike);
     }
 
-    public Map<String, Object> boardLike(Integer id) {
-        BoardLikeDTO dto = new BoardLikeDTO();
-        dto.setMember_id("test");
+    public Map<String, Object> boardLike(BoardLikeDTO boardLikeDTO) {
 
         int count = 0;
-        if (mapper.deleteByTestId(dto.getMember_id(), id) == 0){
-            mapper.insertByTestId(dto.getMember_id(), id);
+
+        if (mapper.deleteById(boardLikeDTO) == 0){
+            mapper.insertById(boardLikeDTO);
             count = 1;
         }
 
