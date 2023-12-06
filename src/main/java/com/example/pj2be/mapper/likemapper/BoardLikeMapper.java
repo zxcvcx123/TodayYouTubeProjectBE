@@ -44,7 +44,7 @@ public interface BoardLikeMapper {
             SELECT member_id FROM boardlike
             WHERE board_id = #{board_id}
             """)
-    List<String> getCheckListId(Integer board_id);
+    List<String> getCheckListId(BoardLikeDTO boardLikeDTO);
 
 }
 

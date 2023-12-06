@@ -19,12 +19,11 @@ public class BoardLikeService {
     public Map<String, Object> getBoardLike(BoardLikeDTO boardLikeDTO) {
 
 
-
         // 게시글 좋아요 갯수
         int countlike = mapper.countLikeByBoardId(boardLikeDTO);
+        List<String> list = mapper.getCheckListId(boardLikeDTO);
 
-
-        return Map.of( "countlike", countlike);
+        return Map.of( "countlike", countlike, "checkId", list);
     }
 
     public Map<String, Object> boardLike(BoardLikeDTO boardLikeDTO) {
