@@ -26,6 +26,7 @@ public class MemberSignupService {
 
     // 중복 체크 로직 시작
     public boolean getMemberId(String member_id) {
+        System.out.println("mapper.select_member_id(member_id = " + mapper.select_member_id(member_id));
         return mapper.select_member_id(member_id) != null;
     }
 
