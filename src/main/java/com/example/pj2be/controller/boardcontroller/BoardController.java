@@ -73,10 +73,13 @@ public class BoardController {
     // 게시글 조회수
     @PostMapping("{id}/increaseView")
     public void increaseView(@PathVariable Integer id) {
-
-        System.out.println("id = " + id);
-        // 게시글 조회수 증가
-        boardService.increaseViewCount(id);
+        try {
+            // 조회수 증가 로직
+            boardService.increaseViewCount(id);
+        } catch (Exception e) {
+            // 에러 발생 시 로그에 기록
+            System.out.printf("@@@@@ 조회수 증가에 실패하였습니다. board id: {}", id, e);
+        }
     }
 
     // 게시글 보기
