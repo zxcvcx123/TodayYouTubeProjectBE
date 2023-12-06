@@ -29,14 +29,11 @@ public class BoardDTO {
     private Integer count_comment;
     private Integer views;
     private List<String> uuSrc;
-
+    private String categoryName;
     private String login_member_id;
-
     public String getAgo() {
         return ChangeTimeStamp.getAgo(updated_at);
     }
-
-
 
 
 }
