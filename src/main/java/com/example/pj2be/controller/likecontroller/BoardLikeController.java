@@ -1,5 +1,6 @@
 package com.example.pj2be.controller.likecontroller;
 
+import com.example.pj2be.domain.like.BoardLikeDTO;
 import com.example.pj2be.service.likeservice.BoardLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,16 +15,16 @@ public class BoardLikeController {
 
     private final BoardLikeService service;
 
-    @GetMapping("{id}")
-    public ResponseEntity<Map<String, Object>> getBoardLike(@PathVariable Integer id) {
-
-        return ResponseEntity.ok(service.getBoardLike(id));
+    @PostMapping
+    public ResponseEntity<Map<String, Object>> getBoardLike(@RequestBody BoardLikeDTO boardLikeDTO) {
+        System.out.println("처음 게시물 들어갈때 게시판 번호: " + boardLikeDTO.getBoard_id());
+        return ResponseEntity.ok(service.getBoardLike(boardLikeDTO));
     }
 
-    @PostMapping("{id}")
-    public ResponseEntity<Map<String, Object>> boardLike(@PathVariable Integer id) {
+    @PostMapping("/add")
+    public ResponseEntity<Map<String, Object>> boardLike(@RequestBody BoardLikeDTO boardLikeDTO) {
 
-        return ResponseEntity.ok(service.boardLike(id));
+        return ResponseEntity.ok(service.boardLike(boardLikeDTO));
     }
 
 }
