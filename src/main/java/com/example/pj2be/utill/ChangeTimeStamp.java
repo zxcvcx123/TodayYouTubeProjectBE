@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 public class ChangeTimeStamp {
@@ -32,6 +33,14 @@ public class ChangeTimeStamp {
             Duration between = Duration.between(a, b);
             return between.getSeconds() + "초 전";
         }
+    }
+
+//    날짜 시간빼고 출력
+    public static String withOutTime(LocalDateTime a) {
+
+        LocalDateTime justTime = a.withHour(0).withMinute(0).withSecond(0).withNano(0);
+        return justTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
+
     }
 
 }

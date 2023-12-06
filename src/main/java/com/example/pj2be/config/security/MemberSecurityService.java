@@ -34,7 +34,6 @@ public class MemberSecurityService implements UserDetailsService {
         log.info("loadUserByUsername 실행됨.");
         Optional<MemberDTO> _member = memberMapper.findByMemberId(member_id);
         if(_member.isEmpty()){
-            log.info("loadUserByUsername 실행됨 -> 가입되지 않은 사용자인 경우");
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다");
         }
 
