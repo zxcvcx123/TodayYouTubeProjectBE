@@ -23,7 +23,7 @@ public class BoardController {
     private final FileService fileService;
 
     // 게시글 작성
-    // ckeditor 영역에 업로드된 이미지의 소스코드를 배열 형태로 받아옴.
+    // ckeditor 영역에 업로드된 이미지의 소스코드를 배열 형태로 받아옴
     @PostMapping("add")
     public void add(BoardDTO board,
                     @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files,
