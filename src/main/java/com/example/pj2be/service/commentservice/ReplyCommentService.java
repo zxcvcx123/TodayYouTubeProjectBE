@@ -13,10 +13,12 @@ public class ReplyCommentService {
 
     private final ReplyCommentMapper mapper;
 
-    public void reply_commentAdd(ReplyCommentDTO reply_comment) {
+    public void reply_commentAdd(ReplyCommentDTO reply_comment, String member_id) {
         System.out.println("@@@@@@" + reply_comment.getId() + " 댓글 작성 @@@@@@");
-        reply_comment.setMember_id("testadmin");
-        mapper.reply_commentInsert(reply_comment);
+//        reply_comment.setMember_id("testadmin");
+        System.out.println("reply_comment = " + reply_comment);
+        System.out.println("member_id = " + member_id);
+        mapper.reply_commentInsert(reply_comment, member_id);
     }
 
     public List<ReplyCommentDTO> reply_commentList(Integer comment_id) {

@@ -30,7 +30,6 @@ public class BoardController {
     private final BoardService boardService;
     private final FileService fileService;
 
-    // 게시글 작성
     // ckeditor 영역에 업로드된 이미지의 소스코드를 배열 형태로 받아옴.
     // @Valid 어노테이션과 BindingResult 객체를 통해 유효성 검증
     @PostMapping("add")

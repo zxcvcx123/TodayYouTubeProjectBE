@@ -21,8 +21,10 @@ public interface CommentMapper {
                    c.member_id,
                    c.comment,
                    c.created_at,
+                   
                    m.nickname nickname,
-                   (SELECT COUNT(cl.id) FROM comment_like cl WHERE cl.comment_id = c.id) count_comment_like
+                   (SELECT COUNT(cl.id) FROM comment_like cl WHERE cl.comment_id = c.id) count_comment_like,
+                   (SELECT COUNT(cl.id) FROM comment_like cl WHERE cl.comment_id = c.id AND cl.member_id = #{member_id}) likeHeart
                                            
             FROM comment c
                      JOIN member m ON c.member_id = m.member_id
@@ -31,7 +33,7 @@ public interface CommentMapper {
                      
             WHERE board_id = #{board_id}
             """)
-    List<CommentDTO> commentSelectByBoard_id(Integer board_id);
+    List<CommentDTO> commentSelectByBoard_id(Integer board_id, String member_id);
 
     @Delete("""
             DELETE FROM comment

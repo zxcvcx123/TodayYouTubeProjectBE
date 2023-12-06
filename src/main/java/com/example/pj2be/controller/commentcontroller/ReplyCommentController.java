@@ -15,8 +15,8 @@ public class ReplyCommentController {
     private final ReplyCommentService service;
 
     @PostMapping("/add")
-    public void reply_commentAdd(@RequestBody ReplyCommentDTO reply_comment) {
-        service.reply_commentAdd(reply_comment);
+    public void reply_commentAdd(@RequestBody ReplyCommentDTO reply_comment, String member_id) {
+        service.reply_commentAdd(reply_comment, member_id);
     }
 
     @GetMapping("list")

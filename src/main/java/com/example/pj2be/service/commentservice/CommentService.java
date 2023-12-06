@@ -16,15 +16,16 @@ public class CommentService {
     private final CommentMapper mapper;
     private final ReplyCommentMapper replyCommentMapper;
 
-    public void commentAdd(CommentDTO comment) {
+    public void commentAdd(CommentDTO comment, String member_id) {
         System.out.println("@@@@@@" + comment.getId() + " 댓글 작성 @@@@@@");
-        comment.setMember_id("testadmin");
+//        comment.setMember_id("testadmin");
+        System.out.println("member_id = " + member_id);
         mapper.commentInsert(comment);
     }
 
 
-    public List<CommentDTO> commentList(Integer board_id) {
-        return mapper.commentSelectByBoard_id(board_id);
+    public List<CommentDTO> commentList(Integer board_id, String member_id) {
+        return mapper.commentSelectByBoard_id(board_id, member_id);
     }
 
 
