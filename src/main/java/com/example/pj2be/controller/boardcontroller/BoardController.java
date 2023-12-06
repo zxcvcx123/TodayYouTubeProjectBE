@@ -70,12 +70,19 @@ public class BoardController {
         return boardService.list(page, keyword, category, slice);
     }
 
+    // 게시글 조회수
+    @PostMapping("{id}/increaseView")
+    public void increaseView(@PathVariable Integer id) {
+
+        System.out.println("id = " + id);
+        // 게시글 조회수 증가
+        boardService.increaseViewCount(id);
+    }
+
     // 게시글 보기
     @Transactional
     @GetMapping("id/{id}")
     public BoardDTO view(@PathVariable Integer id) {
-        // 게시글 조회수 증가
-        boardService.increaseViewCount(id);
 
         return boardService.get(id);
     }

@@ -126,7 +126,6 @@ public class BoardService {
     }
 
     // 게시글 조회수 증가
-    @Transactional
     public void increaseViewCount(Integer id) {
         boardMapper.increaseViewCount(id);
         System.out.println("@@@@@@@@@@@@@@@@@@ " + id + "번 게시글 조회수 증가.");
