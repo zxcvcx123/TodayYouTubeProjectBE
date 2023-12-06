@@ -32,18 +32,18 @@ public interface MemberMapper {
 
     @Select("""
             SELECT member_id FROM member
-            WHERE role_id = 2 AND member_id = #{member_id}
+            WHERE member_id = #{memberId}
             """)
     String select_member_id(String memberId);
     @Select("""
             SELECT nickname FROM member
-            WHERE role_id = 2 AND nickname = #{nickname}
+            WHERE nickname = #{nickname}
             """)
     String select_nickname(String nickname);
 
     @Select("""
             SELECT email FROM member
-            WHERE role_id = 2 AND email = #{email}
+            WHERE email = #{email}
             """)
     String select_Email(String email);
 

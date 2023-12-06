@@ -40,8 +40,6 @@ public class SignupController {
         // 아이디
         @GetMapping(value = "/check", params = "member_id")
         public ResponseEntity<?> checkMemberId(@RequestParam Optional<String> member_id) {
-            System.out.println("MemberController.checkMemberId");
-            System.out.println("@@@@@@@@@@@@로그인 체크" + member_id);
             // null 여부
             if (member_id.isPresent()) {
                 // 중복되는 경우
@@ -49,6 +47,7 @@ public class SignupController {
                     // 409 : 리소스 충돌을 나타내는 상태코드
                     return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 존재하는 아이디입니다");
                 } else {
+                    System.out.println("service.getMemberId(member_id.get()) = " + service.getMemberId(member_id.get()));
                     return ResponseEntity.ok().body("사용 가능한 아이디입니다");
                 }
             } else {
