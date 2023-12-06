@@ -17,7 +17,7 @@ public interface BoardMapper {
                 #{link}, 
                 #{content}, 
                 (SELECT code FROM category WHERE id = 1 ),
-                (SELECT member_id FROM member WHERE  id = 1)
+                #{board_member_id}
                 )
         """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
@@ -58,7 +58,7 @@ public interface BoardMapper {
                 b.created_at,
                 b.updated_at,
                 COUNT(DISTINCT bl.id) countlike,
-                COUNT(DISTINCT c.id) count_comment, 
+                COUNT(DISTINCT c.id) count_comment,
                 is_show,
                 views
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id

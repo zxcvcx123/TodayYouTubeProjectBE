@@ -22,7 +22,6 @@ public class BoardService {
     private final FileService fileService;
 
     // 게시글 작성
-    // TODO : 타이틀, 본문 isBlank면 작성 되어서는 안됨
     public void save(BoardDTO board, MultipartFile[] files, String[] uuSrc) throws Exception {
         boardMapper.insert(board);
 
@@ -88,6 +87,8 @@ public class BoardService {
     public BoardDTO get(Integer id) {
         BoardDTO board = boardMapper.selectById(id);
 
+        System.out.println("@@@@@@@@@@@@@@@@@@ " + id + "번 게시글 보기.");
+
         return board;
     }
 
@@ -121,12 +122,13 @@ public class BoardService {
     // 게시글 삭제 (Update 형식)
     public void remove(Integer id) {
         boardMapper.remove(id);
+        System.out.println("@@@@@@@@@@@@@@@@@@ " + id + "번 게시글 삭제.");
     }
 
     // 게시글 조회수 증가
-    @Transactional
     public void increaseViewCount(Integer id) {
         boardMapper.increaseViewCount(id);
+        System.out.println("@@@@@@@@@@@@@@@@@@ " + id + "번 게시글 조회수 증가.");
     }
 
 
