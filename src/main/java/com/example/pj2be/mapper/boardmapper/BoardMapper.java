@@ -17,7 +17,7 @@ public interface BoardMapper {
                 #{link}, 
                 #{content}, 
                 (SELECT code FROM category WHERE id = 1 ),
-                (SELECT member_id FROM member WHERE  id = 1)
+                #{board_member_id}
                 )
         """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
