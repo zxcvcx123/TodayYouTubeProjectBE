@@ -48,14 +48,26 @@ public class WebSocketController {
 
     @MessageMapping("/like/")
     @SendTo("/topic/like")
-    public Map<String, Object> like(BoardLikeDTO boardLikeDTO){
-
-        boardLikeService.boardLike(boardLikeDTO);
+    public Map<String, Object> like(BoardLikeDTO boardLikeDTO) {
 
         return boardLikeService.getBoardLike(boardLikeDTO);
 
     }
+    
+    // 특정 누군가에게만 받고 특정 누군가에게만 전달 가능
+    @MessageMapping("/like/add/{userId}")
+    @SendTo("/queue/like/{userId}")
+    public Map<String, Object> addLike(BoardLikeDTO boardLikeDTO,
+                                       @PathVariable String userId) {
 
+        System.out.println("특정 웹소켓: " + boardLikeDTO);
+        System.out.println("특정 웹소켓 계정: " + userId);
+        Map<String , Object> map = new HashMap<>();
+        map.put("like", boardLikeService.boardLike(boardLikeDTO).get("like"));
+        map.put("memberId", boardLikeDTO.getMember_id());
+        System.out.println("보내는 데이터: " + map);
+        return map;
+    }
 
 
 }
