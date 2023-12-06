@@ -26,33 +26,6 @@ public class MainService {
         LocalDateTime SeoulTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         Map<String, Object> map = new HashMap<>();
 
-//       -------------------- 현재 날짜 기준---------------
-        int sortTime = 0;
-//        rankingTime = (현재날짜 - ?일) 동안 최다 추천수 받은 날짜
-//        LocalDateTime rankingTime = LocalDateTime.now();
-//
-//        if (sort.equals("daily") || sort.equals("weekly")) {
-//
-//            if (sort.equals("daily")) {
-//            sortTime = 1;
-//        } else if (sort.equals("weekly")) {
-//            sortTime = 7;
-//        }
-//            rankingTime = SeoulTime.minusDays(sortTime);
-//
-//        } else if (sort.equals("monthly")) {
-//            sortTime = 1;
-//            rankingTime = SeoulTime.minusMonths(sortTime);
-//        }
-
-        //        category가 all일 경우에 다른 mapper메소드 실행
-//        if (c.equals("all")) {
-//            map.put("otherBoardList", mapper.selectOtherByALl(rankingTime));
-//            map.put("firstBoardList", mapper.selectFirstByAll(rankingTime));
-//        } else {
-//            map.put("otherBoardList", mapper.selectOtherByCategory(c, rankingTime));
-//            map.put("firstBoardList", mapper.selectFirstByCategory(c, rankingTime));
-//        }
 
         // ---------------현재날짜 속한 요일 기준--------------
         DayOfWeek dayOfWeek = SeoulTime.getDayOfWeek();
@@ -75,9 +48,6 @@ public class MainService {
             startDay = SeoulTime.with(TemporalAdjusters.firstDayOfMonth()).with(LocalTime.MIDNIGHT);
             endDay = SeoulTime.with(TemporalAdjusters.lastDayOfMonth()).with(LocalTime.MIDNIGHT);
         }
-
-        System.out.println("startDay = " + startDay);
-        System.out.println("endDay = " + endDay);
 
         if (c.equals("all")) {
             map.put("otherBoardList", mapper.selectOtherByALl2(startDay, endDay));
