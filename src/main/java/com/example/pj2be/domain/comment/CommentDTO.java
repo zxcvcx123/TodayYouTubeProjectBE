@@ -1,5 +1,6 @@
 package com.example.pj2be.domain.comment;
 
+import com.example.pj2be.utill.ChangeTimeStamp;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -15,4 +16,6 @@ public class CommentDTO {
     private String nickname;
     private Integer count_comment_like;
     private Boolean likeHeart;
+
+
 }
