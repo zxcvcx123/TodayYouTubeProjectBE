@@ -63,13 +63,13 @@ public interface BoardMapper {
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
                      LEFT JOIN comment c ON b.id = c.board_id
         <where>
-            <if test="category == 'all' or category == 'title'">
+            <if test="type == 'all' or type == 'title'">
                 OR b.title like #{keyword}
             </if>
-            <if test="category == 'all' or category == 'content'">
+            <if test="type == 'all' or type == 'content'">
                  OR b.content like #{keyword}
             </if>
-            <if test="category == 'all' or category == 'board_member_id'">
+            <if test="type == 'all' or type == 'board_member_id'">
                  OR b.board_member_id like #{keyword}
             </if>
         </where>
@@ -78,7 +78,7 @@ public interface BoardMapper {
         LIMIT #{from}, #{slice}
         </script>
         """)
-    List<BoardDTO> selectAll(Integer from, Integer slice, String keyword, String category);
+    List<BoardDTO> selectAll(Integer from, Integer slice, String keyword, String type, String category);
 
     // 게시글 수정
     // BoardEditDTO 내부에 BoardDTO가 있음.

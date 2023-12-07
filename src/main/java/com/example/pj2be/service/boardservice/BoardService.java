@@ -74,7 +74,7 @@ public class BoardService {
         int from = (page - 1) * slice;
 
 
-        map.put("boardList", boardMapper.selectAll(from, slice, "%" + keyword + "%", type));
+        map.put("boardList", boardMapper.selectAll(from, slice, "%" + keyword + "%", type, category));
         map.put("pageInfo", pageInfo);
 
 
