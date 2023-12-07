@@ -121,8 +121,8 @@ public interface MainMapper {
                      LEFT JOIN comment c ON b.id = c.board_id
                      LEFT JOIN youtube.category ct on ct.code = b.board_category_code
         WHERE b.created_at >= #{startDay} AND b.created_at <= #{endDay}
-        GROUP BY b.id, views
-        ORDER BY countlike desc, b.views desc
+        GROUP BY b.id, views, b.created_at
+        ORDER BY countlike desc, b.views desc, b.created_at, b.id
         LIMIT 4 OFFSET 1;
         """)
     List<BoardDTO> selectOtherByALl2(LocalDateTime startDay, LocalDateTime endDay);
@@ -146,8 +146,8 @@ public interface MainMapper {
                      LEFT JOIN comment c ON b.id = c.board_id
                      LEFT JOIN youtube.category ct on ct.code = b.board_category_code
         WHERE b.created_at >= #{startDay} AND b.created_at <= #{endDay}
-        GROUP BY b.id, views
-        ORDER BY countlike desc, b.views desc
+        GROUP BY b.id, views, b.created_at
+        ORDER BY countlike desc, b.views desc, b.created_at, b.id
         LIMIT 0, 1 ;
         """)
     BoardDTO selectFirstByAll2(LocalDateTime startDay, LocalDateTime endDay);
@@ -171,8 +171,8 @@ public interface MainMapper {
                      LEFT JOIN comment c ON b.id = c.board_id
                      LEFT JOIN youtube.category ct on ct.code = b.board_category_code
         WHERE board_category_code = #{c} AND b.created_at >= #{startDay} AND b.created_at <= #{endDay}
-        GROUP BY b.id, views
-        ORDER BY countlike desc, b.views desc
+        GROUP BY b.id, views, b.created_at
+        ORDER BY countlike desc, b.views desc, b.created_at, b.id
         LIMIT 4 OFFSET 1;
         """)
     List<BoardDTO> selectOtherByCategory2(String c, LocalDateTime startDay, LocalDateTime endDay);
@@ -196,8 +196,8 @@ public interface MainMapper {
                      LEFT JOIN comment c ON b.id = c.board_id
                      LEFT JOIN youtube.category ct on ct.code = b.board_category_code
         WHERE board_category_code = #{c} AND b.created_at >= #{startDay} AND b.created_at <= #{endDay}
-        GROUP BY b.id, views
-        ORDER BY countlike desc, b.views desc
+        GROUP BY b.id, views, b.created_at
+        ORDER BY countlike desc, b.views desc, b.created_at, b.id
         LIMIT 0, 1 ;
         """)
     BoardDTO selectFirstByCategory2(String c, LocalDateTime startDay, LocalDateTime endDay);
