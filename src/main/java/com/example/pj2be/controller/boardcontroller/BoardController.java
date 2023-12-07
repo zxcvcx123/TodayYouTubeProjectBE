@@ -61,7 +61,7 @@ public class BoardController {
     @GetMapping("list")
     public Map<String, Object> list(
             @RequestParam(value = "p", defaultValue = "1") Integer page,
-            @RequestParam(value = "c", defaultValue = "all") String type,
+            @RequestParam(value = "t", defaultValue = "all") String type,
             @RequestParam(value = "k", defaultValue = "") String keyword,
             @RequestParam(value = "s", defaultValue = "10") Integer slice,
             @RequestParam(value = "category", defaultValue = "mukbang") String category) {
