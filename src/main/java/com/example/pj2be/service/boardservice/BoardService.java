@@ -1,6 +1,7 @@
 package com.example.pj2be.service.boardservice;
 
 import com.example.pj2be.domain.board.BoardDTO;
+import com.example.pj2be.domain.category.CategoryDTO;
 import com.example.pj2be.mapper.boardmapper.BoardMapper;
 import com.example.pj2be.service.fileservice.FileService;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,8 @@ public class BoardService {
     private final FileService fileService;
 
     // 게시글 작성
-    public void save(BoardDTO board, MultipartFile[] files, String[] uuSrc) throws Exception {
-        boardMapper.insert(board);
+    public void save(BoardDTO board, MultipartFile[] files, String[] uuSrc, CategoryDTO category) throws Exception {
+        boardMapper.insert(board, category);
 
         if (files != null) {
             for (MultipartFile file : files) {

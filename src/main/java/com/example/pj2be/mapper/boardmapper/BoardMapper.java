@@ -1,6 +1,7 @@
 package com.example.pj2be.mapper.boardmapper;
 
 import com.example.pj2be.domain.board.BoardDTO;
+import com.example.pj2be.domain.category.CategoryDTO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -12,15 +13,15 @@ public interface BoardMapper {
     // TODO : 코드, 멤버ID 등 작성시 로그인 정보와 연동 되도록 하기.
     @Insert("""
         INSERT INTO board (title, link, content, board_category_code, board_member_id)
-        VALUES (#{title}, 
-                #{link}, 
-                #{content}, 
-                (SELECT code FROM category WHERE id = 1 ),
-                #{board_member_id}
+        VALUES (#{board.title}, 
+                #{board.link}, 
+                #{board.content}, 
+                (SELECT code FROM category WHERE name_eng = #{category.name_eng} ),
+                #{board.board_member_id}
                 )
         """)
-    @Options(useGeneratedKeys = true, keyProperty = "id")
-    void insert(BoardDTO board);
+    @Options(useGeneratedKeys = true, keyProperty = "board.id")
+    void insert(BoardDTO board, CategoryDTO category);
 
     // 게시글 보기
     @Select("""

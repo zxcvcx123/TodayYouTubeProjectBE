@@ -49,7 +49,7 @@ public class BoardController {
 
         System.out.println("게시글 작성 category = " + category);
         System.out.println("@@@@@@@@@@@@@@@@@@" + board.getBoard_member_id() + "님이 게시글 작성함.");
-        boardService.save(board, files, uuSrc);
+        boardService.save(board, files, uuSrc, category);
 
         return ResponseEntity.ok().body("BoardDto 객체 _ title, content 검증 완료");
     }
