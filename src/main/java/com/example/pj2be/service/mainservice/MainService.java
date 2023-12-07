@@ -44,8 +44,6 @@ public class MainService {
         LocalDateTime startDay = SeoulTime;
         LocalDateTime endDay = SeoulTime;
 
-
-
             if (sort.equals("daily")) {
                 startDay = SeoulTime.with(LocalTime.MIDNIGHT);
                 endDay = startDay.plusDays(1);
