@@ -1,7 +1,6 @@
 package com.example.pj2be.mapper.boardmapper;
 
 import com.example.pj2be.domain.board.BoardDTO;
-import com.example.pj2be.domain.board.BoardEditDTO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -107,21 +106,24 @@ public interface BoardMapper {
     @Select("""
         <script>
         SELECT COUNT(*)
-        FROM board
+        FROM board b
+            JOIN category c on c.code = b.board_category_code
         <where>
-            <if test="category == 'all' or category == 'title'">
-                OR title like #{keyword}
+            <if test="type == 'all' or type == 'title'">
+                OR b.title like #{keyword}
             </if>
-            <if test="category == 'all' or category == 'content'">
-                OR content like #{keyword}
+            <if test="type == 'all' or type == 'content'">
+                OR b.content like #{keyword}
             </if>
-            <if test="category == 'all' or category == 'board_member_id'">
-                OR board_member_id like #{keyword}
+            <if test="type == 'all' or type == 'board_member_id'">
+                OR b.board_member_id like #{keyword}
             </if>
         </where>
+            AND b.board_category_code = c.code 
+            AND c.name_eng = #{category}
         </script>
         """)
-    int selectAllpage(String keyword, String category);
+    int selectAllpage(String keyword, String type, String category);
 
     // 게시글 조회수 증가
     @Update("""
