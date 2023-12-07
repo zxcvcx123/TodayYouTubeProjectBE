@@ -1,21 +1,17 @@
 package com.example.pj2be.controller.boardcontroller;
 
 import com.example.pj2be.domain.board.BoardDTO;
-import com.example.pj2be.domain.board.BoardEditDTO;
 import com.example.pj2be.service.boardservice.BoardService;
 import com.example.pj2be.service.fileservice.FileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
 import java.util.Map;
 
 import static com.example.pj2be.utill.MemberAccess.IsLoginMember;
