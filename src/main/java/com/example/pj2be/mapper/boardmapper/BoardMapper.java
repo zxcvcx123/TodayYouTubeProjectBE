@@ -62,17 +62,27 @@ public interface BoardMapper {
                 views
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
                      LEFT JOIN comment c ON b.id = c.board_id
+                     JOIN category ON b.board_category_code = category.code
         <where>
+            <if test="type == 'all'">
+                AND b.title like #{keyword}
+                AND b.content like #{keyword}
+                AND b.board_member_id like #{keyword}
+            </if>
             <if test="type == 'all' or type == 'title'">
-                OR b.title like #{keyword}
+                AND b.title like #{keyword}
             </if>
             <if test="type == 'all' or type == 'content'">
-                 OR b.content like #{keyword}
+                 AND b.content like #{keyword}
             </if>
             <if test="type == 'all' or type == 'board_member_id'">
-                 OR b.board_member_id like #{keyword}
+                 AND b.board_member_id like #{keyword}
+            </if>
+            <if test="category != null">
+                 AND category.name_eng = #{category}
             </if>
         </where>
+            
         GROUP BY b.id
         ORDER BY b.id DESC
         LIMIT #{from}, #{slice}
@@ -110,17 +120,19 @@ public interface BoardMapper {
             JOIN category c on c.code = b.board_category_code
         <where>
             <if test="type == 'all' or type == 'title'">
-                OR b.title like #{keyword}
+                AND b.title like #{keyword}
             </if>
             <if test="type == 'all' or type == 'content'">
-                OR b.content like #{keyword}
+                AND b.content like #{keyword}
             </if>
             <if test="type == 'all' or type == 'board_member_id'">
-                OR b.board_member_id like #{keyword}
+                AND b.board_member_id like #{keyword}
+            </if>
+            <if test="category != null">
+                AND (b.board_category_code = c.code AND c.name_eng = #{category})
             </if>
         </where>
-            AND b.board_category_code = c.code 
-            AND c.name_eng = #{category}
+            
         </script>
         """)
     int selectAllpage(String keyword, String type, String category);
