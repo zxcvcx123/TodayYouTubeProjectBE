@@ -65,17 +65,19 @@ public interface BoardMapper {
                      JOIN category ON b.board_category_code = category.code
         <where>
             <if test="type == 'all'">
-                AND b.title like #{keyword}
-                AND b.content like #{keyword}
-                AND b.board_member_id like #{keyword}
+                AND (
+                    b.title like #{keyword} OR
+                    b.content like #{keyword} OR
+                    b.board_member_id like #{keyword}
+                )
             </if>
-            <if test="type == 'all' or type == 'title'">
+            <if test="type == 'title'">
                 AND b.title like #{keyword}
             </if>
-            <if test="type == 'all' or type == 'content'">
+            <if test="type == 'content'">
                  AND b.content like #{keyword}
             </if>
-            <if test="type == 'all' or type == 'board_member_id'">
+            <if test="type == 'board_member_id'">
                  AND b.board_member_id like #{keyword}
             </if>
             <if test="category != null">
@@ -119,13 +121,20 @@ public interface BoardMapper {
         FROM board b
             JOIN category c on c.code = b.board_category_code
         <where>
-            <if test="type == 'all' or type == 'title'">
+            <if test="type == 'all'">
+                AND (
+                    b.title like #{keyword} OR
+                    b.content like #{keyword} OR
+                    b.board_member_id like #{keyword}
+                )
+            </if>
+            <if test="type == 'title'">
                 AND b.title like #{keyword}
             </if>
-            <if test="type == 'all' or type == 'content'">
+            <if test="type == 'content'">
                 AND b.content like #{keyword}
             </if>
-            <if test="type == 'all' or type == 'board_member_id'">
+            <if test="type == 'board_member_id'">
                 AND b.board_member_id like #{keyword}
             </if>
             <if test="category != null">
