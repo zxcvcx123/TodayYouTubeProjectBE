@@ -21,7 +21,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/gs-guide-websocket")  // 커넥션을 맺는 경로 설정.
+        registry.addEndpoint("/ws")  // 커넥션을 맺는 경로 설정.
                 .withSockJS(); // 프론트에서 SockJS 같이 사용하는 경우
 
 
