@@ -1,6 +1,7 @@
 package com.example.pj2be.controller.boardcontroller;
 
 import com.example.pj2be.domain.board.BoardDTO;
+import com.example.pj2be.domain.category.CategoryDTO;
 import com.example.pj2be.service.boardservice.BoardService;
 import com.example.pj2be.service.fileservice.FileService;
 import jakarta.validation.Valid;
@@ -31,6 +32,7 @@ public class BoardController {
     @PostMapping("add")
     public ResponseEntity add(@Valid BoardDTO board,
                               BindingResult bindingResult,
+                              CategoryDTO category,
                               @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files,
                               @RequestParam(value = "uuSrc[]", required = false) String[] uuSrc) throws Exception {
         System.out.println("##################board = " + board);
@@ -45,7 +47,7 @@ public class BoardController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-
+        System.out.println("게시글 작성 category = " + category);
         System.out.println("@@@@@@@@@@@@@@@@@@" + board.getBoard_member_id() + "님이 게시글 작성함.");
         boardService.save(board, files, uuSrc);
 
