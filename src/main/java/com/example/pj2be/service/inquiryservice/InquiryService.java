@@ -1,5 +1,6 @@
 package com.example.pj2be.service.inquiryservice;
 
+import com.example.pj2be.domain.answer.AnswerDTO;
 import com.example.pj2be.domain.inquiry.InquiryDTO;
 import com.example.pj2be.mapper.inquirymapper.InquiryMapper;
 import lombok.RequiredArgsConstructor;
@@ -58,5 +59,17 @@ public class InquiryService {
     public void update(InquiryDTO dto) {
 
         mapper.update(dto);
+    }
+
+//    답변추가
+    public void answerAdd(AnswerDTO dto) {
+        mapper.insertAnswer(dto);
+
+        InquiryDTO inquiryDTO = new InquiryDTO();
+        inquiryDTO.setId(dto.getAnswer_board_id());
+        inquiryDTO.setAnswer_status("답변완료");
+        mapper.updateAnswerState(inquiryDTO);
+
+
     }
 }

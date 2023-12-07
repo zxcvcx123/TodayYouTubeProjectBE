@@ -1,5 +1,6 @@
 package com.example.pj2be.mapper.inquirymapper;
 
+import com.example.pj2be.domain.answer.AnswerDTO;
 import com.example.pj2be.domain.inquiry.InquiryDTO;
 import org.apache.ibatis.annotations.*;
 
@@ -17,8 +18,10 @@ public interface InquiryMapper {
                 i.inquiry_member_id,
                 i.created_at,
                 i.updated_at,
-                i.answer_status
+                i.answer_status,
+                a.content answerContent
          FROM inquiry i JOIN inquirycategory ic ON ic.id = i.inquiry_category
+         LEFT JOIN youtube.answer a on i.id = a.answer_board_id
          ORDER BY i.id DESC
         """)
     List<InquiryDTO> selectAll();
@@ -65,4 +68,21 @@ public interface InquiryMapper {
             inquiry_category = #{inquiry_category}
         """)
     int update(InquiryDTO dto);
+
+    @Insert("""
+        INSERT INTO answer (answer_board_id, title, content)
+        VALUES (
+            #{answer_board_id},
+            '답변이 완료되었습니다.',
+            #{content}
+        )
+        """)
+    int insertAnswer(AnswerDTO dto);
+
+    @Update("""
+        UPDATE inquiry
+        SET answer_status = #{answer_status}
+        WHERE id = #{id}
+        """)
+    int updateAnswerState(InquiryDTO inquiryDTO);
 }

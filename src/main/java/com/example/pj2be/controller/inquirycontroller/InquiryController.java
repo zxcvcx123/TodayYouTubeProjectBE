@@ -1,5 +1,6 @@
 package com.example.pj2be.controller.inquirycontroller;
 
+import com.example.pj2be.domain.answer.AnswerDTO;
 import com.example.pj2be.domain.inquiry.InquiryDTO;
 import com.example.pj2be.service.inquiryservice.InquiryService;
 import lombok.RequiredArgsConstructor;
@@ -56,6 +57,14 @@ public class InquiryController {
         dto.setInquiry_member_id("testadmin");
 
         service.update(dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("answer")
+    public ResponseEntity answer(@RequestBody AnswerDTO dto) {
+        System.out.println("dto = " + dto);
+
+        service.answerAdd(dto);
         return ResponseEntity.ok().build();
     }
 }
