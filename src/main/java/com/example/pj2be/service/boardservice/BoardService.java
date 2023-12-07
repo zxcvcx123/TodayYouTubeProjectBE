@@ -76,6 +76,7 @@ public class BoardService {
 
         map.put("boardList", boardMapper.selectAll(from, slice, "%" + keyword + "%", type, category));
         map.put("pageInfo", pageInfo);
+        map.put("boardInfo", category);
 
         System.out.println("boardList: " + map.get("boardList"));
         System.out.println("pageInfo: " + map.get("pageInfo"));
