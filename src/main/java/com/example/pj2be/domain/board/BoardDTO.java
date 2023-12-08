@@ -40,6 +40,9 @@ public class BoardDTO {
     // ---------- 로그인 사용자 유효성 검증 ----------
     private String login_member_id;
 
+    // ---------- 게시물 번호 저장 ----------
+    private Integer rownum;
+
     // ---------- 시간 포맷 변경 ----------
     public String getAgo() {
         return ChangeTimeStamp.getAgo(updated_at);
