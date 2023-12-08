@@ -1,5 +1,6 @@
 package com.example.pj2be.service.mainservice;
 
+import com.example.pj2be.domain.board.BoardDTO;
 import com.example.pj2be.mapper.mainmapper.MainMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,9 +10,9 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -26,14 +27,22 @@ public class MainService {
         LocalDateTime SeoulTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         Map<String, Object> map = new HashMap<>();
 
+        map.put("mainRecommendBoardList", mapper.selectRecommendList());
+        map.put("mainHitsBoardList", mapper.selectHitsList());
+
+        map.put("mainBoardList2", mapper.selectCategory2());
+        map.put("mainBoardList3", mapper.selectCategory3());
+        map.put("mainBoardList4", mapper.selectCategory4());
+        map.put("mainBoardList5", mapper.selectCategory5());
+        map.put("mainBoardList6", mapper.selectCategory6());
+        map.put("mainBoardList7", mapper.selectCategory7());
+
 
         // ---------------현재날짜 속한 요일 기준--------------
         DayOfWeek dayOfWeek = SeoulTime.getDayOfWeek();
         int weekNumber = dayOfWeek.getValue();
         LocalDateTime startDay = SeoulTime;
         LocalDateTime endDay = SeoulTime;
-
-
 
             if (sort.equals("daily")) {
                 startDay = SeoulTime.with(LocalTime.MIDNIGHT);
@@ -62,4 +71,7 @@ public class MainService {
 
         return map;
     }
+
+
+
 }

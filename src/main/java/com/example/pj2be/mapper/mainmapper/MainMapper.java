@@ -201,4 +201,90 @@ public interface MainMapper {
         LIMIT 0, 1 ;
         """)
     BoardDTO selectFirstByCategory2(String c, LocalDateTime startDay, LocalDateTime endDay);
+
+    @Select("""
+            SELECT title, b.id, b.created_at,
+                   b.updated_at
+            FROM board b
+            JOIN category c ON b.board_category_code = c.code
+            WHERE board_category_code = 'C002'
+            ORDER BY b.created_at DESC
+            LIMIT 0, 5 ;
+            """)
+    List<BoardDTO> selectCategory2();
+
+    @Select("""
+            SELECT title, b.id, b.created_at,
+                   b.updated_at
+            FROM board b
+            JOIN category c ON b.board_category_code = c.code
+            WHERE board_category_code = 'C003'
+            ORDER BY b.created_at DESC
+            LIMIT 0, 5 ;
+            """)
+    List<BoardDTO> selectCategory3();
+
+    @Select("""
+            SELECT title, b.id, b.created_at,
+                   b.updated_at
+            FROM board b
+            JOIN category c ON b.board_category_code = c.code
+            WHERE board_category_code = 'C004'
+            ORDER BY b.created_at DESC
+            LIMIT 0, 5 ;
+            """)
+    List<BoardDTO> selectCategory4();
+
+    @Select("""
+            SELECT title, b.id, b.created_at,
+                   b.updated_at
+            FROM board b
+            JOIN category c ON b.board_category_code = c.code
+            WHERE board_category_code = 'C005'
+            ORDER BY b.created_at DESC
+            LIMIT 0, 5 ;
+            """)
+    List<BoardDTO> selectCategory5();
+
+    @Select("""
+            SELECT title, b.id, b.created_at,
+                   b.updated_at
+            FROM board b
+            JOIN category c ON b.board_category_code = c.code
+            WHERE board_category_code = 'C006'
+            ORDER BY b.created_at DESC
+            LIMIT 0, 5 ;
+            """)
+    List<BoardDTO> selectCategory6();
+
+    @Select("""
+            SELECT b.title, b.id, b.created_at,
+                   b.updated_at
+            FROM board b
+            JOIN category c ON b.board_category_code = c.code
+            WHERE board_category_code = 'C007'
+            ORDER BY b.created_at DESC
+            LIMIT 0, 5 ;
+            """)
+    List<BoardDTO> selectCategory7();
+
+    @Select("""
+            SELECT b.title, b.id, b.created_at,
+                   b.updated_at
+            FROM board b
+            JOIN boardlike bl ON b.id = bl.board_id
+            GROUP BY b.id, b.views
+            ORDER BY COUNT(DISTINCT bl.id) DESC, b.views DESC
+            LIMIT 5;
+            """)
+    List<BoardDTO> selectRecommendList();
+
+    @Select("""
+            SELECT title, b.id, b.created_at,
+                   b.updated_at
+            FROM board b
+            ORDER BY b.views DESC, b.created_at DESC
+            LIMIT 0, 5;
+            """)
+    List<BoardDTO> selectHitsList();
 }
