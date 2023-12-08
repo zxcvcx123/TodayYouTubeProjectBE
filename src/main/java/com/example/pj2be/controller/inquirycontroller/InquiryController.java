@@ -22,7 +22,6 @@ public class InquiryController {
     public Map<String, Object> list(@RequestParam(value = "p", defaultValue = "1") Integer page,
                                     @RequestBody InquiryDTO dto){
 
-
         return service.list(page, dto);
 
     }
@@ -31,7 +30,6 @@ public class InquiryController {
     public ResponseEntity write(@RequestBody InquiryDTO dto) {
 
 //        로그인 객체 되면 수정
-        dto.setInquiry_member_id("testadmin");
 
         if (!service.validate(dto)) {
             return ResponseEntity.badRequest().build();
@@ -43,8 +41,8 @@ public class InquiryController {
 
     @GetMapping("{id}")
     public InquiryDTO view(@PathVariable Integer id) {
-        InquiryDTO dto = new InquiryDTO();
-        dto.setInquiry_member_id("testadmin");
+
+
 
         return service.get(id);
     }

@@ -26,10 +26,12 @@ public class InquiryService {
         // 전체페이지, 보여줄페이지 수, 왼쪽끝페이지, 오른쪽끝페이지, 담페이지, 이전페이지,
         int countAll;
 
+        System.out.println("dto = " + dto);
+
         if (dto.getRole_name().equals("운영자")) {
             countAll = mapper.selectAllpage();
         } else {
-            countAll = mapper.selectPageByMemberId(dto.getInquiry_member_id());
+            countAll = mapper.selectPageByMemberId(dto.getLogin_member_id());
         }
         int lastPageNumber = (countAll - 1) / 5 + 1;
         int startPageNumber = (page - 1) / 5 * 5 + 1;
@@ -62,7 +64,7 @@ public class InquiryService {
             map.put("inquiryList", mapper.selectAll(from));
             map.put("pageInfo", pageInfo);
         } else {
-            map.put("inquiryList", mapper.selectByMemberId(dto.getInquiry_member_id(), from));
+            map.put("inquiryList", mapper.selectByMemberId(dto.getLogin_member_id(), from));
             map.put("pageInfo", pageInfo);
         }
 

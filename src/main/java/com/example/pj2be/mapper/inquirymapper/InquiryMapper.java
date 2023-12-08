@@ -99,9 +99,9 @@ public interface InquiryMapper {
     @Select("""
         SELECT COUNT(*)
         FROM inquiry
-        WHERE inquiry_member_id = #{inquiryMemberId}
+        WHERE inquiry_member_id = #{loginMember}
         """)
-    int selectPageByMemberId(String inquiryMemberId);
+    int selectPageByMemberId(String loginMember);
 
     @Select("""
         
