@@ -22,7 +22,6 @@ public class InquiryController {
     public Map<String, Object> list(@RequestParam(value = "p", defaultValue = "1") Integer page,
                                     @RequestBody InquiryDTO dto){
 
-        System.out.println("dto = " + dto);
 
         return service.list(page, dto);
 
