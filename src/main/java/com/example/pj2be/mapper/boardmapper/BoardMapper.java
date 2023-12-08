@@ -45,6 +45,7 @@ public interface BoardMapper {
                           JOIN roles r on m.role_id = r.role_id
                     
         WHERE b.id = #{id}
+            AND b.is_show = true
         GROUP BY b.id ORDER BY b.id DESC;
         """)
     BoardDTO selectById(Integer id);
