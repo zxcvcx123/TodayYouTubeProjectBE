@@ -1,8 +1,10 @@
 package com.example.pj2be.mapper.membermapper;
 
 import com.example.pj2be.domain.board.BoardDTO;
+import com.example.pj2be.domain.member.MemberUpdateDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -68,4 +70,19 @@ public interface MemberInfoMapper {
                         
             """)
     int countAll(String member_id, String categoryTopics);
+
+    @Update("""
+            UPDATE member 
+            SET nickname = #{nickname},
+                email = #{email},
+                password = #{password},
+                phone_number = #{phone_number}
+            WHERE member_id = #{member_id}
+            """)
+    boolean updateMemberInformation(String member_id, String nickname, String email, String password, String phone_number);
+
+    @Select("""
+            SELECT password FROM member WHERE member_id = #{member_id}
+            """)
+    String getPasswordByMemberId(String member_id);
 }

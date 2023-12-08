@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Data
@@ -25,6 +26,11 @@ public class MemberDTO {
     private String gender;
     private LocalDate birth_date;
     private String role_name;
-    private int total_like;
-
+    private Integer total_like;
+    private Integer total_board;
+    private Integer total_comment;
+    private Integer total_views;
+    private Integer image_id;
+    private String image_name;
+    private String url;
 }
