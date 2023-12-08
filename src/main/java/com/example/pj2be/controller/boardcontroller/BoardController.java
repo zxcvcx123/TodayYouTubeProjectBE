@@ -67,6 +67,7 @@ public class BoardController {
         System.out.println("@@@@@@@@@@@category = " + category);
 
         return boardService.list(page, keyword, type, slice, category);
+
     }
 
     // 게시글 조회수

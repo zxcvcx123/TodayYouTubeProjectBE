@@ -1,6 +1,8 @@
 package com.example.pj2be.controller.inquirycontroller;
 
+import com.example.pj2be.domain.answer.AnswerDTO;
 import com.example.pj2be.domain.inquiry.InquiryDTO;
+import com.example.pj2be.domain.member.MemberDTO;
 import com.example.pj2be.service.inquiryservice.InquiryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +18,11 @@ public class InquiryController {
 
     private final InquiryService service;
 
-    @GetMapping("list")
-    public List<InquiryDTO> list(){
-        return service.list();
+    @PostMapping("list")
+    public Map<String, Object> list(@RequestParam(value = "p", defaultValue = "1") Integer page,
+                                    @RequestBody InquiryDTO dto){
+
+        return service.list(page, dto);
 
     }
 
@@ -26,7 +30,6 @@ public class InquiryController {
     public ResponseEntity write(@RequestBody InquiryDTO dto) {
 
 //        로그인 객체 되면 수정
-        dto.setInquiry_member_id("testadmin");
 
         if (!service.validate(dto)) {
             return ResponseEntity.badRequest().build();
@@ -38,8 +41,8 @@ public class InquiryController {
 
     @GetMapping("{id}")
     public InquiryDTO view(@PathVariable Integer id) {
-        InquiryDTO dto = new InquiryDTO();
-        dto.setInquiry_member_id("testadmin");
+
+
 
         return service.get(id);
     }
@@ -56,6 +59,14 @@ public class InquiryController {
         dto.setInquiry_member_id("testadmin");
 
         service.update(dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("answer")
+    public ResponseEntity answer(@RequestBody AnswerDTO dto) {
+        System.out.println("dto = " + dto);
+
+        service.answerAdd(dto);
         return ResponseEntity.ok().build();
     }
 }

@@ -49,6 +49,7 @@ public class MainService {
             endDay = SeoulTime.with(TemporalAdjusters.lastDayOfMonth()).with(LocalTime.MIDNIGHT);
         }
 
+
         if (c.equals("all")) {
             map.put("otherBoardList", mapper.selectOtherByALl2(startDay, endDay));
             map.put("firstBoardList", mapper.selectFirstByAll2(startDay, endDay));

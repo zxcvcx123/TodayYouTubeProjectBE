@@ -15,6 +15,9 @@ public class InquiryDTO {
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
     private String answer_status;
+    private String answerContent;
+    private String login_member_id;
+    private String role_name;
 
     public String getAgo() {
         return ChangeTimeStamp.getAgo(created_at);

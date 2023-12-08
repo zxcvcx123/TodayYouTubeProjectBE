@@ -79,6 +79,10 @@ public class BoardService {
         map.put("pageInfo", pageInfo);
         map.put("boardInfo", category);
 
+        System.out.println("pageInfo = " + pageInfo);
+
+        
+
         return map;
     }
 
