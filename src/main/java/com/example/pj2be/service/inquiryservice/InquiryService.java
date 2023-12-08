@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -18,7 +17,7 @@ public class InquiryService {
 
     private final InquiryMapper mapper;
 
-    public Map<String, Object> list(Integer page) {
+    public Map<String, Object> list(Integer page, InquiryDTO dto) {
 
         Map<String, Object> map = new HashMap<>();
         Map<String, Object> pageInfo = new HashMap<>();
@@ -26,7 +25,12 @@ public class InquiryService {
         // 페이징 필요한 것들
         // 전체페이지, 보여줄페이지 수, 왼쪽끝페이지, 오른쪽끝페이지, 담페이지, 이전페이지,
         int countAll;
-        countAll = mapper.selectAllpage();
+
+        if (dto.getRole_name().equals("운영자")) {
+            countAll = mapper.selectAllpage();
+        } else {
+            countAll = mapper.selectPageByMemberId(dto.getInquiry_member_id());
+        }
         int lastPageNumber = (countAll - 1) / 5 + 1;
         int startPageNumber = (page - 1) / 5 * 5 + 1;
         int endPageNumber = (startPageNumber + (5 - 1));
@@ -52,9 +56,17 @@ public class InquiryService {
 
         int from = (page - 1) * 5;
 
+        // 운영자인지, 멤버인지에 따라 게시물 출력
 
-        map.put("inquiryList", mapper.selectAll(from));
-        map.put("pageInfo", pageInfo);
+        if (dto.getRole_name().equals("운영자")) {
+            map.put("inquiryList", mapper.selectAll(from));
+            map.put("pageInfo", pageInfo);
+        } else {
+            map.put("inquiryList", mapper.selectByMemberId(dto.getInquiry_member_id(), from));
+            map.put("pageInfo", pageInfo);
+        }
+
+
 
 
         return map;

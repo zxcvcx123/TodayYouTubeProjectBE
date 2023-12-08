@@ -2,6 +2,7 @@ package com.example.pj2be.controller.inquirycontroller;
 
 import com.example.pj2be.domain.answer.AnswerDTO;
 import com.example.pj2be.domain.inquiry.InquiryDTO;
+import com.example.pj2be.domain.member.MemberDTO;
 import com.example.pj2be.service.inquiryservice.InquiryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,13 @@ public class InquiryController {
 
     private final InquiryService service;
 
-    @GetMapping("list")
-    public Map<String, Object> list(@RequestParam(value = "p", defaultValue = "1") Integer page){
+    @PostMapping("list")
+    public Map<String, Object> list(@RequestParam(value = "p", defaultValue = "1") Integer page,
+                                    @RequestBody InquiryDTO dto){
 
-        return service.list(page);
+        System.out.println("dto = " + dto);
+
+        return service.list(page, dto);
 
     }
 

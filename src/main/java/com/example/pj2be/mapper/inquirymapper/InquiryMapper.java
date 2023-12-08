@@ -95,4 +95,32 @@ public interface InquiryMapper {
         FROM inquiry
         """)
     int selectAllpage();
+
+    @Select("""
+        SELECT COUNT(*)
+        FROM inquiry
+        WHERE inquiry_member_id = #{inquiryMemberId}
+        """)
+    int selectPageByMemberId(String inquiryMemberId);
+
+    @Select("""
+        
+            SELECT i.id,
+               ic.category as inquiry_category,
+               i.title,
+               i.content,
+               i.inquiry_member_id,
+               i.created_at,
+               i.updated_at,
+               i.answer_status,
+               a.content answerContent
+        FROM inquiry i JOIN inquirycategory ic ON ic.id = i.inquiry_category
+                       LEFT JOIN youtube.answer a on i.id = a.answer_board_id
+        WHERE inquiry_member_id = #{id}
+        ORDER BY i.id DESC
+        LIMIT #{from}, 10;
+        """)
+    List<InquiryDTO> selectByMemberId(String id, Integer from);
+
+
 }
