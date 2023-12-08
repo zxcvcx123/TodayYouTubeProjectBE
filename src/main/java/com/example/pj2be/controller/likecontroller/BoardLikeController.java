@@ -18,12 +18,11 @@ public class BoardLikeController {
     @PostMapping
     public ResponseEntity<Map<String, Object>> getBoardLike(@RequestBody BoardLikeDTO boardLikeDTO) {
         System.out.println("처음 게시물 들어갈때 게시판 번호: " + boardLikeDTO.getBoard_id());
-        return ResponseEntity.ok(service.getBoardLike(boardLikeDTO));
+        return ResponseEntity.ok(service.getFirstBoardLike(boardLikeDTO));
     }
 
     @PostMapping("/add")
     public ResponseEntity<Map<String, Object>> boardLike(@RequestBody BoardLikeDTO boardLikeDTO) {
-
         return ResponseEntity.ok(service.boardLike(boardLikeDTO));
     }
 
