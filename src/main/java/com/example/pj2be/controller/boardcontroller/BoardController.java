@@ -66,6 +66,7 @@ public class BoardController {
             @RequestParam(value = "s", defaultValue = "10") Integer slice) {
 
 
+
         return boardService.list(page, keyword, category, slice);
     }
 

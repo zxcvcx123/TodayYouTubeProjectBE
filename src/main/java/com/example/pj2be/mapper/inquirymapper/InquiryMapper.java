@@ -46,9 +46,12 @@ public interface InquiryMapper {
                 i.inquiry_member_id,
                 i.created_at,
                 i.updated_at,
-                i.answer_status
+                i.answer_status,
+                a.content answerContent
         FROM inquiry i JOIN inquirycategory ic on ic.id = i.inquiry_category
+         LEFT JOIN youtube.answer a on i.id = a.answer_board_id
         WHERE i.id = #{id}
+        ORDER BY i.id DESC;
         """)
     InquiryDTO selectByInquiryId(Integer id);
 

@@ -16,9 +16,8 @@ public class InquiryService {
 
     private final InquiryMapper mapper;
 
-    public List<InquiryDTO> list() {
+    public List<InquiryDTO> list(Integer page) {
         return mapper.selectAll();
-
     }
 
     public void add(InquiryDTO dto) {
