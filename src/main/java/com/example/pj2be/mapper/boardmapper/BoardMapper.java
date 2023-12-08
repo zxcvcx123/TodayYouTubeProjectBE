@@ -34,12 +34,15 @@ public interface BoardMapper {
                b.created_at, 
                b.updated_at, 
                COUNT(DISTINCT bl.id) countlike, 
-               COUNT(DISTINCT c.comment) count_comment, 
-              
+               COUNT(DISTINCT c.comment) count_comment,         
                b.is_show,
-               b.views
+               b.views,
+               m.nickname,
+               r.role_name
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
                      LEFT JOIN comment c ON b.id = c.board_id
+                          JOIN member m on b.board_member_id = m.member_id
+                          JOIN roles r on m.role_id = r.role_id
                     
         WHERE b.id = #{id}
         GROUP BY b.id ORDER BY b.id DESC;
