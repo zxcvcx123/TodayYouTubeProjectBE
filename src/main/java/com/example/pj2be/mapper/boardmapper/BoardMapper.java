@@ -90,6 +90,7 @@ public interface BoardMapper {
             <if test="category != null">
                  AND category.name_eng = #{category}
             </if>
+                 AND b.is_show = true
         </where>
         GROUP BY b.id
         ORDER BY rownum DESC
