@@ -1,7 +1,7 @@
 package com.example.pj2be.service.boardservice;
 
 import com.example.pj2be.domain.board.BoardDTO;
-import com.example.pj2be.domain.board.BoardEditDTO;
+import com.example.pj2be.domain.category.CategoryDTO;
 import com.example.pj2be.mapper.boardmapper.BoardMapper;
 import com.example.pj2be.service.fileservice.FileService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -22,8 +23,8 @@ public class BoardService {
     private final FileService fileService;
 
     // 게시글 작성
-    public void save(BoardDTO board, MultipartFile[] files, String[] uuSrc) throws Exception {
-        boardMapper.insert(board);
+    public void save(BoardDTO board, MultipartFile[] files, String[] uuSrc, CategoryDTO category) throws Exception {
+        boardMapper.insert(board, category);
 
         if (files != null) {
             for (MultipartFile file : files) {
@@ -41,14 +42,14 @@ public class BoardService {
     }
 
     // 게시글 리스트, 페이징
-    public Map<String, Object> list(Integer page, String keyword, String category, Integer slice) {
+    public Map<String, Object> list(Integer page, String keyword, String type, Integer slice, String category) {
         Map<String, Object> map = new HashMap<>();
         Map<String, Object> pageInfo = new HashMap<>();
 
         // 페이징 필요한 것들
         // 전체페이지, 보여줄페이지 수, 왼쪽끝페이지, 오른쪽끝페이지, 담페이지, 이전페이지,
         int countAll;
-        countAll = boardMapper.selectAllpage("%" + keyword + "%", category);
+        countAll = boardMapper.selectAllpage("%" + keyword + "%", type, category);
         int lastPageNumber = (countAll - 1) / slice + 1;
         int startPageNumber = (page - 1) / 5 * 5 + 1;
         int endPageNumber = (startPageNumber + (5 - 1));
@@ -74,11 +75,13 @@ public class BoardService {
 
         int from = (page - 1) * slice;
 
-
-        map.put("boardList", boardMapper.selectAll(from, slice, "%" + keyword + "%", category));
+        map.put("boardList", boardMapper.selectAll(from, slice, "%" + keyword + "%", type, category));
         map.put("pageInfo", pageInfo);
+        map.put("boardInfo", category);
 
         System.out.println("pageInfo = " + pageInfo);
+
+        
 
         return map;
     }

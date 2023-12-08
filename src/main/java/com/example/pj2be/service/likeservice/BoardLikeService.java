@@ -16,15 +16,32 @@ public class BoardLikeService {
 
     private final BoardLikeMapper mapper;
 
+
+    public Map<String, Object> getFirstBoardLike(BoardLikeDTO boardLikeDTO) {
+
+
+        // 게시글 좋아요 갯수
+        int countlike = mapper.countLikeByBoardId(boardLikeDTO);
+
+        int like = mapper.selectById(boardLikeDTO);
+
+        return Map.of( "countlike", countlike, "like", like);
+    }
+
+
     public Map<String, Object> getBoardLike(BoardLikeDTO boardLikeDTO) {
 
 
         // 게시글 좋아요 갯수
         int countlike = mapper.countLikeByBoardId(boardLikeDTO);
-        List<String> list = mapper.getCheckListId(boardLikeDTO);
 
-        return Map.of( "countlike", countlike, "checkId", list);
+
+
+
+        return Map.of( "countlike", countlike);
     }
+
+
 
     public Map<String, Object> boardLike(BoardLikeDTO boardLikeDTO) {
 

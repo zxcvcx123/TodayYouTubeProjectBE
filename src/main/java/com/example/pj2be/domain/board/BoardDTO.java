@@ -10,14 +10,13 @@ import java.util.List;
 @Data
 public class BoardDTO {
 
-    private Integer id;
 
+    // ---------- board table ----------
+    private Integer id;
     @NotBlank
     private String title;
-
     @NotBlank
     private String content;
-
     private String link;
     private String board_category_code;
     private String board_member_id;
@@ -25,13 +24,29 @@ public class BoardDTO {
     private LocalDateTime updated_at;
     private Boolean is_show;
     private LocalDateTime deleted_at;
+    private Integer views;
+
+    // ---------- 좋아요, 댓글 ----------
     private Integer countlike;
     private Integer count_comment;
-    private Integer views;
+
+    // ---------- CKeditor uuSrc ----------
     private List<String> uuSrc;
+
+    // ---------- 회원 닉네임, 등급 ----------
     private String nickname;
+    private String role_name;
+
+    // ---------- 카테고리명 ----------
     private String categoryName;
+
+    // ---------- 로그인 사용자 유효성 검증 ----------
     private String login_member_id;
+
+    // ---------- 게시물 번호 저장 ----------
+    private Integer rownum;
+
+    // ---------- 시간 포맷 변경 ----------
     public String getAgo() {
         return ChangeTimeStamp.getAgo(updated_at);
     }

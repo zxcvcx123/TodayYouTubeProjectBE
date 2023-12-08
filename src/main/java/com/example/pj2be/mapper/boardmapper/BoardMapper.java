@@ -1,7 +1,7 @@
 package com.example.pj2be.mapper.boardmapper;
 
 import com.example.pj2be.domain.board.BoardDTO;
-import com.example.pj2be.domain.board.BoardEditDTO;
+import com.example.pj2be.domain.category.CategoryDTO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -13,15 +13,15 @@ public interface BoardMapper {
     // TODO : 코드, 멤버ID 등 작성시 로그인 정보와 연동 되도록 하기.
     @Insert("""
         INSERT INTO board (title, link, content, board_category_code, board_member_id)
-        VALUES (#{title}, 
-                #{link}, 
-                #{content}, 
-                (SELECT code FROM category WHERE id = 1 ),
-                #{board_member_id}
+        VALUES (#{board.title}, 
+                #{board.link}, 
+                #{board.content}, 
+                (SELECT code FROM category WHERE name_eng = #{category.name_eng} ),
+                #{board.board_member_id}
                 )
         """)
-    @Options(useGeneratedKeys = true, keyProperty = "id")
-    void insert(BoardDTO board);
+    @Options(useGeneratedKeys = true, keyProperty = "board.id")
+    void insert(BoardDTO board, CategoryDTO category);
 
     // 게시글 보기
     @Select("""
@@ -34,14 +34,18 @@ public interface BoardMapper {
                b.created_at, 
                b.updated_at, 
                COUNT(DISTINCT bl.id) countlike, 
-               COUNT(DISTINCT c.comment) count_comment, 
-              
+               COUNT(DISTINCT c.comment) count_comment,         
                b.is_show,
-               b.views
+               b.views,
+               m.nickname,
+               r.role_name
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
                      LEFT JOIN comment c ON b.id = c.board_id
+                          JOIN member m on b.board_member_id = m.member_id
+                          JOIN roles r on m.role_id = r.role_id
                     
         WHERE b.id = #{id}
+            AND b.is_show = true
         GROUP BY b.id ORDER BY b.id DESC;
         """)
     BoardDTO selectById(Integer id);
@@ -49,7 +53,9 @@ public interface BoardMapper {
     // 게시글 리스트
     @Select("""
         <script>
-        SELECT b.id,
+        SELECT
+                ROW_NUMBER() OVER (ORDER BY b.id ASC) AS rownum,
+                b.id,
                 b.title,
                 b.content,
                 b.link,
@@ -61,25 +67,38 @@ public interface BoardMapper {
                 COUNT(DISTINCT c.id) count_comment,
                 is_show,
                 views
-        FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
-                     LEFT JOIN comment c ON b.id = c.board_id
+        FROM board b 
+                    LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
+                    LEFT JOIN comment c ON b.id = c.board_id
+                         JOIN category ON b.board_category_code = category.code
         <where>
-            <if test="category == 'all' or category == 'title'">
-                OR b.title like #{keyword}
+            <if test="type == 'all'">
+                AND (
+                    b.title like #{keyword} OR
+                    b.content like #{keyword} OR
+                    b.board_member_id like #{keyword}
+                )
             </if>
-            <if test="category == 'all' or category == 'content'">
-                 OR b.content like #{keyword}
+            <if test="type == 'title'">
+                AND b.title like #{keyword}
             </if>
-            <if test="category == 'all' or category == 'board_member_id'">
-                 OR b.board_member_id like #{keyword}
+            <if test="type == 'content'">
+                 AND b.content like #{keyword}
             </if>
+            <if test="type == 'board_member_id'">
+                 AND b.board_member_id like #{keyword}
+            </if>
+            <if test="category != null">
+                 AND category.name_eng = #{category}
+            </if>
+                 AND b.is_show = true
         </where>
         GROUP BY b.id
-        ORDER BY b.id DESC
+        ORDER BY rownum DESC
         LIMIT #{from}, #{slice}
         </script>
         """)
-    List<BoardDTO> selectAll(Integer from, Integer slice, String keyword, String category);
+    List<BoardDTO> selectAll(Integer from, Integer slice, String keyword, String type, String category);
 
     // 게시글 수정
     // BoardEditDTO 내부에 BoardDTO가 있음.
@@ -107,21 +126,34 @@ public interface BoardMapper {
     @Select("""
         <script>
         SELECT COUNT(*)
-        FROM board
+        FROM board b
+            JOIN category c on c.code = b.board_category_code
         <where>
-            <if test="category == 'all' or category == 'title'">
-                OR title like #{keyword}
+            <if test="type == 'all'">
+                AND (
+                    b.title like #{keyword} OR
+                    b.content like #{keyword} OR
+                    b.board_member_id like #{keyword}
+                )
             </if>
-            <if test="category == 'all' or category == 'content'">
-                OR content like #{keyword}
+            <if test="type == 'title'">
+                AND b.title like #{keyword}
             </if>
-            <if test="category == 'all' or category == 'board_member_id'">
-                OR board_member_id like #{keyword}
+            <if test="type == 'content'">
+                AND b.content like #{keyword}
             </if>
+            <if test="type == 'board_member_id'">
+                AND b.board_member_id like #{keyword}
+            </if>
+            <if test="category != null">
+                AND (b.board_category_code = c.code AND c.name_eng = #{category})
+            </if>
+                 AND b.is_show = true        
         </where>
+            
         </script>
         """)
-    int selectAllpage(String keyword, String category);
+    int selectAllpage(String keyword, String type, String category);
 
     // 게시글 조회수 증가
     @Update("""

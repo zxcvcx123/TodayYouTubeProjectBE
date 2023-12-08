@@ -11,6 +11,10 @@ public class ChangeTimeStamp {
 
     public static String getAgo(LocalDateTime a) {
 
+        if (a == null) {
+            return "";
+        }
+
         // 서울 시간
         LocalDateTime b = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
 
