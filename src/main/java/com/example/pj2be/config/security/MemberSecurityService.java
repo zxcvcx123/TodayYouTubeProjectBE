@@ -41,7 +41,6 @@ public class MemberSecurityService implements UserDetailsService {
         System.out.println("로그인 시도한 사용자 = " + member);
         List<GrantedAuthority> authorities = new ArrayList<>();
         if (member.getRole_id() == 1) {
-
             authorities.add(new SimpleGrantedAuthority(MemberRole.ADMIN.getValue()));
             System.out.println("loadUserByUsername 실행됨 -> 시용자 권한 등록증 : " + authorities);
         }else if(member.getRole_id() == 2) {
