@@ -23,8 +23,9 @@ public interface InquiryMapper {
          FROM inquiry i JOIN inquirycategory ic ON ic.id = i.inquiry_category
          LEFT JOIN youtube.answer a on i.id = a.answer_board_id
          ORDER BY i.id DESC
+         LIMIT #{from}, 10
         """)
-    List<InquiryDTO> selectAll();
+    List<InquiryDTO> selectAll(Integer from);
 
 
     @Insert("""
@@ -88,4 +89,10 @@ public interface InquiryMapper {
         WHERE id = #{id}
         """)
     int updateAnswerState(InquiryDTO inquiryDTO);
+
+    @Select("""
+        SELECT COUNT(*)
+        FROM inquiry
+        """)
+    int selectAllpage();
 }

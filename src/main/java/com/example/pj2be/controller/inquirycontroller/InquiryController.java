@@ -18,7 +18,7 @@ public class InquiryController {
     private final InquiryService service;
 
     @GetMapping("list")
-    public List<InquiryDTO> list(@RequestParam(value = "p", defaultValue = "1") Integer page){
+    public Map<String, Object> list(@RequestParam(value = "p", defaultValue = "1") Integer page){
 
         return service.list(page);
 
