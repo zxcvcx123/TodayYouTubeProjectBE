@@ -43,8 +43,6 @@ public interface WebSocketMapper {
     int commentAlarmSend(AlarmDTO alarmDTO);
 
 
-
-
     @Select("""
             SELECT
                 a.id AS id,
@@ -57,7 +55,8 @@ public interface WebSocketMapper {
                 a.created_at AS created_at
             FROM alarm a LEFT JOIN board b
                 ON a.board_id = b.id
-            WHERE receiver_member_id = #{receiver_member_id};
+            WHERE receiver_member_id = #{receiver_member_id}
+            ORDER BY a.id DESC;
             """)
     List<AlarmDTO> getCommentAlarmContent(AlarmDTO alarmDTO);
     
@@ -68,4 +67,10 @@ public interface WebSocketMapper {
             """)
      Integer getAlarmCount(String receiver_member_id);
 
+    @Update("""
+            UPDATE alarm
+            SET is_alarm = 1
+            WHERE id = #{id}
+            """)
+    void readAlarm(Integer id);
 }

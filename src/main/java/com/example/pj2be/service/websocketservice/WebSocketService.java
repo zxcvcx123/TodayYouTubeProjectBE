@@ -35,12 +35,12 @@ public class WebSocketService {
 
         alarmDTO.setAlarm_category("ac002");
         // 알람온거 확인
-        List<AlarmDTO> alarmList= webSocketMapper.getCommentAlarmContent(alarmDTO);
+        List<AlarmDTO> alarmList = webSocketMapper.getCommentAlarmContent(alarmDTO);
 
         return alarmList;
     }
 
-
+    // 누군가 알림 보낼때마다 알림 전체리스트 가져오기
     public List<AlarmDTO> commentAlarmSend(AlarmDTO alarmDTO) {
 
         alarmDTO.setAlarm_category("ac002");
@@ -55,8 +55,12 @@ public class WebSocketService {
 
     // 알람 개수 가져오기
     public Integer getAlarmCount(String userId){
+
         return webSocketMapper.getAlarmCount(userId);
     }
 
 
+    public void readAlarm(Integer id) {
+        webSocketMapper.readAlarm(id);
+    }
 }

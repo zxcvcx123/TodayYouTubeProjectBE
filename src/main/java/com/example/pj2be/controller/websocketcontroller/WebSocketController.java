@@ -83,13 +83,36 @@ public class WebSocketController {
         System.out.println("댓글 알림 userId: " + userId);
         System.out.println("댓글 내용 alarmDTO:" + alarmDTO);
 
-        String toId = alarmDTO.getReceiver_member_id();
 
+        // 알림 최신화
         List<AlarmDTO> list = webSocketService.commentAlarmSend(alarmDTO);
 
+        // 알림 최신 개수
+        Integer count = webSocketService.getAlarmCount(alarmDTO.getReceiver_member_id());
+
+        String toId = alarmDTO.getReceiver_member_id();
         System.out.println("알림 받을 사람: " + toId);
 
         simpMessagingTemplate.convertAndSend("/queue/comment/alarm/" + toId, list);
+
+    }
+
+    // 댓글알람개수
+    @MessageMapping("/comment/sendalarm/count/{userId}")
+    public void receiverCommentAlarmCount(@DestinationVariable String userId,
+                                @RequestBody AlarmDTO alarmDTO) {
+        System.out.println("댓글 알림 userId: " + userId);
+        System.out.println("댓글 내용 alarmDTO:" + alarmDTO);
+
+
+
+        // 알림 최신 개수
+        Integer count = webSocketService.getAlarmCount(alarmDTO.getReceiver_member_id());
+
+        String toId = alarmDTO.getReceiver_member_id();
+        System.out.println("알림 받을 사람: " + toId);
+
+        simpMessagingTemplate.convertAndSend("/queue/comment/alarm/count/" + toId, count);
 
     }
 
@@ -110,5 +133,15 @@ public class WebSocketController {
 
         return webSocketService.getAlarmCount(map.get("userId"));
     }
+
+    // 알람 개별 읽기
+    @PostMapping("api/alarmread")
+    public void readAlarm(@RequestBody Map<String, Integer> map){
+        System.out.println("동작");
+        webSocketService.readAlarm(map.get("id"));
+
+    }
+
+    /* ==================================== */
 
 }
