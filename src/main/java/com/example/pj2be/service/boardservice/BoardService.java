@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -79,8 +80,13 @@ public class BoardService {
         map.put("pageInfo", pageInfo);
         map.put("boardInfo", category);
 
-        System.out.println("boardList: " + map.get("boardList"));
-        System.out.println("pageInfo: " + map.get("pageInfo"));
+
+        List<BoardDTO> boardList = (List<BoardDTO>) map.get("boardList");
+        System.out.println("countAll = " + countAll);
+        for (BoardDTO board: boardList) {
+            System.out.println("rownum: " + board.getRownum());
+        }
+//        System.out.println("pageInfo: " + map.get("pageInfo"));
 
         return map;
     }
