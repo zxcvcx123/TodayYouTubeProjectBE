@@ -49,7 +49,9 @@ public interface BoardMapper {
     // 게시글 리스트
     @Select("""
         <script>
-        SELECT b.id,
+        SELECT
+                ROW_NUMBER() OVER (ORDER BY b.id ASC) AS rownum,
+                b.id,
                 b.title,
                 b.content,
                 b.link,
@@ -61,9 +63,10 @@ public interface BoardMapper {
                 COUNT(DISTINCT c.id) count_comment,
                 is_show,
                 views
-        FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
-                     LEFT JOIN comment c ON b.id = c.board_id
-                     JOIN category ON b.board_category_code = category.code
+        FROM board b 
+                    LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
+                    LEFT JOIN comment c ON b.id = c.board_id
+                         JOIN category ON b.board_category_code = category.code
         <where>
             <if test="type == 'all'">
                 AND (
@@ -85,9 +88,8 @@ public interface BoardMapper {
                  AND category.name_eng = #{category}
             </if>
         </where>
-            
         GROUP BY b.id
-        ORDER BY b.id DESC
+        ORDER BY rownum DESC
         LIMIT #{from}, #{slice}
         </script>
         """)

@@ -75,18 +75,9 @@ public class BoardService {
 
         int from = (page - 1) * slice;
 
-
         map.put("boardList", boardMapper.selectAll(from, slice, "%" + keyword + "%", type, category));
         map.put("pageInfo", pageInfo);
         map.put("boardInfo", category);
-
-
-        List<BoardDTO> boardList = (List<BoardDTO>) map.get("boardList");
-        System.out.println("countAll = " + countAll);
-        for (BoardDTO board: boardList) {
-            System.out.println("rownum: " + board.getRownum());
-        }
-//        System.out.println("pageInfo: " + map.get("pageInfo"));
 
         return map;
     }
