@@ -33,8 +33,11 @@ public class BoardDTO {
     // ---------- CKeditor uuSrc ----------
     private List<String> uuSrc;
 
-    // ---------- ??? ----------
+    // ---------- 회원 닉네임, 등급 ----------
     private String nickname;
+    private String role_name;
+
+    // ---------- 카테고리명 ----------
     private String categoryName;
 
     // ---------- 로그인 사용자 유효성 검증 ----------
