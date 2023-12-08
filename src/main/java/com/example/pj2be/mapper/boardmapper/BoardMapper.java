@@ -147,6 +147,7 @@ public interface BoardMapper {
             <if test="category != null">
                 AND (b.board_category_code = c.code AND c.name_eng = #{category})
             </if>
+                 AND b.is_show = true        
         </where>
             
         </script>
