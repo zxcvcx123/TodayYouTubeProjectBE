@@ -80,9 +80,6 @@ public class WebSocketController {
     @MessageMapping("/comment/sendalarm/{userId}")
     public void addCommentAlarm(@DestinationVariable String userId,
                                           @RequestBody AlarmDTO alarmDTO) {
-        System.out.println("댓글 알림 userId: " + userId);
-        System.out.println("댓글 내용 alarmDTO:" + alarmDTO);
-
 
         // 알림 최신화
         List<AlarmDTO> list = webSocketService.commentAlarmSend(alarmDTO);
@@ -90,8 +87,8 @@ public class WebSocketController {
         // 알림 최신 개수
         Integer count = webSocketService.getAlarmCount(alarmDTO.getReceiver_member_id());
 
+        // 받을 사람 ID
         String toId = alarmDTO.getReceiver_member_id();
-        System.out.println("알림 받을 사람: " + toId);
 
         simpMessagingTemplate.convertAndSend("/queue/comment/alarm/" + toId, list);
 
@@ -101,46 +98,95 @@ public class WebSocketController {
     @MessageMapping("/comment/sendalarm/count/{userId}")
     public void receiverCommentAlarmCount(@DestinationVariable String userId,
                                 @RequestBody AlarmDTO alarmDTO) {
-        System.out.println("댓글 알림 userId: " + userId);
-        System.out.println("댓글 내용 alarmDTO:" + alarmDTO);
-
-
 
         // 알림 최신 개수
         Integer count = webSocketService.getAlarmCount(alarmDTO.getReceiver_member_id());
 
+        // 받을 사람 ID
         String toId = alarmDTO.getReceiver_member_id();
-        System.out.println("알림 받을 사람: " + toId);
 
+        // 받을 소켓주소 + ID로 데이터 넘겨주기
         simpMessagingTemplate.convertAndSend("/queue/comment/alarm/count/" + toId, count);
 
     }
 
-    // 초기에 알람목록 가져오기
+    // 초기에 알람목록 가져오기 (ajax)
     @PostMapping("api/websocket/alarmlist")
     public List<AlarmDTO> getAlarmList(@RequestBody Map<String, String> map){
-        System.out.println("userId = " + map);
+
         AlarmDTO alarmDTO = new AlarmDTO();
         alarmDTO.setReceiver_member_id(map.get("userId"));
+
         return webSocketService.getAlarmList(alarmDTO);
     }
 
-    // 알람 개수
+    // 알람 개수 (ajax)
     @PostMapping("api/websocket/alarmcount")
     public Integer getAlarmCount(@RequestBody Map<String, String> map){
-        System.out.println("userId = " + map);
+
         AlarmDTO alarmDTO = new AlarmDTO();
 
         return webSocketService.getAlarmCount(map.get("userId"));
     }
 
-    // 알람 개별 읽기
+    // 알람 개별 읽기 (ajax)
     @PostMapping("api/alarmread")
     public void readAlarm(@RequestBody Map<String, Integer> map){
-        System.out.println("동작");
+
+        // 알람 개별 읽기
         webSocketService.readAlarm(map.get("id"));
 
     }
+
+    // 알람 모두 읽기
+    @MessageMapping("/comment/alarm/allread/{userId}")
+    @SendTo("/queue/comment/alarm/{userId}")
+    public void readAllAlarm(@DestinationVariable String userId){
+
+        // 알람 전부읽기
+        webSocketService.readAllAlarm(userId);
+
+        // 코드 재활용 위해 DTO 형식으로 보내줘야 해서 선언
+        AlarmDTO alarmDTO = new AlarmDTO();
+
+        // 알람 목록 가져오기
+        alarmDTO.setReceiver_member_id(userId);
+        List<AlarmDTO> list = webSocketService.getAlarmList(alarmDTO);
+
+        // 알람 수 가져오기
+        // 알림 최신 개수
+        Integer count = webSocketService.getAlarmCount(userId);
+
+        simpMessagingTemplate.convertAndSend("/queue/comment/alarm/" + userId, list);
+        simpMessagingTemplate.convertAndSend("/queue/comment/alarm/count/" + userId, count);
+    }
+
+    // 알람 삭제
+    @MessageMapping("/comment/alarm/delete")
+    public void deleteAlarm(@RequestBody Map<String, Object> map){
+
+        webSocketService.deleteAlarm(map);
+
+        String userId = (String) map.get("userId");
+
+        // 코드 재활용 위해 DTO 형식으로 보내줘야 해서 선언
+        AlarmDTO alarmDTO = new AlarmDTO();
+
+        // 알람 목록 가져오기
+        alarmDTO.setReceiver_member_id(userId);
+        List<AlarmDTO> list = webSocketService.getAlarmList(alarmDTO);
+
+        // 알람 수 가져오기
+        // 알림 최신 개수
+        Integer count = webSocketService.getAlarmCount(userId);
+
+        simpMessagingTemplate.convertAndSend("/queue/comment/alarm/" + userId, list);
+        simpMessagingTemplate.convertAndSend("/queue/comment/alarm/count/" + userId, count);
+
+    }
+
+
+
 
     /* ==================================== */
 

@@ -146,6 +146,15 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+    // 랜덤 게시판 보기
+    @Transactional
+    @GetMapping("random")
+    public Map<String, Object> randomView() {
+
+      return boardService.randomGet();
+
+    }
+
     // 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트
     @PostMapping("test")
     public void test(@RequestParam(value = "file") MultipartFile file) {

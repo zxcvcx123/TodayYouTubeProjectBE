@@ -1,10 +1,7 @@
 package com.example.pj2be.mapper.WebSocktMapper;
 
 import com.example.pj2be.domain.alarm.AlarmDTO;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Map;
@@ -73,4 +70,23 @@ public interface WebSocketMapper {
             WHERE id = #{id}
             """)
     void readAlarm(Integer id);
+
+    @Update("""
+            UPDATE youtube.alarm
+            SET is_alarm = 1
+            WHERE receiver_member_id = #{userId} AND is_alarm = 0
+            """)
+    void readAllAlarm(String userId);
+
+    @Delete("""
+            DELETE FROM alarm
+            WHERE id = #{id}
+            """)
+    void deleteAlarm(Integer id);
+
+    @Delete("""
+            DELETE FROM alarm
+            WHERE receiver_member_id = #{userId}
+            """)
+    void deleteAllAlarm(String userId);
 }

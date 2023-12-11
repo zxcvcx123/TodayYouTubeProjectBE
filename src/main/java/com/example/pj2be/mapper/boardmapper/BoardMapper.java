@@ -5,6 +5,7 @@ import com.example.pj2be.domain.category.CategoryDTO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface BoardMapper {
@@ -162,4 +163,14 @@ public interface BoardMapper {
         WHERE id = #{id}
         """)
     int increaseViewCount(Integer id);
+
+    // 무작위 게시글 조회 용도 모든 게시판 id 가져오기
+    @Select("""
+            SELECT b.id, b.board_category_code, c.name, c.name_eng
+            FROM board b LEFT JOIN category c
+                ON b.board_category_code = c.code
+            WHERE is_show = 1 AND NOT board_category_code = 'C001'
+            """)
+    List<Map<String, Object>> randomGet();
+
 }
