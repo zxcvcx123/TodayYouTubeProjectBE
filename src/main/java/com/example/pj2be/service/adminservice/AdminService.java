@@ -17,9 +17,21 @@ public class AdminService {
     public Map<String, Object> getBoardData() {
         Map<String, Object> map = new HashMap<>();
 
-        map.put("boardList", adminMapper.getBoardData());
+        map.put("boardDataList", adminMapper.getBoardData());
 
         System.out.println("어드민 서비스 보드데이터");
+
+        return map;
+    }
+
+    public Map<String, Object> getUserData() {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("userWriteRankDataList", adminMapper.getUserWriteRankData());
+        map.put("userLikeRankDataList", adminMapper.getUserLikeRankData());
+        map.put("userCommentRankDataList", adminMapper.getUserCommentRankData());
+
+        System.out.println("어드민 서비스 유저데이터");
 
         return map;
     }
