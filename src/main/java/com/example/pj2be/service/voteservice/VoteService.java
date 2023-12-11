@@ -18,4 +18,8 @@ public class VoteService {
         voteMapper.add(voteDTO);
 
     }
+
+    public VoteDTO view(Integer id){
+        return voteMapper.view(id);
+    }
 }

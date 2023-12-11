@@ -42,10 +42,6 @@ public class BoardController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
-        // 파일 개수 5개 넘으면 오류
-        if(files.length > 5){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
 
         // 글쓰기 버튼 클릭했는데, 로그인 아이디가 null로 오는 것 검증, 비로그인 사용자는 401 반환
         if (!IsLoginMember(board.getBoard_member_id())) {
@@ -108,10 +104,7 @@ public class BoardController {
         // 게시글 작성자 id와 로그인 사용자 id를 비교하여 유효성 검증
         if (MemberChecked(board.getLogin_member_id(), board.getBoard_member_id()) == 0) {
 
-            // 파일 개수 5개 넘으면 오류
-            if(files.length > 5){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-            }
+
 
             boardService.update(board, files);
 
