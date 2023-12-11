@@ -22,7 +22,6 @@ public class MemberLoginService {
             String decodedFileName = memberDTO.getImage_name();
             String encodedFileName = URLEncoder.encode(decodedFileName, StandardCharsets.UTF_8.toString());
             String url = urlPrefix + "member-profiles/" + member_id+"/" + encodedFileName;
-            System.out.println("url = " + url);
             memberDTO.setUrl(url);
         }catch (Exception e){
 

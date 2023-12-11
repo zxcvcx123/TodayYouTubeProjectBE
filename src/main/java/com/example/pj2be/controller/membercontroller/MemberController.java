@@ -62,7 +62,7 @@ public class MemberController {
                 MemberDTO memberDTO = memberLoginService.getLoginInfo(member_id);
                 return ResponseEntity.ok().body(memberDTO);
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         }catch(Exception e){
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
