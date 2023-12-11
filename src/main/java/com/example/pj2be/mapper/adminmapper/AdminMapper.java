@@ -1,6 +1,7 @@
 package com.example.pj2be.mapper.adminmapper;
 
 import com.example.pj2be.domain.admin.BoardDataDTO;
+import com.example.pj2be.domain.admin.UserDataDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -22,4 +23,37 @@ public interface AdminMapper {
         ORDER BY board_category_code;
         """)
     List<BoardDataDTO> getBoardData();
+
+    @Select("""
+        SELECT m.member_id,
+               COUNT(m.member_id) AS write_count,
+               RANK() over (ORDER BY COUNT(m.member_id) DESC) AS write_rank
+        FROM member m
+                 JOIN board b on m.member_id = b.board_member_id
+        GROUP BY m.member_id
+        ORDER BY write_rank;
+        """)
+    List<UserDataDTO> getUserWriteRankData();
+
+    @Select("""
+        SELECT m.member_id,
+               COUNT(m.member_id) AS like_count,
+               RANK() over (ORDER BY COUNT(m.member_id) DESC) AS like_rank
+        FROM member m
+                 JOIN boardlike bl on m.member_id = bl.member_id
+        GROUP BY m.member_id
+        ORDER BY like_rank;
+        """)
+    List<UserDataDTO> getUserLikeRankData();
+
+    @Select("""
+        SELECT m.member_id,
+               COUNT(m.member_id) AS comment_count,
+               RANK() over (ORDER BY COUNT(m.member_id) DESC) AS comment_rank
+        FROM member m
+                JOIN youtube.comment c on m.member_id = c.member_id
+        GROUP BY m.member_id
+        ORDER BY comment_rank;
+        """)
+    List<UserDataDTO> getUserCommentRankData();
 }
