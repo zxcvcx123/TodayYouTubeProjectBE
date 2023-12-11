@@ -30,7 +30,7 @@ public interface AdminMapper {
     @Select("""
         SELECT m.member_id,
                COUNT(m.member_id) AS write_count,
-               RANK() over (ORDER BY COUNT(m.member_id) DESC) AS write_rank
+               DENSE_RANK() over (ORDER BY COUNT(m.member_id) DESC) AS write_rank
         FROM member m
                  JOIN board b on m.member_id = b.board_member_id
         GROUP BY m.member_id
@@ -42,7 +42,7 @@ public interface AdminMapper {
     @Select("""
         SELECT m.member_id,
                COUNT(m.member_id) AS like_count,
-               RANK() over (ORDER BY COUNT(m.member_id) DESC) AS like_rank
+               DENSE_RANK() over (ORDER BY COUNT(m.member_id) DESC) AS like_rank
         FROM member m
                  JOIN boardlike bl on m.member_id = bl.member_id
         GROUP BY m.member_id
@@ -54,7 +54,7 @@ public interface AdminMapper {
     @Select("""
         SELECT m.member_id,
                COUNT(m.member_id) AS comment_count,
-               RANK() over (ORDER BY COUNT(m.member_id) DESC) AS comment_rank
+               DENSE_RANK() over (ORDER BY COUNT(m.member_id) DESC) AS comment_rank
         FROM member m
                 JOIN youtube.comment c on m.member_id = c.member_id
         GROUP BY m.member_id
