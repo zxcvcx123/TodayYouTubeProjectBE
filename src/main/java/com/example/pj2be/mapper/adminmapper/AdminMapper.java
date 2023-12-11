@@ -9,6 +9,8 @@ import java.util.List;
 
 @Mapper
 public interface AdminMapper {
+
+    // 게시판 관련 데이터
     @Select("""
         SELECT
             c.name_eng,
@@ -24,6 +26,7 @@ public interface AdminMapper {
         """)
     List<BoardDataDTO> getBoardData();
 
+    // 유저 게시글 작성 순위 데이터
     @Select("""
         SELECT m.member_id,
                COUNT(m.member_id) AS write_count,
@@ -35,6 +38,7 @@ public interface AdminMapper {
         """)
     List<UserDataDTO> getUserWriteRankData();
 
+    // 유저 좋아요 작성 순위 데이터
     @Select("""
         SELECT m.member_id,
                COUNT(m.member_id) AS like_count,
@@ -46,6 +50,7 @@ public interface AdminMapper {
         """)
     List<UserDataDTO> getUserLikeRankData();
 
+    // 유저 댓글 작성 순위 데이터
     @Select("""
         SELECT m.member_id,
                COUNT(m.member_id) AS comment_count,
