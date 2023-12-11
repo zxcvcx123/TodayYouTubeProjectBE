@@ -16,11 +16,20 @@ public class AdminController {
     private final AdminService adminService;
 
     @GetMapping("board")
-    public Map<String, Object> list() {
+    public Map<String, Object> boardDataList() {
 
         System.out.println("어드민 컨트롤러 보드데이터");
 
         return adminService.getBoardData();
+
+    }
+
+    @GetMapping("user")
+    public Map<String, Object> userDataList() {
+
+        System.out.println("어드민 컨트롤러 유저데이터");
+
+        return adminService.getUserData();
 
     }
 }
