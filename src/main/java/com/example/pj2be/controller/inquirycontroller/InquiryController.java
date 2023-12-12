@@ -42,8 +42,6 @@ public class InquiryController {
     @GetMapping("{id}")
     public InquiryDTO view(@PathVariable Integer id) {
 
-
-
         return service.get(id);
     }
 
