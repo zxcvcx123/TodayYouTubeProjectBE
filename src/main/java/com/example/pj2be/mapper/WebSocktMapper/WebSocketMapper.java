@@ -47,11 +47,18 @@ public interface WebSocketMapper {
                 a.receiver_member_id AS receiver_member_id,
                 a.board_id AS board_id,
                 b.title AS board_title,
+                i.title AS inquiry_title,
                 a.alarm_category as alarm_category,
                 a.is_alarm AS is_alarm,
-                a.created_at AS created_at
-            FROM alarm a LEFT JOIN board b
+                a.created_at AS created_at,
+                m.nickname AS nickname
+            FROM alarm a 
+                LEFT JOIN board b
                 ON a.board_id = b.id
+                LEFT JOIN inquiry i 
+                ON a.inquiry_id = i.id
+                LEFT JOIN member m 
+                ON a.sender_member_id = m.member_id 
             WHERE receiver_member_id = #{receiver_member_id}
             ORDER BY a.id DESC;
             """)
@@ -89,4 +96,43 @@ public interface WebSocketMapper {
             WHERE receiver_member_id = #{userId}
             """)
     void deleteAllAlarm(String userId);
+
+
+    @Insert("""
+            INSERT INTO alarm (
+            sender_member_id,
+            receiver_member_id,
+            alarm_category,
+            inquiry_id
+            )
+            VALUES (
+            #{sender_member_id},
+            #{receiver_member_id},
+            #{alarm_category},
+            #{inquiry_id}
+            )
+            """)
+    int inquiryAlarmSend(AlarmDTO alarmDTO);
+
+//    @Select("""
+//            SELECT
+//            a.id AS id,
+//            a.sender_member_id sender_member_id,
+//            a.receiver_member_id receiver_member_id,
+//            a.inquiry_id inquiry_id,
+//            i.title inquiry_title,
+//            a.alarm_category as alarm_category,
+//            a.is_alarm AS is_alarm,
+//            a.created_at AS created_at
+//            FROM alarm a
+//            LEFT JOIN inquiry i ON a.inquiry_id = i.id
+//            WHERE receiver_member_id = #{receiver_member_id}
+//            ORDER BY a.id DESC ;
+//            """)
+//    List<AlarmDTO> getInquiryAlarmContent(AlarmDTO alarmDTO);
+
 }
+
+
+
+

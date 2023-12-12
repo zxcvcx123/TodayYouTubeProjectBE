@@ -3,23 +3,16 @@ package com.example.pj2be.controller.websocketcontroller;
 import com.example.pj2be.domain.alarm.AlarmDTO;
 import com.example.pj2be.domain.like.BoardLikeDTO;
 import com.example.pj2be.domain.socket.ChatDTO;
-import com.example.pj2be.domain.socket.Greeting;
-import com.example.pj2be.domain.socket.HelloMessage;
 import com.example.pj2be.service.likeservice.BoardLikeService;
 import com.example.pj2be.service.websocketservice.WebSocketService;
-import com.example.pj2be.service.websocketservice.testLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.HtmlUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -185,9 +178,27 @@ public class WebSocketController {
 
     }
 
+    @MessageMapping("/inquiry/sendalarm")
+    public void addInquiryAlarm(@RequestBody AlarmDTO alarmDTO) {
+        System.out.println("alarmDTO = " + alarmDTO);
+
+        webSocketService.inquiryAlarmSend(alarmDTO);
+
+        // 알람 받는이 설정
+        String toId = alarmDTO.getReceiver_member_id();
+
+        // 알람 수 최신화 데이터
+        Integer count = webSocketService.getAlarmCount(alarmDTO.getReceiver_member_id());
+        System.out.println("alarmDTO.getReceiver_member_id() = " + alarmDTO.getReceiver_member_id());
+
+        // 알람목록 최신화 데이터
+        List<AlarmDTO> list = webSocketService.getAlarmList(alarmDTO);
 
 
+        simpMessagingTemplate.convertAndSend("/queue/inquiry/alarm/" + toId, list);
+        simpMessagingTemplate.convertAndSend("/queue/inquiry/alarm/count/" + toId, count);
+    }
 
-    /* ==================================== */
 
 }
+

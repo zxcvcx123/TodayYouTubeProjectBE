@@ -84,4 +84,14 @@ public class WebSocketService {
         }
 
     }
+
+
+    public void inquiryAlarmSend(AlarmDTO alarmDTO) {
+
+        alarmDTO.setAlarm_category("ac003");
+
+        webSocketMapper.inquiryAlarmSend(alarmDTO);
+
+    }
 }
+
