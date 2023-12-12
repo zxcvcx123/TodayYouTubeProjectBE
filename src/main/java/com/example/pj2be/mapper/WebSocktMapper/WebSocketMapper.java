@@ -1,10 +1,7 @@
 package com.example.pj2be.mapper.WebSocktMapper;
 
 import com.example.pj2be.domain.alarm.AlarmDTO;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Map;
@@ -43,8 +40,6 @@ public interface WebSocketMapper {
     int commentAlarmSend(AlarmDTO alarmDTO);
 
 
-
-
     @Select("""
             SELECT
                 a.id AS id,
@@ -57,7 +52,8 @@ public interface WebSocketMapper {
                 a.created_at AS created_at
             FROM alarm a LEFT JOIN board b
                 ON a.board_id = b.id
-            WHERE receiver_member_id = #{receiver_member_id};
+            WHERE receiver_member_id = #{receiver_member_id}
+            ORDER BY a.id DESC;
             """)
     List<AlarmDTO> getCommentAlarmContent(AlarmDTO alarmDTO);
     
@@ -68,4 +64,29 @@ public interface WebSocketMapper {
             """)
      Integer getAlarmCount(String receiver_member_id);
 
+    @Update("""
+            UPDATE alarm
+            SET is_alarm = 1
+            WHERE id = #{id}
+            """)
+    void readAlarm(Integer id);
+
+    @Update("""
+            UPDATE youtube.alarm
+            SET is_alarm = 1
+            WHERE receiver_member_id = #{userId} AND is_alarm = 0
+            """)
+    void readAllAlarm(String userId);
+
+    @Delete("""
+            DELETE FROM alarm
+            WHERE id = #{id}
+            """)
+    void deleteAlarm(Integer id);
+
+    @Delete("""
+            DELETE FROM alarm
+            WHERE receiver_member_id = #{userId}
+            """)
+    void deleteAllAlarm(String userId);
 }

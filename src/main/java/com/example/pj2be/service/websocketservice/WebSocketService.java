@@ -15,10 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -29,18 +26,17 @@ public class WebSocketService {
     private final WebSocketMapper webSocketMapper;
 
 
-
     // 첫 접속시 알람 목록 가져오기
     public List<AlarmDTO> getAlarmList(AlarmDTO alarmDTO) {
 
         alarmDTO.setAlarm_category("ac002");
         // 알람온거 확인
-        List<AlarmDTO> alarmList= webSocketMapper.getCommentAlarmContent(alarmDTO);
+        List<AlarmDTO> alarmList = webSocketMapper.getCommentAlarmContent(alarmDTO);
 
         return alarmList;
     }
 
-
+    // 누군가 알림 보낼때마다 알림 전체리스트 가져오기
     public List<AlarmDTO> commentAlarmSend(AlarmDTO alarmDTO) {
 
         alarmDTO.setAlarm_category("ac002");
@@ -48,15 +44,44 @@ public class WebSocketService {
         webSocketMapper.commentAlarmSend(alarmDTO);
 
         // 알람온거 확인
-        List<AlarmDTO> alarmList= webSocketMapper.getCommentAlarmContent(alarmDTO);
+        List<AlarmDTO> alarmList = webSocketMapper.getCommentAlarmContent(alarmDTO);
 
         return alarmList;
     }
 
     // 알람 개수 가져오기
-    public Integer getAlarmCount(String userId){
+    public Integer getAlarmCount(String userId) {
+
         return webSocketMapper.getAlarmCount(userId);
     }
 
+    // 알람 개별 읽기
+    public void readAlarm(Integer id) {
+        webSocketMapper.readAlarm(id);
+    }
 
+    // 알람 전부 읽기
+    public void readAllAlarm(String userId) {
+
+        webSocketMapper.readAllAlarm(userId);
+
+    }
+
+    // 알람 제거
+    public void deleteAlarm(Map<String, Object> map) {
+
+        Integer id = (Integer) map.get("id");
+        String userId = (String) map.get("userId");
+        String mode = (String) map.get("mode");
+
+        if (mode.equals("ALL")) {
+            // 알람 전부삭제
+            webSocketMapper.deleteAllAlarm(userId);
+        }
+        if(mode.equals("ONE")) {
+            // 알람 개별 삭제
+            webSocketMapper.deleteAlarm(id);
+        }
+
+    }
 }

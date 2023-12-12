@@ -8,10 +8,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 
 @Service
@@ -27,9 +29,11 @@ public class BoardService {
         boardMapper.insert(board, category);
 
         if (files != null) {
-            for (MultipartFile file : files) {
-                fileService.s3Upload(file, board.getId());
-            }
+
+                for (MultipartFile file : files) {
+                    fileService.s3Upload(file, board.getId());
+                }
+
         }
 
         /* 본문 ck에디터영역에 실제로 저장된 이미지 소스코드와 게시물ID 보내기 */
@@ -136,5 +140,17 @@ public class BoardService {
     }
 
 
+    public Map<String, Object> randomGet() {
+
+        Random random = new Random();
+
+        List<Map<String, Object>> list = boardMapper.randomGet();
+
+
+        int randomIndex = random.nextInt(list.size());
+
+        return list.get(randomIndex);
+
+    }
 }
    
