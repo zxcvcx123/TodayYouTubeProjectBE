@@ -19,7 +19,7 @@ public class VisitorController {
 
     @GetMapping("visitor")
     public void visitorCount(HttpServletRequest request,
-                                 @RequestParam(required = false) String member_id) {
+                             @RequestParam(required = false) String member_id) {
         // IP 주소 얻기
         String clientIp = request.getRemoteAddr();
 
@@ -28,7 +28,10 @@ public class VisitorController {
         System.out.println("member id: " + member_id);
         System.out.println("방문자 컨트롤러");
 
-        visitorService.visitorCount(clientIp, member_id);
+        // 비 로그인 사용자는 방문자 집계하지 않음.
+        if (member_id != null) {
+            visitorService.visitorCount(clientIp, member_id);
+        }
 
     }
 
