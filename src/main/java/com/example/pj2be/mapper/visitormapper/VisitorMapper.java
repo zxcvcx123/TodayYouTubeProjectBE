@@ -18,4 +18,12 @@ public interface VisitorMapper {
         FROM visitor_statistics;
         """)
     Integer visitorCount();
+
+    @Select("""
+        SELECT COUNT(*)
+        FROM visitor_statistics
+        WHERE member_id = #{memberId}
+            AND inserted_at > NOW() - INTERVAL 30 MINUTE ;
+        """)
+    Integer countRecentVisit(String memberId);
 }
