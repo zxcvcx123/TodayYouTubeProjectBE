@@ -15,7 +15,7 @@ import java.util.Map;
 public class VisitorController {
 
     @GetMapping("visitor")
-    public Integer boardDataList(HttpServletRequest request,
+    public void boardDataList(HttpServletRequest request,
                                  @RequestParam(required = false) String member_id) {
         // IP 주소 얻기
         String clientIp = request.getRemoteAddr();
@@ -25,7 +25,6 @@ public class VisitorController {
         System.out.println("member id: " + member_id);
         System.out.println("방문자 컨트롤러");
 
-        return null;
 
     }
 }
