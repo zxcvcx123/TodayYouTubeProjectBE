@@ -15,4 +15,8 @@ public class VisitorService {
         visitorMapper.visitorInsert(clientIp, member_id);
 
     }
+
+    public Integer getVisitorCount() {
+        return visitorMapper.visitorCount();
+    }
 }

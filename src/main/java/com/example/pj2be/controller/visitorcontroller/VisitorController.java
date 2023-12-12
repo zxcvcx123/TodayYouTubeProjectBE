@@ -18,7 +18,7 @@ public class VisitorController {
     private final VisitorService visitorService;
 
     @GetMapping("visitor")
-    public void boardDataList(HttpServletRequest request,
+    public void visitorCount(HttpServletRequest request,
                                  @RequestParam(required = false) String member_id) {
         // IP 주소 얻기
         String clientIp = request.getRemoteAddr();
@@ -30,5 +30,11 @@ public class VisitorController {
 
         visitorService.visitorCount(clientIp, member_id);
 
+    }
+
+    @GetMapping("getVisitorCount")
+    public Integer getVisitorCount() {
+
+        return visitorService.getVisitorCount();
     }
 }

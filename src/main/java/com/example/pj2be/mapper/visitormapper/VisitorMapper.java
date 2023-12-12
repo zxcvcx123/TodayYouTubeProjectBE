@@ -2,6 +2,7 @@ package com.example.pj2be.mapper.visitormapper;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface VisitorMapper {
@@ -11,4 +12,10 @@ public interface VisitorMapper {
             VALUES (#{member_id}, #{clientIp})
         """)
     void visitorInsert(String clientIp, String member_id);
+
+    @Select("""
+        SELECT COUNT(*)
+        FROM visitor_statistics;
+        """)
+    Integer visitorCount();
 }
