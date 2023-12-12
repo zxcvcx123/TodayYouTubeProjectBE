@@ -25,15 +25,22 @@ public class SignupController {
         public ResponseEntity signup(@Valid @RequestBody MemberDTO memberDTO,
                                      BindingResult bindingResult) {
             if (bindingResult.hasErrors()) {
+                System.out.println(" bindingerror! ");
                 return ResponseEntity.badRequest().build();
             }
             try {
+                System.out.println("요기 실행 ");
                 memberDTO.setRole_id(2);
-                service.signup(memberDTO);
-                return ResponseEntity.ok().build();
+                if (service.signup(memberDTO)) {
+                    System.out.println("가입 성공!!");
+                    return ResponseEntity.ok().build();
+                } else {
+                    return ResponseEntity.badRequest().build();
+                }
             } catch (Exception e) {
-                return ResponseEntity.internalServerError().build();
+                e.printStackTrace();
             }
+            return ResponseEntity.internalServerError().build();
         }
 
         // 중복 체크 시작

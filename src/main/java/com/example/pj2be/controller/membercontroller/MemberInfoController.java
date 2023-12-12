@@ -34,10 +34,7 @@ public class MemberInfoController {
                                            @RequestParam("ct") String categoryTopics,
                                            @RequestParam(value = "pg", defaultValue = "1") Integer page
     ){
-        System.out.println("page = " + page);
         Map<String, Object> myBoardList = memberInfoService.getMyBoardList(member_id, categoryOrdedBy, categoryTopics, page);
-        System.out.println("실행여부 확인 Controller");
-        System.out.println("myBoardList = " + myBoardList);
         return myBoardList;
     }
     @PostMapping("/passwordCheck")

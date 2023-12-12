@@ -28,7 +28,7 @@ public interface MemberMapper {
            #{birth_date}
            )
             """)
-    int signup(MemberDTO memberDTO);
+    boolean signup(MemberDTO memberDTO);
 
     @Select("""
             SELECT member_id FROM member

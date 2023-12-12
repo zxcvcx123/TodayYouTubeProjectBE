@@ -2,6 +2,7 @@ package com.example.pj2be.service.memberservice;
 
 import com.example.pj2be.config.s3client.AwsConfig;
 import com.example.pj2be.domain.member.MemberLoginDTO;
+import com.example.pj2be.domain.member.MemberProfileImageDTO;
 import com.example.pj2be.domain.member.MemberUpdateDTO;
 import com.example.pj2be.mapper.membermapper.ProFileMapper;
 import com.example.pj2be.mapper.membermapper.MemberInfoMapper;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -109,7 +111,25 @@ public class MemberInfoService {
         System.out.println("service updateProfileImage");
         if(files != null){
             System.out.println("updateProfileImage + IF문 안");
-                proFileMapper.insertProfileImage(memberDTO.getMember_id(), files.getOriginalFilename());  // DB에 파일저장
+            // 기존에 있던 사진 지우기
+            String member_id = memberDTO.getMember_id();
+            MemberProfileImageDTO memberProfileImageDTO = proFileMapper.selectProfileByMemberId(member_id);
+            if(memberProfileImageDTO != null) {
+                String imageName = memberProfileImageDTO.getImage_name();
+                Integer id = memberProfileImageDTO.getId();
+                if (imageName != null && id != null) {
+                    String key = "member-profiles/" + member_id + "/" + imageName;
+
+                    DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
+                            .bucket(awsBucket)
+                            .key(key)
+                            .build();
+
+                    s3.deleteObject(objectRequest);
+                    proFileMapper.deleteProfileByMemberId(member_id);
+                }
+            }
+            proFileMapper.insertProfileImage(memberDTO.getMember_id(), files.getOriginalFilename());  // DB에 파일저장
                 uploadProfileImageToAws(memberDTO.getMember_id(), files);
             return true;
         }
