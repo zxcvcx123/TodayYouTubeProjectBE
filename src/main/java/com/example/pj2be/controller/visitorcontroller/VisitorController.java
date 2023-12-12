@@ -1,5 +1,6 @@
 package com.example.pj2be.controller.visitorcontroller;
 
+import com.example.pj2be.service.visitorservice.VisitorService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,8 @@ import java.util.Map;
 @RequestMapping("/api")
 public class VisitorController {
 
+    private final VisitorService visitorService;
+
     @GetMapping("visitor")
     public void boardDataList(HttpServletRequest request,
                                  @RequestParam(required = false) String member_id) {
@@ -25,6 +28,7 @@ public class VisitorController {
         System.out.println("member id: " + member_id);
         System.out.println("방문자 컨트롤러");
 
+        visitorService.visitorCount(clientIp, member_id);
 
     }
 }

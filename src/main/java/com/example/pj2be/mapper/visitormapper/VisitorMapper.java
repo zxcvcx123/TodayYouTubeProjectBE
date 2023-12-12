@@ -1,0 +1,14 @@
+package com.example.pj2be.mapper.visitormapper;
+
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface VisitorMapper {
+
+    @Insert("""
+        INSERT INTO visitor_statistics (member_id, ip_address) 
+            VALUES (#{member_id}, #{clientIp})
+        """)
+    void visitorInsert(String clientIp, String member_id);
+}
