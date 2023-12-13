@@ -1,7 +1,5 @@
 package com.example.pj2be.service.adminservice;
 
-import com.example.pj2be.domain.admin.AdminMemberDTO;
-import com.example.pj2be.domain.member.MemberDTO;
 import com.example.pj2be.mapper.adminmapper.AdminMemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +13,7 @@ public class AdminMemberService {
 
     private final AdminMemberMapper mapper;
 
-    public Map<String, Object> memberlist(Integer page) {
+    public Map<String, Object> memberlist(Integer page, String mid) {
         Map<String, Object> map = new HashMap<>();
         Map<String, Object> pageInfo = new HashMap<>();
 
@@ -23,7 +21,7 @@ public class AdminMemberService {
         // 전체페이지, 보여줄페이지 수, 왼쪽끝페이지, 오른쪽끝페이지, 담페이지, 이전페이지,
         int countAll;
 
-        countAll = mapper.selectAll();
+        countAll = mapper.selectAll("%" + mid + "%");
 
         int lastPageNumber = (countAll - 1) / 20 + 1;
         int startPageNumber = (page - 1) / 20 * 20 + 1;
@@ -51,12 +49,25 @@ public class AdminMemberService {
         int from = (page - 1) * 20;
         map.put("pageInfo", pageInfo);
 
-        map.put("memberList", mapper.selectAllMember(from));
+        map.put("memberList", mapper.selectAllMember(from, "%" + mid + "%"));
         return map;
     }
 
-    public AdminMemberDTO memberInfo(String memberId) {
+    public Map<String, Object> memberInfo(String memberId) {
+        Map<String, Object> map = new HashMap<>();
 
-        return mapper.selectByMemberId(memberId);
+        // 활동한 게시판목록
+        map.put("activeBoard", mapper.selectActiveBoard(memberId));
+
+        // 멤버정보 가져오기
+        map.put("memberList", mapper.selectByMemberId(memberId));
+
+        // 작성한 게시글 가져오기
+        map.put("memberInfoBoardList", mapper.selectBoardList(memberId));
+
+        // 작성한 댓글 가져오기
+        map.put("memberInfoCommentList", mapper.selectCommentList(memberId));
+
+        return map;
     }
 }

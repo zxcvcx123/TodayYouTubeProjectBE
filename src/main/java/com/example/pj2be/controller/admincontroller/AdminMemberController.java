@@ -16,12 +16,13 @@ public class AdminMemberController {
     private final AdminMemberService service;
 
     @PostMapping("list")
-    public Map<String, Object> memberlist(@RequestParam (value = "p", defaultValue = "1") Integer page) {
-        return service.memberlist(page);
+    public Map<String, Object> memberlist(@RequestParam (value = "p", defaultValue = "1") Integer page,
+                                          @RequestParam(value = "mid", defaultValue = "") String mid) {
+        return service.memberlist(page,mid);
     }
 
     @GetMapping("{member_id}")
-    public AdminMemberDTO memberInfo(@PathVariable String member_id) {
+    public Map<String, Object> memberInfo(@PathVariable String member_id) {
         return service.memberInfo(member_id);
     }
 }
