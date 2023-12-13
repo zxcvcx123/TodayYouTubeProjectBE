@@ -178,7 +178,7 @@ public class WebSocketController {
 
     }
 
-    @MessageMapping("/inquiry/sendalarm")
+    @MessageMapping("/answer/sendalarm")
     public void addInquiryAlarm(@RequestBody AlarmDTO alarmDTO) {
         System.out.println("alarmDTO = " + alarmDTO);
 
@@ -195,8 +195,8 @@ public class WebSocketController {
         List<AlarmDTO> list = webSocketService.getAlarmList(alarmDTO);
 
 
-        simpMessagingTemplate.convertAndSend("/queue/inquiry/alarm/" + toId, list);
-        simpMessagingTemplate.convertAndSend("/queue/inquiry/alarm/count/" + toId, count);
+        simpMessagingTemplate.convertAndSend("/queue/answer/alarm/" + toId, list);
+        simpMessagingTemplate.convertAndSend("/queue/answer/alarm/count/" + toId, count);
     }
 
 
