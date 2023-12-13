@@ -26,6 +26,6 @@ public class VisitorService {
     }
 
     public Integer getVisitorCount() {
-        return visitorMapper.visitorCount();
+        return visitorMapper.visitorCountAll();
     }
 }
