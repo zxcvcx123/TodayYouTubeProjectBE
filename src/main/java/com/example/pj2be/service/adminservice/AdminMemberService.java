@@ -1,5 +1,7 @@
 package com.example.pj2be.service.adminservice;
 
+import com.example.pj2be.domain.admin.AdminMemberDTO;
+import com.example.pj2be.domain.member.MemberDTO;
 import com.example.pj2be.mapper.adminmapper.AdminMemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -51,5 +53,10 @@ public class AdminMemberService {
 
         map.put("memberList", mapper.selectAllMember(from));
         return map;
+    }
+
+    public AdminMemberDTO memberInfo(String memberId) {
+
+        return mapper.selectByMemberId(memberId);
     }
 }
