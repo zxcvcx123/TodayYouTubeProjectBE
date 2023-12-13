@@ -27,7 +27,7 @@ public class VisitorService {
 
     public Integer getVisitorCount() {
         visitorMapper.visitorCountToday();
-
+        visitorMapper.visitorCountMonthlyLastYear();
         return visitorMapper.visitorCountAll();
     }
 }

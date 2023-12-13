@@ -49,4 +49,15 @@ public interface VisitorMapper {
         WHERE DATE(inserted_at) = CURDATE();
         """)
     Integer visitorCountToday();
+
+    @Select("""
+        SELECT
+            CONCAT(YEAR(inserted_at), '-', LPAD(MONTH(inserted_at), 2, '0')) AS `year_month`,
+            COUNT(member_id) AS unique_visitors
+        FROM visitor_statistics
+        WHERE inserted_at >= CURDATE() - INTERVAL 12 MONTH
+        GROUP BY YEAR(inserted_at), MONTH(inserted_at)
+        ORDER BY `year_month` DESC;
+        """)
+    void visitorCountMonthlyLastYear();
 }
