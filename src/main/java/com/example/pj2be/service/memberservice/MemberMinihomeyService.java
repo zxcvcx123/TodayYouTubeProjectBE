@@ -1,15 +1,15 @@
 package com.example.pj2be.service.memberservice;
 
-import com.example.pj2be.domain.board.BoardDTO;
 import com.example.pj2be.domain.member.MemberDTO;
+import com.example.pj2be.domain.member.YoutuberInfoDTO;
 import com.example.pj2be.domain.minihomepy.MiniHomepyDTO;
 import com.example.pj2be.mapper.membermapper.MiniHomepyMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -56,13 +56,52 @@ public class MemberMinihomeyService {
         Map<String, Object> topBoardList = new HashMap<>();
         topBoardList.put("topBoardList", miniHomepyMapper.getTopBoardList(member_id));
         topBoardList.put("newBoardList", miniHomepyMapper.getNewBoardList(member_id));
-        System.out.println("topBoardList = " + topBoardList);
         return topBoardList;
     }
 
-    public Map<String, Object> getAllBoardList(String memberId, String categoryOrdedBy) {
+    public Map<String, Object> getAllBoardList(String memberId, String categoryOrdedBy, String searchingKeyword) {
         Map<String, Object> boardListMap = new HashMap<>();
-        boardListMap.put("boardListAll", miniHomepyMapper.getAllBoardList(memberId, categoryOrdedBy));
+        boardListMap.put("boardListAll", miniHomepyMapper.getAllBoardList(memberId, categoryOrdedBy, "%"+searchingKeyword+"%"));
     return boardListMap;
+    }
+
+    public boolean addYoutuberInfo(YoutuberInfoDTO youtuberInfoDTO) {
+        String memberId = youtuberInfoDTO.getMember_id();
+        String title = youtuberInfoDTO.getTitle();
+        String customUrl = youtuberInfoDTO.getCustomUrl();
+        LocalDateTime publishedAt = youtuberInfoDTO.getPublishedAt();
+        String thumbnails = youtuberInfoDTO.getThumbnails();
+        String description = youtuberInfoDTO.getDescription();
+        String formattedVideoCount = formatNumber(Long.parseLong(youtuberInfoDTO.getVideoCount()));
+        String formattedSubscriberCount = formatNumber(Long.parseLong(youtuberInfoDTO.getSubscriberCount()));
+        String formattedViewCount = formatNumber(Long.parseLong(youtuberInfoDTO.getViewCount()));
+        String country = youtuberInfoDTO.getCountry();
+        return miniHomepyMapper.addYoutuberInfoByMemberId(memberId, title, customUrl, publishedAt, thumbnails, description, formattedVideoCount, formattedSubscriberCount,formattedViewCount, country) == 1;
+    }
+
+    public String formatNumber(long number) {
+//        String formattedVideoCount = formatNumber(Long.parseLong(youtuberInfoDTO.getVideoCount()));
+//        String formattedSubscriberCount = formatNumber(Long.parseLong(youtuberInfoDTO.getSubscriberCount()));
+//        String formattedViewCount = formatNumber(Long.parseLong(youtuberInfoDTO.getViewCount()));
+//
+//        String videoCount = youtuberInfoDTO.getVideoCount();
+//        String subscriberCount = youtuberInfoDTO.getSubscriberCount();
+//        String viewCount = youtuberInfoDTO.getViewCount();
+//        videoCount, subscriberCount,viewCount,
+        if (number < 10000) {
+            return String.valueOf(number);
+        } else if (number < 100000000) {
+            double result = number / 10000.0;
+            return String.format("%.1f만", result).replaceAll("\\.0", "");
+        } else {
+            double result = number / 100000000.0;
+            return String.format("%.1f억", result).replaceAll("\\.0", "");
+        }
+    }
+
+    public Map<String, Object> getYoutuberInfo(String memberId) {
+        Map<String, Object> youtuberInfo = new HashMap<>();
+        youtuberInfo.put("youtuberInfo", miniHomepyMapper.getYoutuberInfoList(memberId));
+        return youtuberInfo;
     }
 }

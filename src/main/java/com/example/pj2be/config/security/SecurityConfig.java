@@ -50,7 +50,7 @@ public class SecurityConfig {
                 // 접근 가능 경로 설정
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
-                                .requestMatchers(new AntPathRequestMatcher("/api/member/minihomepy/member_id/**")).hasAnyAuthority("ROLE_GENERAL")
+                                .requestMatchers(new AntPathRequestMatcher("/api/member/minihomepy/member_id/**")).hasAnyAuthority("ROLE_GENERAL_MEMBER","ROLE_ADMIN")
                                 .anyRequest().permitAll())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();

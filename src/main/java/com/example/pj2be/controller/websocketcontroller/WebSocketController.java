@@ -185,6 +185,7 @@ public class WebSocketController {
 
     @MessageMapping("/answer/sendalarm")
     public void addAnswerAlarm(@RequestBody AlarmDTO alarmDTO) {
+
         System.out.println("alarmDTO = " + alarmDTO);
 
         webSocketService.answerAlarmSend(alarmDTO);
