@@ -29,6 +29,8 @@ public class VoteController {
         System.out.println("투표 게시글: " + id);
         return voteService.view(id);
 
+
     }
+
 
 }

@@ -3,6 +3,7 @@ package com.example.pj2be.mapper.votemapper;
 import com.example.pj2be.domain.vote.VoteDTO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public interface VoteMapper {
                 #{name_eng}
             )
             """)
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     void add(VoteDTO voteDTO);
 
 
