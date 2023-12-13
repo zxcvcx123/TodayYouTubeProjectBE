@@ -75,7 +75,6 @@ public class MemberMinihomeyService {
         String formattedVideoCount = formatNumber(Long.parseLong(youtuberInfoDTO.getVideoCount()));
         String formattedSubscriberCount = formatNumber(Long.parseLong(youtuberInfoDTO.getSubscriberCount()));
         String formattedViewCount = formatNumber(Long.parseLong(youtuberInfoDTO.getViewCount()));
-
         String country = youtuberInfoDTO.getCountry();
         return miniHomepyMapper.addYoutuberInfoByMemberId(memberId, title, customUrl, publishedAt, thumbnails, description, formattedVideoCount, formattedSubscriberCount,formattedViewCount, country) == 1;
     }
