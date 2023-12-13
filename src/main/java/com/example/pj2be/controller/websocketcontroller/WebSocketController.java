@@ -2,7 +2,10 @@ package com.example.pj2be.controller.websocketcontroller;
 
 import com.example.pj2be.domain.alarm.AlarmDTO;
 import com.example.pj2be.domain.like.BoardLikeDTO;
+import com.example.pj2be.domain.member.MemberDTO;
 import com.example.pj2be.domain.socket.ChatDTO;
+import com.example.pj2be.mapper.WebSocktMapper.WebSocketMapper;
+import com.example.pj2be.service.inquiryservice.InquiryService;
 import com.example.pj2be.service.likeservice.BoardLikeService;
 import com.example.pj2be.service.websocketservice.WebSocketService;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +25,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class WebSocketController {
 
+    private final WebSocketMapper webSocketMapper;
     private final WebSocketService webSocketService;
     private final BoardLikeService boardLikeService;
     private final SimpMessagingTemplate simpMessagingTemplate; // 특정 유저에게 보내야해서 사용
+
 
     /* ========== 채팅 ========== */
     @MessageMapping("/hello")
@@ -72,7 +77,7 @@ public class WebSocketController {
     // 댓글알람
     @MessageMapping("/comment/sendalarm/{userId}")
     public void addCommentAlarm(@DestinationVariable String userId,
-                                          @RequestBody AlarmDTO alarmDTO) {
+                                @RequestBody AlarmDTO alarmDTO) {
 
         // 알림 최신화
         List<AlarmDTO> list = webSocketService.commentAlarmSend(alarmDTO);
@@ -90,7 +95,7 @@ public class WebSocketController {
     // 댓글알람개수
     @MessageMapping("/comment/sendalarm/count/{userId}")
     public void receiverCommentAlarmCount(@DestinationVariable String userId,
-                                @RequestBody AlarmDTO alarmDTO) {
+                                          @RequestBody AlarmDTO alarmDTO) {
 
         // 알림 최신 개수
         Integer count = webSocketService.getAlarmCount(alarmDTO.getReceiver_member_id());
@@ -105,7 +110,7 @@ public class WebSocketController {
 
     // 초기에 알람목록 가져오기 (ajax)
     @PostMapping("api/websocket/alarmlist")
-    public List<AlarmDTO> getAlarmList(@RequestBody Map<String, String> map){
+    public List<AlarmDTO> getAlarmList(@RequestBody Map<String, String> map) {
 
         AlarmDTO alarmDTO = new AlarmDTO();
         alarmDTO.setReceiver_member_id(map.get("userId"));
@@ -115,7 +120,7 @@ public class WebSocketController {
 
     // 알람 개수 (ajax)
     @PostMapping("api/websocket/alarmcount")
-    public Integer getAlarmCount(@RequestBody Map<String, String> map){
+    public Integer getAlarmCount(@RequestBody Map<String, String> map) {
 
         AlarmDTO alarmDTO = new AlarmDTO();
 
@@ -124,7 +129,7 @@ public class WebSocketController {
 
     // 알람 개별 읽기 (ajax)
     @PostMapping("api/alarmread")
-    public void readAlarm(@RequestBody Map<String, Integer> map){
+    public void readAlarm(@RequestBody Map<String, Integer> map) {
 
         // 알람 개별 읽기
         webSocketService.readAlarm(map.get("id"));
@@ -134,7 +139,7 @@ public class WebSocketController {
     // 알람 모두 읽기
     @MessageMapping("/comment/alarm/allread/{userId}")
     @SendTo("/queue/comment/alarm/{userId}")
-    public void readAllAlarm(@DestinationVariable String userId){
+    public void readAllAlarm(@DestinationVariable String userId) {
 
         // 알람 전부읽기
         webSocketService.readAllAlarm(userId);
@@ -156,7 +161,7 @@ public class WebSocketController {
 
     // 알람 삭제
     @MessageMapping("/comment/alarm/delete")
-    public void deleteAlarm(@RequestBody Map<String, Object> map){
+    public void deleteAlarm(@RequestBody Map<String, Object> map) {
 
         webSocketService.deleteAlarm(map);
 
@@ -179,13 +184,15 @@ public class WebSocketController {
     }
 
     @MessageMapping("/answer/sendalarm")
-    public void addInquiryAlarm(@RequestBody AlarmDTO alarmDTO) {
+    public void addAnswerAlarm(@RequestBody AlarmDTO alarmDTO) {
+
         System.out.println("alarmDTO = " + alarmDTO);
 
-        webSocketService.inquiryAlarmSend(alarmDTO);
+        webSocketService.answerAlarmSend(alarmDTO);
 
         // 알람 받는이 설정
         String toId = alarmDTO.getReceiver_member_id();
+        System.out.println("toId1 = " + toId);
 
         // 알람 수 최신화 데이터
         Integer count = webSocketService.getAlarmCount(alarmDTO.getReceiver_member_id());
@@ -199,6 +206,30 @@ public class WebSocketController {
         simpMessagingTemplate.convertAndSend("/queue/answer/alarm/count/" + toId, count);
     }
 
+    @MessageMapping("/inquiry/sendalarm")
+    public void addInquiryAlarm(@RequestBody AlarmDTO alarmDTO,
+                                @RequestBody MemberDTO memberDTO) {
+        webSocketService.inquiryAlarmSend(alarmDTO);
+        System.out.println("alarmDTO = " + alarmDTO);
+
+        List<String> idList = webSocketMapper.getAdminList(1);
+
+
+
+        for (String toId : idList) {
+            alarmDTO.setReceiver_member_id(toId);
+            List<AlarmDTO> list = webSocketService.getAlarmList(alarmDTO);
+            System.out.println("list = " + list);
+
+            Integer count = webSocketService.getAlarmCount(toId);
+            System.out.println("count = " + count);
+
+
+            simpMessagingTemplate.convertAndSend("/queue/inquiry/alarm/" + toId, list);
+            simpMessagingTemplate.convertAndSend("/queue/inquiry/alarm/count/" + toId, count);
+        }
+    }
 
 }
+
 

@@ -37,6 +37,7 @@ public interface InquiryMapper {
             #{inquiry_member_id}
         )
         """)
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     int insert(InquiryDTO dto);
 
     @Select("""

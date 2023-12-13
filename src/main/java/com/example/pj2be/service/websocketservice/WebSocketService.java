@@ -1,20 +1,14 @@
 package com.example.pj2be.service.websocketservice;
 
 import com.example.pj2be.domain.alarm.AlarmDTO;
+import com.example.pj2be.domain.inquiry.InquiryDTO;
 import com.example.pj2be.mapper.WebSocktMapper.WebSocketMapper;
-import jakarta.websocket.OnClose;
-import jakarta.websocket.OnMessage;
-import jakarta.websocket.OnOpen;
-import jakarta.websocket.Session;
-import jakarta.websocket.server.ServerEndpoint;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.io.IOException;
+import java.sql.Array;
 import java.util.*;
 
 
@@ -78,7 +72,7 @@ public class WebSocketService {
             // 알람 전부삭제
             webSocketMapper.deleteAllAlarm(userId);
         }
-        if(mode.equals("ONE")) {
+        if (mode.equals("ONE")) {
             // 알람 개별 삭제
             webSocketMapper.deleteAlarm(id);
         }
@@ -86,12 +80,28 @@ public class WebSocketService {
     }
 
 
-    public void inquiryAlarmSend(AlarmDTO alarmDTO) {
+    public void answerAlarmSend(AlarmDTO alarmDTO) {
 
         alarmDTO.setAlarm_category("ac003");
 
-        webSocketMapper.inquiryAlarmSend(alarmDTO);
+        webSocketMapper.answerAlarmSend(alarmDTO);
 
     }
+
+    public void inquiryAlarmSend(AlarmDTO alarmDTO) {
+        List<String> list = webSocketMapper.getAdminList(1);
+
+        for (int i = 0; i < list.size(); i++) {
+
+            alarmDTO.setAlarm_category("ac004");
+            alarmDTO.setReceiver_member_id(list.get(i));
+            System.out.println("운영자 아이디: " + list.get(i));
+            System.out.println("반복문 테스트: " + alarmDTO);
+            webSocketMapper.answerInquirySend(alarmDTO);
+
+        }
+    }
+
+
 }
 

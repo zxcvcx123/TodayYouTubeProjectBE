@@ -3,6 +3,7 @@ package com.example.pj2be.service.inquiryservice;
 import com.example.pj2be.domain.answer.AnswerDTO;
 import com.example.pj2be.domain.inquiry.InquiryDTO;
 import com.example.pj2be.mapper.inquirymapper.InquiryMapper;
+import com.example.pj2be.service.websocketservice.WebSocketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import java.util.Map;
 public class InquiryService {
 
     private final InquiryMapper mapper;
+    private final WebSocketService webSocketService;
 
     public Map<String, Object> list(Integer page, InquiryDTO dto) {
 

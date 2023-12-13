@@ -2,6 +2,7 @@ package com.example.pj2be.service.voteservice;
 
 import com.example.pj2be.domain.page.PageDTO;
 import com.example.pj2be.domain.vote.VoteDTO;
+import com.example.pj2be.mapper.votemapper.VoteCountMapper;
 import com.example.pj2be.mapper.votemapper.VoteMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,11 +19,13 @@ import java.util.Map;
 public class VoteService {
 
     private final VoteMapper voteMapper;
+    private final VoteCountMapper voteCountMapper;
 
     // 투표 글 작성
     public void add(VoteDTO voteDTO) {
 
         voteMapper.add(voteDTO);
+        voteCountMapper.addVoteA(voteDTO.getId());
 
     }
 
