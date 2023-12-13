@@ -1,5 +1,6 @@
 package com.example.pj2be.mapper.votemapper;
 
+import com.example.pj2be.domain.page.PageDTO;
 import com.example.pj2be.domain.vote.VoteDTO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -49,4 +50,38 @@ public interface VoteMapper {
             WHERE v.id = #{id}
             """)
     VoteDTO view(Integer id);
+
+    @Select("""
+            SELECT v.id AS id,
+                   vote_member_id,
+                   title,
+                   link_a,
+                   link_b,
+                   content,
+                   name_eng,
+                   v.created_at AS created_at,
+                   voted_a,
+                   voted_b,
+                   nickname
+            FROM vote v LEFT JOIN vote_count vc
+                            ON v.id = vc.vote_board_id
+                        LEFT JOIN member m
+                            ON v.vote_member_id = m.member_id
+            WHERE v.title LIKE #{k}
+            ORDER BY v.id DESC
+            LIMIT #{pageDTO.limitNowPage}, #{pageDTO.limitList}
+            """)
+    List<VoteDTO> list(PageDTO pageDTO, String k);
+
+
+
+    @Select("""
+            SELECT COUNT(v.id)
+            FROM vote v LEFT JOIN vote_count vc
+                                  ON v.id = vc.vote_board_id
+                        LEFT JOIN member m
+                                  ON v.vote_member_id = m.member_id
+            WHERE v.title LIKE '%수원%'
+            """)
+    Integer getTotal();
 }
