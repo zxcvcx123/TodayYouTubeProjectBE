@@ -1,8 +1,12 @@
 package com.example.pj2be.mapper.visitormapper;
 
+import com.example.pj2be.domain.visitor.VisitorDTO;
+import com.example.pj2be.domain.visitor.VisitorMonthlyDTO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface VisitorMapper {
@@ -53,11 +57,11 @@ public interface VisitorMapper {
     @Select("""
         SELECT
             CONCAT(YEAR(inserted_at), '-', LPAD(MONTH(inserted_at), 2, '0')) AS `year_month`,
-            COUNT(member_id) AS unique_visitors
+            COUNT(member_id) AS visitor_count
         FROM visitor_statistics
         WHERE inserted_at >= CURDATE() - INTERVAL 12 MONTH
         GROUP BY YEAR(inserted_at), MONTH(inserted_at)
         ORDER BY `year_month` DESC;
         """)
-    void visitorCountMonthlyLastYear();
+    List<VisitorMonthlyDTO> visitorCountMonthlyLastYear();
 }

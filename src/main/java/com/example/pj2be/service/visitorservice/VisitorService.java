@@ -1,8 +1,12 @@
 package com.example.pj2be.service.visitorservice;
 
+import com.example.pj2be.domain.visitor.VisitorDTO;
 import com.example.pj2be.mapper.visitormapper.VisitorMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -25,9 +29,15 @@ public class VisitorService {
 
     }
 
-    public Integer getVisitorCount() {
-        visitorMapper.visitorCountToday();
-        visitorMapper.visitorCountMonthlyLastYear();
-        return visitorMapper.visitorCountAll();
+    public VisitorDTO getVisitorCount() {
+        VisitorDTO result = new VisitorDTO();
+
+        result.setVisitorCountToday(visitorMapper.visitorCountToday());
+        result.setVisitorCountMonthlyLastYear(visitorMapper.visitorCountMonthlyLastYear());
+        result.setVisitorCountAll(visitorMapper.visitorCountAll());
+
+        System.out.println("result = " + result);
+
+        return null;
     }
 }

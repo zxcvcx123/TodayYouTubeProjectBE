@@ -1,5 +1,6 @@
 package com.example.pj2be.controller.visitorcontroller;
 
+import com.example.pj2be.domain.visitor.VisitorDTO;
 import com.example.pj2be.service.visitorservice.VisitorService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class VisitorController {
     }
 
     @GetMapping("getVisitorCount")
-    public Integer getVisitorCount() {
+    public VisitorDTO getVisitorCount() {
 
         return visitorService.getVisitorCount();
     }
