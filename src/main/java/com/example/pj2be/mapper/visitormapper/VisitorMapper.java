@@ -61,7 +61,7 @@ public interface VisitorMapper {
         FROM visitor_statistics
         WHERE inserted_at >= CURDATE() - INTERVAL 12 MONTH
         GROUP BY YEAR(inserted_at), MONTH(inserted_at)
-        ORDER BY `year_month` DESC;
+        ORDER BY `year_month`;
         """)
     List<VisitorMonthlyDTO> visitorCountMonthlyLastYear();
 }
