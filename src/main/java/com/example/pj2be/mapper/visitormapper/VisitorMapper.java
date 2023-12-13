@@ -39,5 +39,14 @@ public interface VisitorMapper {
         """)
     Integer visitorCountAll();
 
-
+    /**
+     * 오늘의 방문자 수 집계 (중복 제거)
+     * @return Integer
+     */
+    @Select("""
+        SELECT COUNT(DISTINCT member_id) AS today_visitor
+        FROM visitor_statistics
+        WHERE DATE(inserted_at) = CURDATE();
+        """)
+    Integer visitorCountToday();
 }
