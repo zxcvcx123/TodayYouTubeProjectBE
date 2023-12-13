@@ -43,11 +43,14 @@ public interface VoteMapper {
                    v.name_eng AS name_eng,
                    v.created_at AS created_at,
                    m.nickname AS nickname,
+                   
                    r.role_name AS rolename
             FROM vote v LEFT JOIN member m
                             ON v.vote_member_id = m.member_id
                         LEFT JOIN roles r
                             ON m.role_id = r.role_id
+                        LEFT JOIN vote_check vch
+                            ON v.id = vch.vote_board_id
             WHERE v.id = #{id}
             """)
     VoteDTO view(Integer id);

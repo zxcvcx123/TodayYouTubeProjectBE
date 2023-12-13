@@ -13,9 +13,64 @@ public class VoteCountService {
 
     private final VoteCountMapper voteCountMapper;
 
-    public void addVoteA(Integer boardId) {
+
+    public VoteCountDTO addVoteA(VoteCountDTO voteCountDTO) {
+
+        Integer boardId = voteCountDTO.getVote_board_id();
+
         voteCountMapper.addVoteA(boardId);
 
+        return voteCountMapper.getVoteCount(boardId);
+    }
+
+
+    public VoteCountDTO addVoteB(VoteCountDTO voteCountDTO) {
+
+        Integer boardId = voteCountDTO.getVote_board_id();
+
+        voteCountMapper.addVoteB(boardId);
+
+        return voteCountMapper.getVoteCount(boardId);
+    }
+
+
+    public VoteCountDTO voteGetCount(VoteCountDTO voteCountDTO) {
+        return voteCountMapper.voteBoardCount(voteCountDTO);
+    }
+
+    public VoteCountDTO voteCheck(VoteCountDTO voteCountDTO, String checked) {
+        System.out.println("vote check 동작");
+
+        System.out.println("조회 값: " + voteCountMapper.voteCheckedInsert(voteCountDTO));
+        if (voteCountMapper.voteCheckedInsert(voteCountDTO) == 0) {
+            if (checked == "voteA") {
+                voteCountDTO.setVoted_a(1);
+                voteCountDTO.setVoted_b(0);
+                voteCountMapper.addVoteCheck(voteCountDTO);
+            }
+
+            if (checked == "voteB") {
+                voteCountDTO.setVoted_a(0);
+                voteCountDTO.setVoted_b(1);
+                voteCountMapper.addVoteCheck(voteCountDTO);
+            }
+
+        }
+
+        if (voteCountMapper.voteCheckedInsert(voteCountDTO) == 1) {
+            if (checked == "voteA") {
+                voteCountDTO.setVoted_a(1);
+                voteCountDTO.setVoted_b(0);
+                voteCountMapper.voteCheckedUpdate(voteCountDTO);
+            }
+
+            if (checked == "voteB") {
+                voteCountDTO.setVoted_a(0);
+                voteCountDTO.setVoted_b(1);
+                voteCountMapper.voteCheckedUpdate(voteCountDTO);
+            }
+        }
+        return voteCountMapper.voteCheckedCount(voteCountDTO);
     }
 
 

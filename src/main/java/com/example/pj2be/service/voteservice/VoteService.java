@@ -18,7 +18,7 @@ public class VoteService {
     public void add(VoteDTO voteDTO) {
 
         voteMapper.add(voteDTO);
-        voteCountMapper.addVoteA(voteDTO.getId());
+        voteCountMapper.addVote(voteDTO.getId());
 
     }
 
