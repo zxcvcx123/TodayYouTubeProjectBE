@@ -83,7 +83,7 @@ public interface VoteMapper {
                                   ON v.id = vc.vote_board_id
                         LEFT JOIN member m
                                   ON v.vote_member_id = m.member_id
-            WHERE v.title LIKE '%수원%'
+            WHERE v.title LIKE #{k}
             """)
-    Integer getTotal();
+    Integer getTotal(String k);
 }

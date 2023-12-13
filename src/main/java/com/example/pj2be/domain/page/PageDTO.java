@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class PageDTO {
-    
+
     private Integer initialPage = 1; // 맨 첫페이지
     private Integer page = 1; // 현재 페이지
     private Integer limitList = 5; // Limit 뒤에 숫자 (글을 몇 개 보여줄건지)
@@ -13,21 +13,25 @@ public class PageDTO {
 
     // Limit 앞에 숫자
     public Integer getLimitNowPage() {
+
         return (page - 1) * limitList;
     }
 
     // 총 페이지
     public Integer getTotalPage() {
-        return (totalList / limitList) + (totalList % limitList > 0 ? 1 : 0);
+
+        return (totalList / slicePage) + 1;
     }
 
     // 페이지 시작점;
     public Integer getStartPage() {
+
         return (page - 1) / slicePage * slicePage + 1;
     }
 
     // 페이지 마지막 번호
     public Integer getLastPage() {
+
         return ((totalList - 1) / slicePage) + 1;
     }
 
@@ -38,18 +42,18 @@ public class PageDTO {
     }
 
     // 다음 페이지
-    public Integer getNextPageNumber(){
+    public Integer getNextPageNumber() {
         return getEndPage() + 1;
     }
 
     // 이전 페이지
-    public Integer getPrevPageNumber(){
+    public Integer getPrevPageNumber() {
         return getStartPage() - slicePage;
     }
 
     // 마지막 페이지
-    public Integer getLastPageNumber(){
-        return (totalList -1) / slicePage + 1;
+    public Integer getLastPageNumber() {
+        return (totalList - 1) / slicePage + 1;
     }
 
 }

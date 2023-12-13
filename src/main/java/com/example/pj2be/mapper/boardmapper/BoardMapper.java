@@ -53,53 +53,83 @@ public interface BoardMapper {
 
     // 게시글 리스트
     @Select("""
-        <script>
-        SELECT
-                ROW_NUMBER() OVER (ORDER BY b.id ASC) AS rownum,
-                b.id,
-                b.title,
-                b.content,
-                b.link,
-                b.board_category_code,
-                b.board_member_id,
-                b.created_at,
-                b.updated_at,
-                COUNT(DISTINCT bl.id) countlike,
-                COUNT(DISTINCT c.id) count_comment,
-                is_show,
-                views
-        FROM board b 
-                    LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
-                    LEFT JOIN comment c ON b.id = c.board_id
-                         JOIN category ON b.board_category_code = category.code
-        <where>
-            <if test="type == 'all'">
-                AND (
-                    b.title like #{keyword} OR
-                    b.content like #{keyword} OR
-                    b.board_member_id like #{keyword}
-                )
-            </if>
-            <if test="type == 'title'">
-                AND b.title like #{keyword}
-            </if>
-            <if test="type == 'content'">
-                 AND b.content like #{keyword}
-            </if>
-            <if test="type == 'board_member_id'">
-                 AND b.board_member_id like #{keyword}
-            </if>
-            <if test="category != null">
-                 AND category.name_eng = #{category}
-            </if>
-                 AND b.is_show = true
-        </where>
-        GROUP BY b.id
-        ORDER BY rownum DESC
-        LIMIT #{from}, #{slice}
-        </script>
-        """)
+            <script>
+            SELECT
+                    ROW_NUMBER() OVER (ORDER BY b.id ASC) AS rownum,
+                    b.id,
+                    b.title,
+                    b.content,
+                    b.link,
+                    b.board_category_code,
+                    b.board_member_id,
+                    b.created_at,
+                    b.updated_at,
+                    COUNT(DISTINCT bl.id) countlike,
+                    COUNT(DISTINCT c.id) count_comment,
+                    is_show,
+                    views
+            FROM board b 
+                        LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
+                        LEFT JOIN comment c ON b.id = c.board_id
+                             JOIN category ON b.board_category_code = category.code
+            <where>
+                <if test="type == 'all'">
+                    AND (
+                        b.title like #{keyword} OR
+                        b.content like #{keyword} OR
+                        b.board_member_id like #{keyword}
+                    )
+                </if>
+                <if test="type == 'title'">
+                    AND b.title like #{keyword}
+                </if>
+                <if test="type == 'content'">
+                     AND b.content like #{keyword}
+                </if>
+                <if test="type == 'board_member_id'">
+                     AND b.board_member_id like #{keyword}
+                </if>
+                <if test="category != null">
+                    AND category.name_eng = #{category}
+                </if>
+                     AND b.is_show = true
+            </where>
+            GROUP BY b.id
+            ORDER BY rownum DESC
+            LIMIT #{from}, #{slice}
+            </script>
+            """)
     List<BoardDTO> selectAll(Integer from, Integer slice, String keyword, String type, String category);
+
+    // 게시글 통합검색 리스트
+    @Select("""
+            SELECT
+                    ROW_NUMBER() OVER (ORDER BY b.id ASC) AS rownum,
+                    b.id,
+                    b.title,
+                    b.content,
+                    b.link,
+                    b.board_category_code,
+                    b.board_member_id,
+                    b.created_at,
+                    b.updated_at,
+                    COUNT(DISTINCT bl.id) countlike,
+                    COUNT(DISTINCT c.id) count_comment,
+                    is_show,
+                    views
+            FROM board b 
+                        LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
+                        LEFT JOIN comment c ON b.id = c.board_id
+                             JOIN category ON b.board_category_code = category.code
+            WHERE b.title like #{keyword} OR
+                  b.content like #{keyword} 
+                   AND b.is_show = true
+            GROUP BY b.id
+            ORDER BY rownum DESC
+            LIMIT #{from}, #{slice}
+            """)
+    List<BoardDTO> mainSelectAll(Integer from, Integer slice, String keyword, String category);
+
 
     // 게시글 수정
     // BoardEditDTO 내부에 BoardDTO가 있음.
@@ -155,6 +185,19 @@ public interface BoardMapper {
         </script>
         """)
     int selectAllpage(String keyword, String type, String category);
+
+    // 전체 통합검색 게시글 수 조회
+    @Select("""
+            SELECT COUNT(b.id)
+            FROM board b 
+                        LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
+                        LEFT JOIN comment c ON b.id = c.board_id
+                             JOIN category ON b.board_category_code = category.code
+            WHERE b.title like #{keyword} OR
+                  b.content like #{keyword} 
+                   AND b.is_show = true
+        """)
+    int selectMainAllpage(String keyword, String category);
 
     // 게시글 조회수 증가
     @Update("""

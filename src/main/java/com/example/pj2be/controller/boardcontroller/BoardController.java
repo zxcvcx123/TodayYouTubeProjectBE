@@ -104,8 +104,6 @@ public class BoardController {
         // 게시글 작성자 id와 로그인 사용자 id를 비교하여 유효성 검증
         if (MemberChecked(board.getLogin_member_id(), board.getBoard_member_id()) == 0) {
 
-
-
             boardService.update(board, files);
 
             return ResponseEntity.ok().build();

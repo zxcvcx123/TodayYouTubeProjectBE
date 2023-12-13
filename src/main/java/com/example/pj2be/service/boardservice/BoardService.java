@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.util.HashMap;
 import java.util.List;
@@ -52,8 +51,16 @@ public class BoardService {
 
         // 페이징 필요한 것들
         // 전체페이지, 보여줄페이지 수, 왼쪽끝페이지, 오른쪽끝페이지, 담페이지, 이전페이지,
-        int countAll;
-        countAll = boardMapper.selectAllpage("%" + keyword + "%", type, category);
+        int countAll = 0;
+
+        if(type != null) {
+            countAll = boardMapper.selectAllpage("%" + keyword + "%", type, category);
+        }
+
+        if (type == null) {
+            countAll = boardMapper.selectMainAllpage("%" + keyword + "%", category);
+        }
+
         int lastPageNumber = (countAll - 1) / slice + 1;
         int startPageNumber = (page - 1) / 5 * 5 + 1;
         int endPageNumber = (startPageNumber + (5 - 1));
@@ -78,10 +85,17 @@ public class BoardService {
         }
 
         int from = (page - 1) * slice;
+        if(type != null) {
+            map.put("boardList", boardMapper.selectAll(from, slice, "%" + keyword + "%", type, category));
+            map.put("pageInfo", pageInfo);
+            map.put("boardInfo", category);
+        }
 
-        map.put("boardList", boardMapper.selectAll(from, slice, "%" + keyword + "%", type, category));
-        map.put("pageInfo", pageInfo);
-        map.put("boardInfo", category);
+        if(type == null){
+            map.put("boardList", boardMapper.mainSelectAll(from, slice, "%" + keyword + "%", category));
+            map.put("pageInfo", pageInfo);
+            map.put("boardInfo", category);
+        }
 
         System.out.println("pageInfo = " + pageInfo);
 
