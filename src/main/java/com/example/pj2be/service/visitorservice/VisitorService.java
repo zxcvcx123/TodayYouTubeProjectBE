@@ -38,6 +38,6 @@ public class VisitorService {
 
         System.out.println("result = " + result);
 
-        return null;
+        return result;
     }
 }
