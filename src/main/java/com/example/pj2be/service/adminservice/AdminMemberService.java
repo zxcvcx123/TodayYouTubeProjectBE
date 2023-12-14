@@ -1,5 +1,6 @@
 package com.example.pj2be.service.adminservice;
 
+import com.example.pj2be.domain.admin.SuspensionDTO;
 import com.example.pj2be.domain.page.PageDTO;
 import com.example.pj2be.domain.page.PaginationDTO;
 import com.example.pj2be.mapper.adminmapper.AdminMemberMapper;
@@ -90,5 +91,10 @@ public class AdminMemberService {
         map.put("memberInfoCommentList", mapper.selectCommentList(memberId, paginationDTO2));
 
         return map;
+    }
+
+    // 회원 정지 진행중
+    public void memberSuspension(SuspensionDTO dto) {
+        mapper.insertSuspensionStart(dto);
     }
 }

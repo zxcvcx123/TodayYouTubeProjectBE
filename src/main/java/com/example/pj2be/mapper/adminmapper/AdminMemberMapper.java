@@ -2,8 +2,10 @@ package com.example.pj2be.mapper.adminmapper;
 
 import com.example.pj2be.domain.admin.AdminMemberActiveBoardDTO;
 import com.example.pj2be.domain.admin.AdminMemberDTO;
+import com.example.pj2be.domain.admin.SuspensionDTO;
 import com.example.pj2be.domain.board.BoardDTO;
 import com.example.pj2be.domain.page.PaginationDTO;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -123,4 +125,13 @@ public interface AdminMemberMapper {
         WHERE member_id = #{memberId}
         """)
     int selectAllMemberComment(String memberId);
+
+
+    @Insert("""
+        INSERT INTO suspension (member_id, reason, period)
+        VALUE (member_id = #{dto.member_id},
+                reason = #{dto.reason},
+                period = #{period})
+        """)
+    int insertSuspensionStart(SuspensionDTO dto);
 }
