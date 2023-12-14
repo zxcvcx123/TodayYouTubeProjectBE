@@ -2,6 +2,7 @@ package com.example.pj2be.service.websocketservice;
 
 import com.example.pj2be.domain.alarm.AlarmDTO;
 import com.example.pj2be.domain.inquiry.InquiryDTO;
+import com.example.pj2be.domain.vote.VoteCountDTO;
 import com.example.pj2be.mapper.WebSocktMapper.WebSocketMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -101,7 +102,5 @@ public class WebSocketService {
 
         }
     }
-
-
 }
 

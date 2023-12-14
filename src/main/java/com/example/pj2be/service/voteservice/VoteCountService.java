@@ -13,9 +13,86 @@ public class VoteCountService {
 
     private final VoteCountMapper voteCountMapper;
 
-    public void addVoteA(Integer boardId) {
-        voteCountMapper.addVoteA(boardId);
 
+    private void addVoteA(VoteCountDTO voteCountDTO) {
+
+        Integer boardId = voteCountDTO.getVote_board_id();
+
+        voteCountMapper.addVoteA(boardId);
+    }
+
+
+    private void addVoteB(VoteCountDTO voteCountDTO) {
+
+        Integer boardId = voteCountDTO.getVote_board_id();
+
+        voteCountMapper.addVoteB(boardId);
+
+    }
+
+    private void minusVoteA(VoteCountDTO voteCountDTO) {
+
+        Integer boardId = voteCountDTO.getVote_board_id();
+
+        voteCountMapper.minusVoteA(boardId);
+
+
+    }
+
+
+    private void minusVoteB(VoteCountDTO voteCountDTO) {
+
+        Integer boardId = voteCountDTO.getVote_board_id();
+
+        voteCountMapper.minusVoteB(boardId);
+
+
+    }
+
+
+    public VoteCountDTO voteGetCount(Integer boardId) {
+        return voteCountMapper.voteBoardCount(boardId);
+    }
+
+    public VoteCountDTO voteCheck(VoteCountDTO voteCountDTO, String checked) {
+        System.out.println("vote check 동작");
+
+        System.out.println("조회 값: " + voteCountMapper.voteCheckedInsert(voteCountDTO));
+        if (voteCountMapper.voteCheckedInsert(voteCountDTO) == 0) {
+            if (checked == "voteA") {
+                voteCountDTO.setVoted_a(1);
+                voteCountDTO.setVoted_b(0);
+                addVoteA(voteCountDTO);
+
+                voteCountMapper.addVoteCheck(voteCountDTO);
+            }
+
+            if (checked == "voteB") {
+                voteCountDTO.setVoted_a(0);
+                voteCountDTO.setVoted_b(1);
+                addVoteB(voteCountDTO);
+                voteCountMapper.addVoteCheck(voteCountDTO);
+            }
+
+        } else {
+            if (checked == "voteA") {
+                voteCountDTO.setVoted_a(1);
+                voteCountDTO.setVoted_b(0);
+                addVoteA(voteCountDTO);
+                minusVoteB(voteCountDTO);
+                voteCountMapper.voteCheckedUpdate(voteCountDTO);
+            }
+
+            if (checked == "voteB") {
+                voteCountDTO.setVoted_a(0);
+                voteCountDTO.setVoted_b(1);
+                addVoteB(voteCountDTO);
+                minusVoteA(voteCountDTO);
+
+                voteCountMapper.voteCheckedUpdate(voteCountDTO);
+            }
+        }
+        return voteCountMapper.voteCheckedCount(voteCountDTO);
     }
 
 

@@ -14,4 +14,8 @@ public class VoteCountDTO {
     private Integer voted_a;
     private Integer voted_b;
     private LocalDateTime created_at;
+
+    // 개인 버튼 확인
+    private Integer checked_vote_a;
+    private Integer checked_vote_b;
 }

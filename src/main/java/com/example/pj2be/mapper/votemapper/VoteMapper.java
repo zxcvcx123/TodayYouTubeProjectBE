@@ -44,6 +44,7 @@ public interface VoteMapper {
                    v.name_eng AS name_eng,
                    v.created_at AS created_at,
                    m.nickname AS nickname,
+                   
                    r.role_name AS rolename
             FROM vote v LEFT JOIN member m
                             ON v.vote_member_id = m.member_id

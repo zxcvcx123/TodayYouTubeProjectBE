@@ -25,35 +25,13 @@ public class VoteService {
     public void add(VoteDTO voteDTO) {
 
         voteMapper.add(voteDTO);
-        voteCountMapper.addVoteA(voteDTO.getId());
+        voteCountMapper.addVote(voteDTO.getId());
 
     }
 
 
-    public Map<String, Object> list(PageDTO pageDTO, Integer p, String k) {
-
-        Map<String, Object> map = new HashMap<>();
-
-        // 페이지
-        pageDTO.setPage(p);
-
-        // 검색
-        if(k == null || k.isBlank() || k.isEmpty()){
-            pageDTO.setTotalList(voteMapper.getTotal("%%"));
-            map.put("vote", voteMapper.list(pageDTO, "%%"));
-        } else {
-            pageDTO.setTotalList(voteMapper.getTotal("%" + k + "%"));
-            map.put("vote", voteMapper.list(pageDTO, "%" + k + "%"));
-        }
-
-        map.put("page", pageDTO);
-        System.out.println("페이지: " + pageDTO);
-        System.out.println("내용: " + map.get("vote"));
-        return map;
-    }
-
-    // 투표 게시글 보기
-    public VoteDTO view(Integer id) {
+  // 투표 게시글 보기
+    public  VoteDTO view(Integer id){
         return voteMapper.view(id);
     }
 
