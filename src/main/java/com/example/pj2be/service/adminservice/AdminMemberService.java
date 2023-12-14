@@ -65,26 +65,30 @@ public class AdminMemberService {
         map.put("memberList", mapper.selectByMemberId(memberId));
 
 
-        // 작성한 댓글 가져오기
-        map.put("memberInfoCommentList", mapper.selectCommentList(memberId));
+
 
         // 게시물 페이징
         paginationDTO.setAllPage(mapper.selectAllMemberBoard(memberId));
         paginationDTO.setCurrentPageNumber(page);
-        paginationDTO.setLimitList(20);
+        paginationDTO.setLimitList(10);
 
         map.put("pageInfo", paginationDTO);
         System.out.println("paginationDTO = " + paginationDTO);
 
         // 작성한 게시글 가져오기
         map.put("memberInfoBoardList", mapper.selectBoardList(memberId, paginationDTO));
+
+
         // 댓글 페이징
-//        PageDTO pageDTO2 = new PageDTO();
-//        pageDTO2.setPage(page);
-//        pageDTO2.setTotalList(mapper.selectAllMemberComment(memberId));
-//        pageDTO2.setLimitList(30);
-//
-//        map.put("pageInfo2", pageDTO2);
+        PaginationDTO paginationDTO2 = new PaginationDTO();
+        paginationDTO2.setCurrentPageNumber(page);
+        paginationDTO2.setAllPage(mapper.selectAllMemberComment(memberId));
+        paginationDTO2.setLimitList(20);
+
+        map.put("pageInfo2", paginationDTO2);
+
+        // 작성한 댓글 가져오기
+        map.put("memberInfoCommentList", mapper.selectCommentList(memberId, paginationDTO2));
 
         return map;
     }
