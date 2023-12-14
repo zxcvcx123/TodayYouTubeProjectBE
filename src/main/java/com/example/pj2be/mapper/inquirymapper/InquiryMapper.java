@@ -117,7 +117,7 @@ public interface InquiryMapper {
                a.content answerContent
         FROM inquiry i JOIN inquirycategory ic ON ic.id = i.inquiry_category
                        LEFT JOIN youtube.answer a on i.id = a.answer_board_id
-        WHERE inquiry_member_id = #{id}
+        WHERE inquiry_member_id = #{id} AND ic.category NOT LIKE '유저신고'
         ORDER BY i.id DESC
         LIMIT #{from}, 10;
         """)

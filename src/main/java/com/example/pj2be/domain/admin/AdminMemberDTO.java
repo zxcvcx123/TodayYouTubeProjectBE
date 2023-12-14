@@ -15,5 +15,9 @@ public class AdminMemberDTO {
     private String role_name;
     private String gender;
     private LocalDate birth_date;
+    private Integer countlike;
+    private Integer countboard;
+    private Integer countcomment;
+    private Integer countcommentreply;
 
 }
