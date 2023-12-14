@@ -1,5 +1,7 @@
 package com.example.pj2be.service.adminservice;
 
+import com.example.pj2be.domain.page.PageDTO;
+import com.example.pj2be.domain.page.PaginationDTO;
 import com.example.pj2be.mapper.adminmapper.AdminMemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -53,7 +55,7 @@ public class AdminMemberService {
         return map;
     }
 
-    public Map<String, Object> memberInfo(String memberId) {
+    public Map<String, Object> memberInfo(String memberId, Integer page, PaginationDTO paginationDTO) {
         Map<String, Object> map = new HashMap<>();
 
         // 활동한 게시판목록
@@ -62,11 +64,27 @@ public class AdminMemberService {
         // 멤버정보 가져오기
         map.put("memberList", mapper.selectByMemberId(memberId));
 
-        // 작성한 게시글 가져오기
-        map.put("memberInfoBoardList", mapper.selectBoardList(memberId));
 
         // 작성한 댓글 가져오기
         map.put("memberInfoCommentList", mapper.selectCommentList(memberId));
+
+        // 게시물 페이징
+        paginationDTO.setAllPage(mapper.selectAllMemberBoard(memberId));
+        paginationDTO.setCurrentPageNumber(page);
+        paginationDTO.setLimitList(20);
+
+        map.put("pageInfo", paginationDTO);
+        System.out.println("paginationDTO = " + paginationDTO);
+
+        // 작성한 게시글 가져오기
+        map.put("memberInfoBoardList", mapper.selectBoardList(memberId, paginationDTO));
+        // 댓글 페이징
+//        PageDTO pageDTO2 = new PageDTO();
+//        pageDTO2.setPage(page);
+//        pageDTO2.setTotalList(mapper.selectAllMemberComment(memberId));
+//        pageDTO2.setLimitList(30);
+//
+//        map.put("pageInfo2", pageDTO2);
 
         return map;
     }

@@ -3,13 +3,11 @@ package com.example.pj2be.mapper.adminmapper;
 import com.example.pj2be.domain.admin.AdminMemberActiveBoardDTO;
 import com.example.pj2be.domain.admin.AdminMemberDTO;
 import com.example.pj2be.domain.board.BoardDTO;
-import com.example.pj2be.domain.member.MemberDTO;
+import com.example.pj2be.domain.page.PaginationDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface AdminMemberMapper {
@@ -83,12 +81,15 @@ public interface AdminMemberMapper {
                 b.board_member_id,
                 b.created_at,
                 COUNT(b.id) countlike,
-                b.views
+                b.views,
+                b.is_show
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
         WHERE board_member_id = #{memberId}
-        GROUP BY b.id;
+        GROUP BY b.id, b.created_at
+        ORDER BY b.created_at DESC
+        LIMIT #{paginationDTO.from}, #{paginationDTO.limitList};
         """)
-    List<BoardDTO> selectBoardList(String memberId);
+    List<BoardDTO> selectBoardList(String memberId, PaginationDTO paginationDTO);
 
 
     @Select("""
@@ -101,9 +102,24 @@ public interface AdminMemberMapper {
             FROM comment c
         JOIN youtube.board b on c.board_id = b.id
         LEFT JOIN youtube.comment_like cl on c.id = cl.comment_id
-        WHERE board_member_id = #{memberId}
+        WHERE c.member_id = #{memberId}
         GROUP BY c.id, c.created_at
-        ORDER BY c.created_at
+        ORDER BY c.created_at DESC
         """)
     List<AdminMemberActiveBoardDTO> selectCommentList(String memberId);
+
+    @Select("""
+        SELECT COUNT(*)
+        FROM board
+        WHERE board_member_id = #{memberId}
+        """)
+    int selectAllMemberBoard(String memberId);
+
+
+    @Select("""
+        SELECT COUNT(*)
+        FROM comment
+        WHERE member_id = #{memberId}
+        """)
+    int selectAllMemberComment(String memberId);
 }
