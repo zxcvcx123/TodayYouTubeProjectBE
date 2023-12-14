@@ -71,6 +71,7 @@ public interface VoteMapper {
                    v.created_at AS created_at,
                    voted_a,
                    voted_b,
+                   voted_a + voted_b AS voted_all,
                    nickname
             FROM vote v LEFT JOIN vote_count vc
                             ON v.id = vc.vote_board_id
