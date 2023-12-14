@@ -18,4 +18,5 @@ public class VoteCountDTO {
     // 개인 버튼 확인
     private Integer checked_vote_a;
     private Integer checked_vote_b;
+    private Integer checked_vote_not;
 }

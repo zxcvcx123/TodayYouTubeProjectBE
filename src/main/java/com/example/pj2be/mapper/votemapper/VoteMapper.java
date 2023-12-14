@@ -1,6 +1,7 @@
 package com.example.pj2be.mapper.votemapper;
 
 import com.example.pj2be.domain.page.PageDTO;
+import com.example.pj2be.domain.vote.VoteCountDTO;
 import com.example.pj2be.domain.vote.VoteDTO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -44,13 +45,18 @@ public interface VoteMapper {
                    v.name_eng AS name_eng,
                    v.created_at AS created_at,
                    m.nickname AS nickname,
-                   
+                   vc.voted_a AS voted_a,
+                   vc.voted_b AS voted_b,
+                   vc.voted_a + vc.voted_b AS voted_all,
+            
                    r.role_name AS rolename
             FROM vote v LEFT JOIN member m
-                            ON v.vote_member_id = m.member_id
+                                  ON v.vote_member_id = m.member_id
                         LEFT JOIN roles r
-                            ON m.role_id = r.role_id
-            WHERE v.id = #{id}
+                                  ON m.role_id = r.role_id
+                        LEFT JOIN vote_count vc
+                                  ON v.id = vc.vote_board_id
+            WHERE v.id = #{id};
             """)
     VoteDTO view(Integer id);
 
@@ -87,4 +93,12 @@ public interface VoteMapper {
             WHERE v.title LIKE #{k}
             """)
     Integer getTotal(String k);
+
+
+    @Select("""
+            SELECT *
+            FROM vote_check
+            WHERE vote_board_id = #{vote_board_id} AND vote_member_id = #{vote_member_id} 
+            """)
+    VoteCountDTO voteHistory(VoteCountDTO voteCountDTO);
 }

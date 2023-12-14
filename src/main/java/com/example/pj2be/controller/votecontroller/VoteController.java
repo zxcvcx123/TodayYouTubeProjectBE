@@ -1,6 +1,7 @@
 package com.example.pj2be.controller.votecontroller;
 
 import com.example.pj2be.domain.page.PageDTO;
+import com.example.pj2be.domain.vote.VoteCountDTO;
 import com.example.pj2be.domain.vote.VoteDTO;
 import com.example.pj2be.service.voteservice.VoteService;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,12 @@ public class VoteController {
         return voteService.view(id);
 
 
+    }
+
+    @PostMapping("history")
+    public VoteCountDTO voteHistory(@RequestBody VoteCountDTO voteCountDTO) {
+        System.out.println("체크드 실행");
+        return voteService.voteHistory(voteCountDTO);
     }
 
 

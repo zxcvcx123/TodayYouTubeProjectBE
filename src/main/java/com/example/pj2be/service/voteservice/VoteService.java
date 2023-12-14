@@ -1,6 +1,7 @@
 package com.example.pj2be.service.voteservice;
 
 import com.example.pj2be.domain.page.PageDTO;
+import com.example.pj2be.domain.vote.VoteCountDTO;
 import com.example.pj2be.domain.vote.VoteDTO;
 import com.example.pj2be.mapper.votemapper.VoteCountMapper;
 import com.example.pj2be.mapper.votemapper.VoteMapper;
@@ -56,5 +57,18 @@ public class VoteService {
         System.out.println("페이지: " + pageDTO);
         System.out.println("내용: " + map.get("vote"));
         return map;
+    }
+
+    public VoteCountDTO voteHistory(VoteCountDTO voteCountDTO) {
+
+        VoteCountDTO list = voteMapper.voteHistory(voteCountDTO);
+
+
+        if (list == null) {
+            VoteCountDTO list1 = new VoteCountDTO();
+            list1.setChecked_vote_not(1);
+            return list1;
+        }
+      return list;
     }
 }
