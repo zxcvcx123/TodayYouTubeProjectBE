@@ -1,7 +1,7 @@
 package com.example.pj2be.controller.membercontroller;
 
-import com.example.pj2be.domain.board.BoardDTO;
 import com.example.pj2be.domain.member.MemberDTO;
+import com.example.pj2be.domain.minihomepy.MiniHomepyCommentDTO;
 import com.example.pj2be.domain.member.YoutuberInfoDTO;
 import com.example.pj2be.domain.minihomepy.MiniHomepyDTO;
 import com.example.pj2be.service.memberservice.MemberMinihomeyService;
@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -101,4 +100,19 @@ public class MemberMinihomepyController {
     public Map<String, Object> getYoutuberInfo(@PathVariable String member_id){
         return service.getYoutuberInfo(member_id);
     }
-}
+    @PostMapping("/addComment")
+    public ResponseEntity addComment(@RequestBody MiniHomepyCommentDTO miniHomepyCommentDTO){
+     if(service.addMiniHomepyComment(miniHomepyCommentDTO)){
+         return ResponseEntity.status(HttpStatus.OK).build();
+     }
+     return ResponseEntity.badRequest().build();
+    }
+    @GetMapping("/getCommentList")
+    public ResponseEntity<Map<String, Object>> getCommentList(@RequestBody MiniHomepyCommentDTO miniHomepyCommentDTO){
+     Map<String, Object> commentList = service.getMiniHomepyComment(miniHomepyCommentDTO);
+     if(!commentList.isEmpty()){
+         return ResponseEntity.status(HttpStatus.OK).body(commentList);
+     }
+     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+    }
