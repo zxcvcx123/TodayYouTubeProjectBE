@@ -36,17 +36,19 @@ public class VoteService {
 
         // 페이지
         pageDTO.setPage(p);
-        pageDTO.setTotalList(voteMapper.getTotal());
 
         // 검색
         if(k == null || k.isBlank() || k.isEmpty()){
+            pageDTO.setTotalList(voteMapper.getTotal("%%"));
             map.put("vote", voteMapper.list(pageDTO, "%%"));
         } else {
-            map.put("vote", voteMapper.list(pageDTO, "%"+k+"%"));
+            pageDTO.setTotalList(voteMapper.getTotal("%" + k + "%"));
+            map.put("vote", voteMapper.list(pageDTO, "%" + k + "%"));
         }
 
         map.put("page", pageDTO);
-
+        System.out.println("페이지: " + pageDTO);
+        System.out.println("내용: " + map.get("vote"));
         return map;
     }
 
