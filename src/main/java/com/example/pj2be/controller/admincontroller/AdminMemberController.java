@@ -31,9 +31,11 @@ public class AdminMemberController {
         return service.memberInfo(member_id, page, paginationDTO);
     }
 
-    @PostMapping
+    @PutMapping
     public void suspensionStart(@RequestBody SuspensionDTO dto) {
+        System.out.println("dto = " + dto);
 
         service.memberSuspension(dto);
+        service.releaseWeekSuspension();
     }
 }

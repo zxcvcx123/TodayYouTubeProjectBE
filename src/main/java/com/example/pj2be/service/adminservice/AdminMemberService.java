@@ -5,6 +5,7 @@ import com.example.pj2be.domain.page.PageDTO;
 import com.example.pj2be.domain.page.PaginationDTO;
 import com.example.pj2be.mapper.adminmapper.AdminMemberMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -95,6 +96,12 @@ public class AdminMemberService {
 
     // 회원 정지 진행중
     public void memberSuspension(SuspensionDTO dto) {
-        mapper.insertSuspensionStart(dto);
+//        mapper.insertSuspensionStart(dto);
+        System.out.println("바로 정지 실행된 것");
+    }
+
+    @Scheduled(fixedRate = 5000) // 7일 후 실행
+    public void releaseWeekSuspension() {
+        System.out.println("@@@@@@@@나중에 정지해제 실행된 것");
     }
 }

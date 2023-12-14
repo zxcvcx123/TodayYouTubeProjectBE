@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 public class SuspensionDTO {
     private Integer id;
-    private Integer member_id;
+    private String member_id;
     private Boolean is_suspended;
     private String reason;
     private LocalDateTime start_date;
