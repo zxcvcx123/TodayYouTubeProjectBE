@@ -1,14 +1,19 @@
 package com.example.pj2be.controller.membercontroller;
 
 import com.example.pj2be.config.security.SecurityUtil;
+import com.example.pj2be.domain.member.JwtToken;
 import com.example.pj2be.domain.member.MemberDTO;
 import com.example.pj2be.domain.member.MemberLoginDTO;
 import com.example.pj2be.domain.member.MemberRole;
 import com.example.pj2be.service.memberservice.MemberLoginService;
 import com.example.pj2be.service.memberservice.MemberService;
 import com.example.pj2be.service.memberservice.MemberSignupService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +39,7 @@ public class MemberController {
 
     //  로그인
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody MemberLoginDTO memberLoginDTO, BindingResult bindingResult) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody MemberLoginDTO memberLoginDTO, BindingResult bindingResult, HttpServletResponse response) throws JsonProcessingException {
         log.info("login controller 실행됨");
 
         String member_id = memberLoginDTO.getMember_id();
@@ -47,6 +52,14 @@ public class MemberController {
             String Auth = String.valueOf(tmp.substring(1, tmp.length()-1));
             if( Auth.equals(MemberRole.GENERAL_MEMBER.getValue() )|| Auth.equals(MemberRole.ADMIN.getValue()) ){
                 // TODO: 추후 권한에 따른 로직 설정
+                String accessToken = (String) jwtTokenAuthentication.get("token");
+                System.out.println("jwtTokenAuthentication = " + jwtTokenAuthentication);
+                System.out.println("accessToken = " + accessToken);
+                Cookie jwtCookie = new Cookie("jwtAccess", accessToken);
+                jwtCookie.setHttpOnly(true);
+                jwtCookie.setPath("/");
+                jwtCookie.setMaxAge(60 * 60 * 24);
+                response.addCookie(jwtCookie);
                 return ResponseEntity.ok().body(jwtTokenAuthentication);
             };
 
@@ -60,6 +73,7 @@ public class MemberController {
         try {
             if (member_id != null) {
                 MemberDTO memberDTO = memberLoginService.getLoginInfo(member_id);
+
                 return ResponseEntity.ok().body(memberDTO);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

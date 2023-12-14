@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface MiniHomepyMapper {
@@ -75,7 +76,7 @@ public interface MiniHomepyMapper {
                        GROUP BY b.id
                        HAVING  b.link LIKE 'https://%' AND b.link LIKE '%youtu%'
                        ORDER BY COUNT(l.id) DESC 
-                        LIMIT 0, 5;
+                        LIMIT 0, 10;
             """)
     List<BoardDTO> getTopBoardList(String memberId);
 
@@ -95,10 +96,28 @@ public interface MiniHomepyMapper {
                        GROUP BY b.id
                        HAVING  b.link LIKE 'https://%' AND b.link LIKE '%youtu%'
                        ORDER BY b.updated_at DESC 
-                        LIMIT 0, 5;
+                        LIMIT 0, 10;
             """)
     List<BoardDTO> getNewBoardList(String memberId);
 
+    @Select("""
+SELECT
+    b.id,
+    b.title,
+    b.link,
+    m.nickname,
+    b.updated_at,
+    b.views,
+    COUNT(DISTINCT l.id) AS countlike
+FROM board b
+         JOIN member m ON b.board_member_id = m.member_id
+         LEFT JOIN boardlike l on b.id = l.board_id
+WHERE l.member_id = #{memberId}
+GROUP BY b.id
+HAVING  b.link LIKE 'https://%' AND b.link LIKE '%youtu%'
+                        LIMIT 0, 10;
+            """)
+    List<BoardDTO> getFavoriteBoardList(String memberId);
     @Select("""
             <script>
                         SELECT
@@ -153,4 +172,17 @@ public interface MiniHomepyMapper {
             SELECT * FROM youtuberinfo WHERE member_id = #{memberId} ORDER BY id DESC;
             """)
     List<YoutuberInfoDTO> getYoutuberInfoList(String memberId);
+
+    @Insert("""
+            INSERT INTO mini_homepy_comment (member_id, comment, image_url, homepy_id) 
+            VALUES (#{memberId},
+           #{comment},
+           #{imageUrl}, #{homepyId})
+           
+            """)
+    boolean addMiniHomepyCommentById(String memberId, String comment, String imageUrl, int homepyId);
+
+    @Select("""
+            """)
+    Map<String, Object> getMiniHomepyCommentByHomepyId(int homepyId);
 }

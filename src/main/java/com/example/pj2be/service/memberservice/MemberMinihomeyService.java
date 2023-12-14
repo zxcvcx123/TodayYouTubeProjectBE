@@ -1,6 +1,7 @@
 package com.example.pj2be.service.memberservice;
 
 import com.example.pj2be.domain.member.MemberDTO;
+import com.example.pj2be.domain.minihomepy.MiniHomepyCommentDTO;
 import com.example.pj2be.domain.member.YoutuberInfoDTO;
 import com.example.pj2be.domain.minihomepy.MiniHomepyDTO;
 import com.example.pj2be.mapper.membermapper.MiniHomepyMapper;
@@ -56,6 +57,7 @@ public class MemberMinihomeyService {
         Map<String, Object> topBoardList = new HashMap<>();
         topBoardList.put("topBoardList", miniHomepyMapper.getTopBoardList(member_id));
         topBoardList.put("newBoardList", miniHomepyMapper.getNewBoardList(member_id));
+        topBoardList.put("favoriteBoardList", miniHomepyMapper.getFavoriteBoardList(member_id));
         return topBoardList;
     }
 
@@ -103,5 +105,18 @@ public class MemberMinihomeyService {
         Map<String, Object> youtuberInfo = new HashMap<>();
         youtuberInfo.put("youtuberInfo", miniHomepyMapper.getYoutuberInfoList(memberId));
         return youtuberInfo;
+    }
+
+    public boolean addMiniHomepyComment(MiniHomepyCommentDTO miniHomepyCommentDTO) {
+        String memberId = miniHomepyCommentDTO.getMember_id();
+        String comment = miniHomepyCommentDTO.getComment();
+        String imageUrl = miniHomepyCommentDTO.getImage_url();
+        int homepyId = miniHomepyCommentDTO.getHomepy_id();
+        return miniHomepyMapper.addMiniHomepyCommentById(memberId, comment, imageUrl, homepyId);
+    }
+
+    public Map<String, Object> getMiniHomepyComment(MiniHomepyCommentDTO miniHomepyCommentDTO) {
+        int homepyId = miniHomepyCommentDTO.getHomepy_id();
+        return miniHomepyMapper.getMiniHomepyCommentByHomepyId(homepyId);
     }
 }
