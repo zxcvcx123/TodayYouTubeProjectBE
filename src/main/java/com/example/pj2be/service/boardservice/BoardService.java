@@ -96,13 +96,13 @@ public class BoardService {
             map.put("boardList", boardMapper.mainSelectAll(from, slice, "%" + keyword + "%", category));
             map.put("listCount", countAll);
             map.put("pageInfo", pageInfo);
-            map.put("boardInfo", category);
+            map.put("boardInfo", boardMapper.boardCategory(category));
             System.out.println("타입 없음 게시글 보기 실행: " + map.get("boardList"));
         } else {
             // 개별 게시판
             map.put("boardList", boardMapper.selectAll(from, slice, "%" + keyword + "%", type, category));
             map.put("pageInfo", pageInfo);
-            map.put("boardInfo", category);
+            map.put("boardInfo", boardMapper.boardCategory(category));
             System.out.println("타입 있음 게시글 보기 실행: " + map.get("boardList"));
         }
 
