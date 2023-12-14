@@ -42,7 +42,7 @@ public class MemberService {
         System.out.println("MemberService의 jwtToken 실행됨!! " + jwtToken );
 
         Map<String, Object> jwtTokenAuthenticationMap = new HashMap<String, Object>();
-        jwtTokenAuthenticationMap.put("accessToken", accessToken);
+        jwtTokenAuthenticationMap.put("token", jwtToken);
         jwtTokenAuthenticationMap.put("authentication", authentication.getAuthorities());
         jwtTokenAuthenticationMap.put("memberInfo", member_id);
         System.out.println("jwtTokenAuthenticationMap.get(\"memberInfo\") = " + jwtTokenAuthenticationMap.get("memberInfo"));

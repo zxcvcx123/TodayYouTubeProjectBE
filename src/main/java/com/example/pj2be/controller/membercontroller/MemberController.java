@@ -52,14 +52,6 @@ public class MemberController {
             String Auth = String.valueOf(tmp.substring(1, tmp.length()-1));
             if( Auth.equals(MemberRole.GENERAL_MEMBER.getValue() )|| Auth.equals(MemberRole.ADMIN.getValue()) ){
                 // TODO: 추후 권한에 따른 로직 설정
-                String accessToken = (String) jwtTokenAuthentication.get("token");
-                System.out.println("jwtTokenAuthentication = " + jwtTokenAuthentication);
-                System.out.println("accessToken = " + accessToken);
-                Cookie jwtCookie = new Cookie("jwtAccess", accessToken);
-                jwtCookie.setHttpOnly(true);
-                jwtCookie.setPath("/");
-                jwtCookie.setMaxAge(60 * 60 * 24);
-                response.addCookie(jwtCookie);
                 return ResponseEntity.ok().body(jwtTokenAuthentication);
             };
 
