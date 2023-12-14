@@ -32,17 +32,17 @@ public class MemberService {
         // 실제 검증
         // MemberSecurityService loadUserByUsername 호출해서 로그인 요청한 id와 비밀번호와 db에 저장된 정보와 검증을함
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        log.info("login 다시 돌아옴");
 
         // 권한만 추출
         System.out.println("authentication.getAuthorities() = " + authentication.getAuthorities());
         // JWT 토큰 생성
         JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
-        log.info("login 다시 돌아옴");
+        String accessToken = jwtToken.getAccessToken();
+
         System.out.println("MemberService의 jwtToken 실행됨!! " + jwtToken );
 
         Map<String, Object> jwtTokenAuthenticationMap = new HashMap<String, Object>();
-        jwtTokenAuthenticationMap.put("token", jwtToken);
+        jwtTokenAuthenticationMap.put("accessToken", accessToken);
         jwtTokenAuthenticationMap.put("authentication", authentication.getAuthorities());
         jwtTokenAuthenticationMap.put("memberInfo", member_id);
         System.out.println("jwtTokenAuthenticationMap.get(\"memberInfo\") = " + jwtTokenAuthenticationMap.get("memberInfo"));

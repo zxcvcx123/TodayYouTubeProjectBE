@@ -1,10 +1,13 @@
 package com.example.pj2be.mapper.membermapper;
 
 import com.example.pj2be.domain.board.BoardDTO;
+import com.example.pj2be.domain.member.YoutuberInfoDTO;
 import com.example.pj2be.domain.minihomepy.MiniHomepyDTO;
 import org.apache.ibatis.annotations.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface MiniHomepyMapper {
@@ -73,7 +76,7 @@ public interface MiniHomepyMapper {
                        GROUP BY b.id
                        HAVING  b.link LIKE 'https://%' AND b.link LIKE '%youtu%'
                        ORDER BY COUNT(l.id) DESC 
-                        LIMIT 0, 5;
+                        LIMIT 0, 10;
             """)
     List<BoardDTO> getTopBoardList(String memberId);
 
@@ -93,10 +96,28 @@ public interface MiniHomepyMapper {
                        GROUP BY b.id
                        HAVING  b.link LIKE 'https://%' AND b.link LIKE '%youtu%'
                        ORDER BY b.updated_at DESC 
-                        LIMIT 0, 5;
+                        LIMIT 0, 10;
             """)
     List<BoardDTO> getNewBoardList(String memberId);
 
+    @Select("""
+SELECT
+    b.id,
+    b.title,
+    b.link,
+    m.nickname,
+    b.updated_at,
+    b.views,
+    COUNT(DISTINCT l.id) AS countlike
+FROM board b
+         JOIN member m ON b.board_member_id = m.member_id
+         LEFT JOIN boardlike l on b.id = l.board_id
+WHERE l.member_id = #{memberId}
+GROUP BY b.id
+HAVING  b.link LIKE 'https://%' AND b.link LIKE '%youtu%'
+                        LIMIT 0, 10;
+            """)
+    List<BoardDTO> getFavoriteBoardList(String memberId);
     @Select("""
             <script>
                         SELECT
@@ -110,7 +131,10 @@ public interface MiniHomepyMapper {
                         FROM board b
                         JOIN member m ON b.board_member_id = m.member_id
                         LEFT JOIN boardlike l on b.id = l.board_id
-                        WHERE b.board_member_id = #{memberId}  
+                        WHERE b.board_member_id = #{memberId}
+                        <if test="searchingKeyword != null and searchingKeyword != ''">
+                        AND b.title LIKE #{searchingKeyword}
+                        </if>
                        GROUP BY b.id
                        HAVING  b.link LIKE 'https://%' AND b.link LIKE '%youtu%'
                             <trim prefix="ORDER BY">
@@ -127,5 +151,38 @@ public interface MiniHomepyMapper {
                   </script>
                       
                                    """)
-    List<BoardDTO> getAllBoardList(String memberId, String categoryOrdedBy);
+    List<BoardDTO> getAllBoardList(String memberId, String categoryOrdedBy, String searchingKeyword);
+
+    @Insert("""
+    INSERT INTO youtuberInfo (member_id, title, customUrl, publishedAt, thumbnails, description, videoCount, subscriberCount, viewCount, country)
+    VALUES (#{memberId}, 
+    #{title}, 
+    #{customUrl}, 
+    #{publishedAt}, 
+    #{thumbnails}, 
+    #{description}, 
+    #{videoCount}, 
+    #{subscriberCount}, 
+    #{viewCount}, 
+    #{country})
+""")
+    int addYoutuberInfoByMemberId(String memberId, String title, String customUrl, LocalDateTime publishedAt, String thumbnails, String description, String videoCount, String subscriberCount, String viewCount, String country);
+
+    @Select("""
+            SELECT * FROM youtuberinfo WHERE member_id = #{memberId} ORDER BY id DESC;
+            """)
+    List<YoutuberInfoDTO> getYoutuberInfoList(String memberId);
+
+    @Insert("""
+            INSERT INTO mini_homepy_comment (member_id, comment, image_url, homepy_id) 
+            VALUES (#{memberId},
+           #{comment},
+           #{imageUrl}, #{homepyId})
+           
+            """)
+    boolean addMiniHomepyCommentById(String memberId, String comment, String imageUrl, int homepyId);
+
+    @Select("""
+            """)
+    Map<String, Object> getMiniHomepyCommentByHomepyId(int homepyId);
 }

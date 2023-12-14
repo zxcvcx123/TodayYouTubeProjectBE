@@ -1,7 +1,8 @@
 package com.example.pj2be.controller.membercontroller;
 
-import com.example.pj2be.domain.board.BoardDTO;
 import com.example.pj2be.domain.member.MemberDTO;
+import com.example.pj2be.domain.minihomepy.MiniHomepyCommentDTO;
+import com.example.pj2be.domain.member.YoutuberInfoDTO;
 import com.example.pj2be.domain.minihomepy.MiniHomepyDTO;
 import com.example.pj2be.service.memberservice.MemberMinihomeyService;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -37,10 +37,11 @@ public class MemberMinihomepyController {
 
     @GetMapping("/boardlist/all")
     public Map<String, Object> myBoardList(@RequestParam("member_id") String member_id,
-                                           @RequestParam("ob") String categoryOrdedBy
+                                           @RequestParam("ob") String categoryOrdedBy,
+                                           @RequestParam("sk") String searchingKeyword
     ){
 
-        Map<String, Object> allBoardList = service.getAllBoardList(member_id, categoryOrdedBy);
+        Map<String, Object> allBoardList = service.getAllBoardList(member_id, categoryOrdedBy, searchingKeyword);
 
         return allBoardList;
     }
@@ -80,4 +81,38 @@ public class MemberMinihomepyController {
             return ResponseEntity.noContent().build();
         }
     }
-}
+    @PostMapping("/addYoutuber")
+    public ResponseEntity addYoutuberInfo(@RequestBody YoutuberInfoDTO youtuberInfoDTO){
+        System.out.println("youtuberInfoDTO = " + youtuberInfoDTO);
+        if(youtuberInfoDTO != null){
+           String description = youtuberInfoDTO.getDescription();
+            description = description.replaceAll("\\s+", " ");
+            if(description.length() > 100){
+                youtuberInfoDTO.setDescription(description.substring(0, 100));
+            }
+            if(service.addYoutuberInfo(youtuberInfoDTO)){
+                return ResponseEntity.status(HttpStatus.OK).build();
+            }
+        }
+     return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+    @GetMapping("/youtuberinfo/{member_id}")
+    public Map<String, Object> getYoutuberInfo(@PathVariable String member_id){
+        return service.getYoutuberInfo(member_id);
+    }
+    @PostMapping("/addComment")
+    public ResponseEntity addComment(@RequestBody MiniHomepyCommentDTO miniHomepyCommentDTO){
+     if(service.addMiniHomepyComment(miniHomepyCommentDTO)){
+         return ResponseEntity.status(HttpStatus.OK).build();
+     }
+     return ResponseEntity.badRequest().build();
+    }
+    @GetMapping("/getCommentList")
+    public ResponseEntity<Map<String, Object>> getCommentList(@RequestBody MiniHomepyCommentDTO miniHomepyCommentDTO){
+     Map<String, Object> commentList = service.getMiniHomepyComment(miniHomepyCommentDTO);
+     if(!commentList.isEmpty()){
+         return ResponseEntity.status(HttpStatus.OK).body(commentList);
+     }
+     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+    }

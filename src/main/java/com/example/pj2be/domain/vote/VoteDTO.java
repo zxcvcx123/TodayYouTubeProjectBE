@@ -16,6 +16,13 @@ public class VoteDTO {
     private String content;
     private String name_eng;
     private LocalDateTime created_at;
+
+    /* 투표 수 */
+    private Integer voted_all;
+    private Integer voted_a;
+    private Integer voted_b;
+
+    /* 유저 정보 */
     private String nickname;
     private String rolename;
 
