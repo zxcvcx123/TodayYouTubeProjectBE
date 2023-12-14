@@ -34,6 +34,21 @@ public interface VoteCountMapper {
             """)
     void addVoteB(Integer boardId);
 
+    @Update("""
+            UPDATE vote_count
+            SET voted_a = voted_a - 1
+            WHERE vote_board_id = #{boardId}
+            """)
+    void minusVoteA(Integer boardId);
+
+    @Update("""
+            UPDATE vote_count
+            SET voted_b = voted_b - 1
+            WHERE vote_board_id = #{boardId}
+            """)
+    void minusVoteB(Integer boardId);
+
+
     @Select("""
             SELECT 
             id, 
@@ -85,10 +100,9 @@ public interface VoteCountMapper {
                     vc.voted_b AS voted_b,
                     vc.voted_a + vc.voted_b AS voted_all
             FROM vote_count vc
-            LEFT JOIN vote_check vch ON vc.vote_board_id = vch.vote_board_id
-            WHERE vc.vote_board_id = #{vote_board_id};
+            WHERE vc.vote_board_id = #{boardId};
             """)
-    VoteCountDTO voteBoardCount(VoteCountDTO voteCountDTO);
+    VoteCountDTO voteBoardCount(Integer boardId);
 
 
     @Select("""

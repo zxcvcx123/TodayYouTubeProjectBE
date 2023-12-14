@@ -14,28 +14,44 @@ public class VoteCountService {
     private final VoteCountMapper voteCountMapper;
 
 
-    public VoteCountDTO addVoteA(VoteCountDTO voteCountDTO) {
+    private void addVoteA(VoteCountDTO voteCountDTO) {
 
         Integer boardId = voteCountDTO.getVote_board_id();
 
         voteCountMapper.addVoteA(boardId);
-
-        return voteCountMapper.getVoteCount(boardId);
     }
 
 
-    public VoteCountDTO addVoteB(VoteCountDTO voteCountDTO) {
+    private void addVoteB(VoteCountDTO voteCountDTO) {
 
         Integer boardId = voteCountDTO.getVote_board_id();
 
         voteCountMapper.addVoteB(boardId);
 
-        return voteCountMapper.getVoteCount(boardId);
+    }
+
+    private void minusVoteA(VoteCountDTO voteCountDTO) {
+
+        Integer boardId = voteCountDTO.getVote_board_id();
+
+        voteCountMapper.minusVoteA(boardId);
+
+
     }
 
 
-    public VoteCountDTO voteGetCount(VoteCountDTO voteCountDTO) {
-        return voteCountMapper.voteBoardCount(voteCountDTO);
+    private void minusVoteB(VoteCountDTO voteCountDTO) {
+
+        Integer boardId = voteCountDTO.getVote_board_id();
+
+        voteCountMapper.minusVoteB(boardId);
+
+
+    }
+
+
+    public VoteCountDTO voteGetCount(Integer boardId) {
+        return voteCountMapper.voteBoardCount(boardId);
     }
 
     public VoteCountDTO voteCheck(VoteCountDTO voteCountDTO, String checked) {
@@ -46,27 +62,33 @@ public class VoteCountService {
             if (checked == "voteA") {
                 voteCountDTO.setVoted_a(1);
                 voteCountDTO.setVoted_b(0);
+                addVoteA(voteCountDTO);
+
                 voteCountMapper.addVoteCheck(voteCountDTO);
             }
 
             if (checked == "voteB") {
                 voteCountDTO.setVoted_a(0);
                 voteCountDTO.setVoted_b(1);
+                addVoteB(voteCountDTO);
                 voteCountMapper.addVoteCheck(voteCountDTO);
             }
 
-        }
-
-        if (voteCountMapper.voteCheckedInsert(voteCountDTO) == 1) {
+        } else {
             if (checked == "voteA") {
                 voteCountDTO.setVoted_a(1);
                 voteCountDTO.setVoted_b(0);
+                addVoteA(voteCountDTO);
+                minusVoteB(voteCountDTO);
                 voteCountMapper.voteCheckedUpdate(voteCountDTO);
             }
 
             if (checked == "voteB") {
                 voteCountDTO.setVoted_a(0);
                 voteCountDTO.setVoted_b(1);
+                addVoteB(voteCountDTO);
+                minusVoteA(voteCountDTO);
+
                 voteCountMapper.voteCheckedUpdate(voteCountDTO);
             }
         }

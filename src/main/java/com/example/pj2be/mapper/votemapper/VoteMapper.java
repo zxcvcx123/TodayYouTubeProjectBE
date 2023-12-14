@@ -49,8 +49,6 @@ public interface VoteMapper {
                             ON v.vote_member_id = m.member_id
                         LEFT JOIN roles r
                             ON m.role_id = r.role_id
-                        LEFT JOIN vote_check vch
-                            ON v.id = vch.vote_board_id
             WHERE v.id = #{id}
             """)
     VoteDTO view(Integer id);

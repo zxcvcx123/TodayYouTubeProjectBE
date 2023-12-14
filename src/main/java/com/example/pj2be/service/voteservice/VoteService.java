@@ -22,7 +22,7 @@ public class VoteService {
 
     }
 
-    public VoteDTO view(Integer id){
+    public  VoteDTO view(Integer id){
         return voteMapper.view(id);
     }
 }
