@@ -113,6 +113,7 @@ public interface BoardMapper {
                     b.board_member_id,
                     b.created_at,
                     b.updated_at,
+                    ct.name AS categoryName,
                     COUNT(DISTINCT bl.id) countlike,
                     COUNT(DISTINCT c.id) count_comment,
                     is_show,
@@ -120,7 +121,7 @@ public interface BoardMapper {
             FROM board b 
                         LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
                         LEFT JOIN comment c ON b.id = c.board_id
-                             JOIN category ON b.board_category_code = category.code
+                             JOIN category ct ON b.board_category_code = ct.code
             WHERE b.title like #{keyword} OR
                   b.content like #{keyword} 
                    AND b.is_show = true

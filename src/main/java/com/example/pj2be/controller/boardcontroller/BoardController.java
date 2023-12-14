@@ -68,7 +68,8 @@ public class BoardController {
 
         System.out.println("@@@@@@@@@@@category = " + category);
 
-        return boardService.list(page, keyword, type, slice, category);
+            return boardService.list(page, keyword, type, slice, category);
+
 
     }
 

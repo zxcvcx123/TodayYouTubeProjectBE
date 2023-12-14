@@ -49,16 +49,21 @@ public class BoardService {
         Map<String, Object> map = new HashMap<>();
         Map<String, Object> pageInfo = new HashMap<>();
 
+        System.out.println("page: " + page + " / keyword: " + keyword + " / type: " + type + " / category: " + category);
+
         // 페이징 필요한 것들
         // 전체페이지, 보여줄페이지 수, 왼쪽끝페이지, 오른쪽끝페이지, 담페이지, 이전페이지,
         int countAll = 0;
 
-        if(type != null) {
-            countAll = boardMapper.selectAllpage("%" + keyword + "%", type, category);
-        }
 
-        if (type == null) {
+        if(category.equals("all")) {
+            // 통합검색
             countAll = boardMapper.selectMainAllpage("%" + keyword + "%", category);
+            System.out.println("타입 없음 총 게시글 실행: " + countAll);
+        } else {
+            // 개별 게시판 검색
+            countAll = boardMapper.selectAllpage("%" + keyword + "%", type, category);
+            System.out.println("타입 있음 총 게시글 실행: " + countAll);
         }
 
         int lastPageNumber = (countAll - 1) / slice + 1;
@@ -85,16 +90,20 @@ public class BoardService {
         }
 
         int from = (page - 1) * slice;
-        if(type != null) {
+
+        if(category.equals("all")){
+            // 통합 검색
+            map.put("boardList", boardMapper.mainSelectAll(from, slice, "%" + keyword + "%", category));
+            map.put("listCount", countAll);
+            map.put("pageInfo", pageInfo);
+            map.put("boardInfo", category);
+            System.out.println("타입 없음 게시글 보기 실행: " + map.get("boardList"));
+        } else {
+            // 개별 게시판
             map.put("boardList", boardMapper.selectAll(from, slice, "%" + keyword + "%", type, category));
             map.put("pageInfo", pageInfo);
             map.put("boardInfo", category);
-        }
-
-        if(type == null){
-            map.put("boardList", boardMapper.mainSelectAll(from, slice, "%" + keyword + "%", category));
-            map.put("pageInfo", pageInfo);
-            map.put("boardInfo", category);
+            System.out.println("타입 있음 게시글 보기 실행: " + map.get("boardList"));
         }
 
         System.out.println("pageInfo = " + pageInfo);
@@ -166,5 +175,7 @@ public class BoardService {
         return list.get(randomIndex);
 
     }
+
+
 }
    
