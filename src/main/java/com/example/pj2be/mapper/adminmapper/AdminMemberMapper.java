@@ -105,7 +105,7 @@ public interface AdminMemberMapper {
         WHERE c.member_id = #{memberId}
         GROUP BY c.id, c.created_at
         ORDER BY c.created_at DESC
-        LIMIT #{paginationDTO2.from}, #{paginationDTO.limitList}
+        LIMIT #{paginationDTO2.from}, #{paginationDTO2.limitList}
         """)
     List<AdminMemberActiveBoardDTO> selectCommentList(String memberId, PaginationDTO paginationDTO2);
 

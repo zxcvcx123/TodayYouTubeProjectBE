@@ -73,7 +73,6 @@ public class AdminMemberService {
         paginationDTO.setLimitList(10);
 
         map.put("pageInfo", paginationDTO);
-        System.out.println("paginationDTO = " + paginationDTO);
 
         // 작성한 게시글 가져오기
         map.put("memberInfoBoardList", mapper.selectBoardList(memberId, paginationDTO));
