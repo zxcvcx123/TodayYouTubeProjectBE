@@ -104,8 +104,8 @@ public class AdminMemberService {
 
     // 회원 정지 진행중
     public void memberSuspension(SuspensionDTO suspensionDTO) {
-        LocalDateTime endDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
-        Integer suspensionDay = 4;
+//        LocalDateTime endDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        int suspensionDay = 4;
 
         if (suspensionDTO.getPeriod() == 7) {
             suspensionDay = 7;
@@ -115,21 +115,6 @@ public class AdminMemberService {
             suspensionDay = 999;
         }
 
-        // 정지시 끝나는 일자 설정
-//        if (dto.getPeriod() == 7) {
-//            endDate = (LocalDateTime.now().plusDays(7));
-//        } else if (dto.getPeriod() == 30) {
-//            endDate = (LocalDateTime.now().plusDays(30));
-//        } else if (dto.getPeriod() == 999) {
-//            endDate = (LocalDateTime.now().plusDays(30));
-//        }
-
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-//        String formattedEndDate = endDate.format(formatter);
-//
-//        Timestamp timestamp = Timestamp.valueOf(formattedEndDate);
-//
-//        dto.setEnd_date(timestamp.toLocalDateTime());
 
         // 정지 테이블에 추가
         mapper.insertSuspensionStart(suspensionDTO, suspensionDay);
