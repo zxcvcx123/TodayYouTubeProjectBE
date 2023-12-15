@@ -39,11 +39,13 @@ public interface BoardMapper {
                b.is_show,
                b.views,
                m.nickname,
-               r.role_name
+               r.role_name,
+               ct.name categoryName
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
                      LEFT JOIN comment c ON b.id = c.board_id
                           JOIN member m on b.board_member_id = m.member_id
                           JOIN roles r on m.role_id = r.role_id
+                          JOIN category ct on ct.code = b.board_category_code
                     
         WHERE b.id = #{id}
             AND b.is_show = true

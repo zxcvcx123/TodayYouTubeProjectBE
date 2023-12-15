@@ -67,26 +67,27 @@ public class VoteController {
 
         System.out.println("vote delete: " + voteDTO);
         // 로그인 정보 있는지 없는지 유무 확인
-        if (IsLoginMember(voteDTO.getVote_member_id())) {
-
+        if (IsLoginMember(voteDTO.getLogin_memeber_id())) {
+            System.out.println("로그인 되어있음: " + voteDTO.getLogin_memeber_id());
             if (MemberChecked(voteDTO.getLogin_memeber_id(), voteDTO.getVote_member_id()) == 0) {
-                if (voteService.voteBoardDelete(voteDTO)) {
-                    return ResponseEntity.ok().build();
-                }
+                System.out.println("아이디랑 멤버아이디 같음");
+                voteService.voteBoardDelete(voteDTO);
+                System.out.println("삭제 완료");
+                return ResponseEntity.ok().build();
             }
-
-
-            if (MemberChecked(voteDTO.getLogin_memeber_id(), voteDTO.getVote_member_id()) == 2) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            }
-
-
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+
+        if (MemberChecked(voteDTO.getLogin_memeber_id(), voteDTO.getVote_member_id()) == 2) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
         return ResponseEntity.internalServerError().build();
 
     }
+
+
 
     @PostMapping("history")
     public VoteCountDTO voteHistory(@RequestBody VoteCountDTO voteCountDTO) {
