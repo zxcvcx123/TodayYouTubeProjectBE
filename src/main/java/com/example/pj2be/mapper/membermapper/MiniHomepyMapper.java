@@ -2,12 +2,12 @@ package com.example.pj2be.mapper.membermapper;
 
 import com.example.pj2be.domain.board.BoardDTO;
 import com.example.pj2be.domain.member.YoutuberInfoDTO;
+import com.example.pj2be.domain.minihomepy.MiniHomepyCommentDTO;
 import com.example.pj2be.domain.minihomepy.MiniHomepyDTO;
 import org.apache.ibatis.annotations.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface MiniHomepyMapper {
@@ -174,15 +174,20 @@ HAVING  b.link LIKE 'https://%' AND b.link LIKE '%youtu%'
     List<YoutuberInfoDTO> getYoutuberInfoList(String memberId);
 
     @Insert("""
-            INSERT INTO mini_homepy_comment (member_id, comment, image_url, homepy_id) 
+            INSERT INTO mini_homepy_comment (member_id, comment, image_url, homepy_id, nickname, role_name) 
             VALUES (#{memberId},
            #{comment},
-           #{imageUrl}, #{homepyId})
+           #{imageUrl}, 
+           #{homepyId},
+           #{nickname},
+           #{role_name}
+           )
            
             """)
-    boolean addMiniHomepyCommentById(String memberId, String comment, String imageUrl, int homepyId);
+    boolean addMiniHomepyCommentById(String memberId, String comment, String imageUrl, int homepyId, String nickname, String role_name);
 
     @Select("""
+            SELECT * FROM mini_homepy_comment WHERE homepy_id = #{homepy_id};
             """)
-    Map<String, Object> getMiniHomepyCommentByHomepyId(int homepyId);
+    List<MiniHomepyCommentDTO> getMiniHomepyCommentByHomepyId(int homepyId);
 }
