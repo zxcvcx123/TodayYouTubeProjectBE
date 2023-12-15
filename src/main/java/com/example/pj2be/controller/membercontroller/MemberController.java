@@ -48,6 +48,7 @@ public class MemberController {
 
             if( Auth.equals(MemberRole.GENERAL_MEMBER.getValue() )|| Auth.equals(MemberRole.ADMIN.getValue()) ){
                 // TODO: 추후 권한에 따른 로직 설정
+
                 String accessToken = URLEncoder.encode( jwtTokenAuthentication.get("accessToken").toString(),"UTF-8");
                 Cookie jwtAccess = new Cookie("jwtAccess",accessToken);
                 jwtAccess.setHttpOnly(true);
@@ -69,6 +70,9 @@ public class MemberController {
                 memberId.setMaxAge(60*60*24);
                 response.addCookie(memberId);
               return ResponseEntity.ok().build();
+                          } else if (Auth.equals(MemberRole.SUSPENSIONMEMBER.getValue())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
             }
 
         }

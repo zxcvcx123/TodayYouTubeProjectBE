@@ -4,6 +4,7 @@ import com.example.pj2be.domain.member.MemberDTO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.Optional;
 
@@ -96,4 +97,10 @@ public interface MemberMapper {
                     """)
     MemberDTO findLoginInfoByMemberId(String member_id);
 
+    @Update("""
+        UPDATE member
+        SET role_id = '11'
+        WHERE member_id = #{memberId}
+        """)
+    void changeRoleToSuspension(String memberId);
 }

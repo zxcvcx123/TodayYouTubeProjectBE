@@ -1,11 +1,20 @@
 package com.example.pj2be.service.adminservice;
 
+import com.example.pj2be.domain.admin.SuspensionDTO;
 import com.example.pj2be.domain.page.PageDTO;
 import com.example.pj2be.domain.page.PaginationDTO;
 import com.example.pj2be.mapper.adminmapper.AdminMemberMapper;
+import com.example.pj2be.mapper.membermapper.MemberMapper;
+import com.example.pj2be.utill.ChangeTimeStamp;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +23,7 @@ import java.util.Map;
 public class AdminMemberService {
 
     private final AdminMemberMapper mapper;
+    private final MemberMapper memberMapper;
 
     public Map<String, Object> memberlist(Integer page, String mid) {
         Map<String, Object> map = new HashMap<>();
@@ -65,27 +75,56 @@ public class AdminMemberService {
         map.put("memberList", mapper.selectByMemberId(memberId));
 
 
-        // 작성한 댓글 가져오기
-        map.put("memberInfoCommentList", mapper.selectCommentList(memberId));
+
 
         // 게시물 페이징
         paginationDTO.setAllPage(mapper.selectAllMemberBoard(memberId));
         paginationDTO.setCurrentPageNumber(page);
-        paginationDTO.setLimitList(20);
+        paginationDTO.setLimitList(10);
 
         map.put("pageInfo", paginationDTO);
-        System.out.println("paginationDTO = " + paginationDTO);
 
         // 작성한 게시글 가져오기
         map.put("memberInfoBoardList", mapper.selectBoardList(memberId, paginationDTO));
+
+
         // 댓글 페이징
-//        PageDTO pageDTO2 = new PageDTO();
-//        pageDTO2.setPage(page);
-//        pageDTO2.setTotalList(mapper.selectAllMemberComment(memberId));
-//        pageDTO2.setLimitList(30);
-//
-//        map.put("pageInfo2", pageDTO2);
+        PaginationDTO paginationDTO2 = new PaginationDTO();
+        paginationDTO2.setCurrentPageNumber(page);
+        paginationDTO2.setAllPage(mapper.selectAllMemberComment(memberId));
+        paginationDTO2.setLimitList(20);
+
+        map.put("pageInfo2", paginationDTO2);
+
+        // 작성한 댓글 가져오기
+        map.put("memberInfoCommentList", mapper.selectCommentList(memberId, paginationDTO2));
 
         return map;
     }
+
+    // 회원 정지 진행중
+    public void memberSuspension(SuspensionDTO suspensionDTO) {
+//        LocalDateTime endDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        int suspensionDay = 4;
+
+        if (suspensionDTO.getPeriod() == 7) {
+            suspensionDay = 7;
+        } else if (suspensionDTO.getPeriod() == 30) {
+            suspensionDay = 30;
+        } else if (suspensionDTO.getPeriod() == 999) {
+            suspensionDay = 999;
+        }
+
+
+        // 정지 테이블에 추가
+        mapper.insertSuspensionStart(suspensionDTO, suspensionDay);
+
+        // 회원 테이블의 role을 11번 '정지회원'으로 변경
+        memberMapper.changeRoleToSuspension(suspensionDTO.getMember_id());
+
+        System.out.println(suspensionDTO.getMember_id() + "회원이 " + suspensionDTO.getPeriod() + "일간 정지되었습니다. => 사유(" + suspensionDTO.getReason() +")");
+        System.out.println(suspensionDTO.getEnd_date());
+        System.out.println(suspensionDTO);
+    }
+
 }

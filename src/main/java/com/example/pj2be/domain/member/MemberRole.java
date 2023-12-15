@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum MemberRole {
     ADMIN("ROLE_ADMIN"),
     GENERAL_MEMBER("ROLE_GENERAL_MEMBER"),
-    STREAMER("ROLE_STREAMER");
+    STREAMER("ROLE_STREAMER"),
+    SUSPENSIONMEMBER("ROLE_SUSPENSION_MEMBER");
 MemberRole(String value){
 this.value = value;
 }

@@ -46,6 +46,9 @@ public class MemberSecurityService implements UserDetailsService {
         }else if(member.getRole_id() == 2) {
             authorities.add(new SimpleGrantedAuthority(MemberRole.GENERAL_MEMBER.getValue()));
             System.out.println("loadUserByUsername 실행됨 -> 권한 등록 : "+ authorities);
+        }else if(member.getRole_id() == 11) {
+            authorities.add(new SimpleGrantedAuthority(MemberRole.SUSPENSIONMEMBER.getValue()));
+            System.out.println("loadUserByUsername 실행됨 -> 권한 등록 : "+ authorities);
         }
 
         User userInfo = new User(member.getMember_id(), member.getPassword(), authorities);

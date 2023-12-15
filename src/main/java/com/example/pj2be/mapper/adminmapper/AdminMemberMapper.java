@@ -2,8 +2,10 @@ package com.example.pj2be.mapper.adminmapper;
 
 import com.example.pj2be.domain.admin.AdminMemberActiveBoardDTO;
 import com.example.pj2be.domain.admin.AdminMemberDTO;
+import com.example.pj2be.domain.admin.SuspensionDTO;
 import com.example.pj2be.domain.board.BoardDTO;
 import com.example.pj2be.domain.page.PaginationDTO;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -32,7 +34,7 @@ public interface AdminMemberMapper {
                  FROM member m
             JOIN youtube.roles r on m.role_id = r.role_id
             WHERE member_id LIKE #{mid}
-            ORDER BY r.role_name DESC, created_at DESC
+            ORDER BY r.role_id, created_at DESC
             LIMIT #{from}, 20;
             """)
     List<AdminMemberDTO> selectAllMember(Integer from, String mid);
@@ -105,8 +107,9 @@ public interface AdminMemberMapper {
         WHERE c.member_id = #{memberId}
         GROUP BY c.id, c.created_at
         ORDER BY c.created_at DESC
+        LIMIT #{paginationDTO2.from}, #{paginationDTO2.limitList}
         """)
-    List<AdminMemberActiveBoardDTO> selectCommentList(String memberId);
+    List<AdminMemberActiveBoardDTO> selectCommentList(String memberId, PaginationDTO paginationDTO2);
 
     @Select("""
         SELECT COUNT(*)
@@ -122,4 +125,11 @@ public interface AdminMemberMapper {
         WHERE member_id = #{memberId}
         """)
     int selectAllMemberComment(String memberId);
+
+
+    @Insert("""
+        INSERT INTO suspension (member_id, reason, end_date, period)
+        VALUES (#{suspensionDTO.member_id}, #{suspensionDTO.reason}, DATE_ADD(LOCALTIMESTAMP, INTERVAL #{suspensionDate} Day), #{suspensionDTO.period});
+        """)
+    int insertSuspensionStart(SuspensionDTO suspensionDTO, Integer suspensionDate);
 }
