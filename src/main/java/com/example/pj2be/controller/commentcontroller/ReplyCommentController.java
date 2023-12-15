@@ -19,12 +19,12 @@ public class ReplyCommentController {
     private final ReplyCommentService service;
 
     @PostMapping("/add")
-    public ResponseEntity reply_commentAdd(@RequestBody ReplyCommentDTO reply_comment, String member_id) {
-        if (!IsLoginMember(reply_comment.getMember_id())) {
+    public ResponseEntity reply_commentAdd(@RequestBody ReplyCommentDTO replyCommentDTO) {
+        if (!IsLoginMember(replyCommentDTO.getMember_id())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        service.reply_commentAdd(reply_comment, member_id);
-        System.out.println("member_id = " + member_id);
+        service.reply_commentAdd(replyCommentDTO);
+
         return ResponseEntity.ok().build();
 
 
@@ -43,10 +43,33 @@ public class ReplyCommentController {
     }
 
     @PutMapping("edit")
-    public ResponseEntity reply_commentUpdate(@RequestBody ReplyCommentDTO reply_comment) {
-        service.reply_commentUpdate(reply_comment);
+    public ResponseEntity reply_commentUpdate(@RequestBody ReplyCommentDTO replyCommentDTO) {
+        service.reply_commentUpdate(replyCommentDTO);
         return ResponseEntity.ok().build();
     }
+
+    // ========================= 투표 게시판 대댓글 =========================
+
+    @PostMapping("/vote/add")
+    public ResponseEntity voteReply_commentAdd(@RequestBody ReplyCommentDTO replyCommentDTO) {
+
+        System.out.println("대댓 테스트: " + replyCommentDTO);
+        if (!IsLoginMember(replyCommentDTO.getMember_id())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        service.voteReply_commentAdd(replyCommentDTO);
+
+        return ResponseEntity.ok().build();
+
+    }
+
+    @GetMapping("/vote/list")
+    public List<ReplyCommentDTO> voteReply_commnetList(ReplyCommentDTO replyCommentDTO) {
+        return service.voteReply_commentList(replyCommentDTO);
+    }
+
+
+
 }
 
 

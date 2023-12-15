@@ -10,9 +10,9 @@ public interface ReplyCommentMapper {
 
     @Insert("""
             INSERT INTO reply_comment (comment_id, reply_comment, member_id)
-            VALUES (#{reply_comment.comment_id}, #{reply_comment.reply_comment}, #{reply_comment.member_id})
+            VALUES (#{comment_id}, #{reply_comment}, #{member_id})
             """)
-    int reply_commentInsert(ReplyCommentDTO reply_comment, String member_id);
+    int reply_commentInsert(ReplyCommentDTO replyCommentDTO);
 
     @Select("""
             SELECT r.id,
@@ -41,7 +41,7 @@ public interface ReplyCommentMapper {
             SET reply_comment = #{reply_comment}
             WHERE id = #{id}
             """)
-    int reply_commentUpdate(ReplyCommentDTO reply_comment);
+    int reply_commentUpdate(ReplyCommentDTO replyCommentDTO);
 
     @Delete("""
             DELETE FROM reply_comment
@@ -49,4 +49,27 @@ public interface ReplyCommentMapper {
             """)
     int DeleteByCommentId(Integer comment_id);
 
+
+    @Insert("""
+            INSERT INTO reply_comment (comment_id, reply_comment, member_id)
+            VALUES (#{comment_id}, #{reply_comment}, #{member_id})
+            """)
+    int reply_voteCommentInsert(ReplyCommentDTO replyCommentDTO);
+
+
+    @Select("""
+            SELECT r.id,
+                   r.comment_id,
+                   r.member_id,
+                   r.reply_comment,
+                   r.created_at,
+                   m.nickname
+                
+            FROM reply_comment r
+            JOIN member m ON r.member_id = m.member_id
+            
+          
+            WHERE comment_id = #{comment_id}
+            """)
+    List<ReplyCommentDTO> voteReply_commentSelectByComment_id(ReplyCommentDTO replyCommentDTO);
 }
