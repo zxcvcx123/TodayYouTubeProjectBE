@@ -31,4 +31,7 @@ public class VoteDTO {
         return ChangeTimeStamp.getAgo(created_at);
     }
 
+    // 로그인 정보 아이디
+    private String login_memeber_id;
+
 }

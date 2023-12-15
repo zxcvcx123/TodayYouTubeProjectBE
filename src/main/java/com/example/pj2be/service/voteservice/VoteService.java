@@ -71,4 +71,15 @@ public class VoteService {
         }
       return list;
     }
+
+    //
+    public boolean voteBoardDelete(VoteDTO voteDTO) {
+
+        if(voteMapper.voteCheckDelete(voteDTO) == 1) {
+            if (voteMapper.voteCountDelete(voteDTO) == 1){
+                return  voteMapper.voteBoardDelete(voteDTO) == 1;
+            }
+        }
+            return false;
+    }
 }

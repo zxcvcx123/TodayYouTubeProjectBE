@@ -3,10 +3,7 @@ package com.example.pj2be.mapper.votemapper;
 import com.example.pj2be.domain.page.PageDTO;
 import com.example.pj2be.domain.vote.VoteCountDTO;
 import com.example.pj2be.domain.vote.VoteDTO;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -102,4 +99,22 @@ public interface VoteMapper {
             WHERE vote_board_id = #{vote_board_id} AND vote_member_id = #{vote_member_id} 
             """)
     VoteCountDTO voteHistory(VoteCountDTO voteCountDTO);
+
+    @Delete("""
+            DELETE FROM youtube.vote
+            WHERE id = #{id} AND vote_member_id = #{vote_member_id}
+            """)
+    Integer voteBoardDelete(VoteDTO voteDTO);
+
+    @Delete("""
+            DELETE FROM youtube.vote_count
+            WHERE vote_board_id = #{id}
+            """)
+    Integer voteCountDelete(VoteDTO voteDTO);
+
+    @Delete("""
+            DELETE FROM youtube.vote_check
+            WHERE vote_board_id = #{id}
+            """)
+    Integer voteCheckDelete(VoteDTO voteDTO);
 }
