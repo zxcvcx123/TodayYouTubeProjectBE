@@ -57,9 +57,9 @@ public class MemberController {
 
                 String refreshToken = URLEncoder.encode( jwtTokenAuthentication.get("refreshToken").toString(),"UTF-8");
                 Cookie jwtRefresh = new Cookie("jwtRefresh",refreshToken);
-                jwtAccess.setHttpOnly(true);
-                jwtAccess.setPath("/");
-                jwtAccess.setMaxAge(60 * 60* 24);
+                jwtRefresh.setHttpOnly(true);
+                jwtRefresh.setPath("/");
+                jwtRefresh.setMaxAge(60 * 60* 24);
                 response.addCookie(jwtRefresh);
 
                 String memberInfo = URLEncoder.encode( jwtTokenAuthentication.get("memberInfo").toString(),"UTF-8");
@@ -87,6 +87,9 @@ public class MemberController {
                 }
                 if ("_mi".equals(cookie.getName())) {
                     memberLoginService.expireJwtCookie(response, "_mi");
+                }
+                if ("jwtRefresh".equals(cookie.getName())) {
+                    memberLoginService.expireJwtCookie(response, "jwtRefresh");
                 }
             }
             return ResponseEntity.ok().build();
