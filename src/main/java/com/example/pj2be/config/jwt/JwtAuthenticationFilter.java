@@ -14,6 +14,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 // 클라이언트 요청 시 JWT 인증을 위함
 // 토큰 유효성 검증 및 건증 후 해당 토큰의 인증 정보를 SecurityContext에 저장하여 인증된 요청을 처리
@@ -31,11 +33,15 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             String path = req.getServletPath();
             if(path.contains("/api/member")){
                 System.out.println("(JwtAuthenticationFilter: doFilter)유효성 검증 시작 ==========================================");
-                String token = resolveToken( getJwtFromCookie(req));
+                Map<String, Object> token = getJwtFromCookie(req);
+                String access = (String) token.get("jwtAccess");
+                String refresh = (String) token.get("jwtRefresh");
+                String accessToken = resolveToken(access);
+                String refreshToken = resolveToken(refresh);
 
                 // 토큰이 존재하는 경우 권한 검사
-                if(token != null && jwtTokenProvider.validateToken(token)){
-                    Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                if(token != null && jwtTokenProvider.validateToken(access)){
+                    Authentication authentication = jwtTokenProvider.getAuthentication(access);
                     // SecurtiyContext에 인증 정보 설정
                     System.out.println("(dofilter)권한은? = " + authentication);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -59,14 +65,17 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         }
         return null;
     }
-    private String getJwtFromCookie(HttpServletRequest request) {
+    private Map<String, Object> getJwtFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-
+        Map<String, Object> jwt = new HashMap<>();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 System.out.println("cookie = " + cookie);
                 if ("jwtAccess".equals(cookie.getName())) {
-                    return cookie.getValue();
+                     jwt.put("jwtAccess",cookie.getValue());
+                }
+                if("jwtRefresh".equals(cookie.getName())){
+                    jwt.put("jwtRefresh", cookie.getValue());
                 }
             }
         }
