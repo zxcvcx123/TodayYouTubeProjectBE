@@ -32,4 +32,10 @@ public class AdminController {
         return adminService.getUserData();
 
     }
+
+    @GetMapping("suspension")
+    public Map<String, Object> suspensionList() {
+
+        return adminService.getSuspensionList();
+    }
 }

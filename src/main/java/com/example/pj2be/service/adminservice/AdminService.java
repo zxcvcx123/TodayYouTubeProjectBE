@@ -35,4 +35,15 @@ public class AdminService {
 
         return map;
     }
+
+    // 정지회원 관리 페이지
+    public Map<String, Object> getSuspensionList() {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("suspensionList", adminMapper.selectSuspensioningMember());
+        map.put("releaseList", adminMapper.selectReleaseMember());
+
+        return map;
+
+    }
 }
