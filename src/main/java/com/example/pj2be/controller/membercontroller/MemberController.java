@@ -53,7 +53,9 @@ public class MemberController {
             if( Auth.equals(MemberRole.GENERAL_MEMBER.getValue() )|| Auth.equals(MemberRole.ADMIN.getValue()) ){
                 // TODO: 추후 권한에 따른 로직 설정
                 return ResponseEntity.ok().body(jwtTokenAuthentication);
-            };
+            } else if (Auth.equals(MemberRole.SUSPENSIONMEMBER.getValue())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
 
         }
         return ResponseEntity.internalServerError().build() ;

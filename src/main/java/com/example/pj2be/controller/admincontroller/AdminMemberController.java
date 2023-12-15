@@ -36,6 +36,5 @@ public class AdminMemberController {
         System.out.println("dto = " + dto);
 
         service.memberSuspension(dto);
-        service.releaseWeekSuspension();
     }
 }

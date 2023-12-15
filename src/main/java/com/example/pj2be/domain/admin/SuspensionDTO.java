@@ -1,7 +1,6 @@
 package com.example.pj2be.domain.admin;
 
 import lombok.Data;
-import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.time.LocalDateTime;
 
