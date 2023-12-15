@@ -70,7 +70,6 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         Map<String, Object> jwt = new HashMap<>();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                System.out.println("cookie = " + cookie);
                 if ("jwtAccess".equals(cookie.getName())) {
                      jwt.put("jwtAccess",cookie.getValue());
                 }
