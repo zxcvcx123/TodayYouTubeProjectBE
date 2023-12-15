@@ -38,15 +38,15 @@ public class MemberService {
         // JWT 토큰 생성
         JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
         String accessToken = jwtToken.getAccessToken();
-
+        String grantType = jwtToken.getGrantType();
+        String refreshToken = jwtToken.getRefreshToken();
         System.out.println("MemberService의 jwtToken 실행됨!! " + jwtToken );
 
         Map<String, Object> jwtTokenAuthenticationMap = new HashMap<String, Object>();
-        jwtTokenAuthenticationMap.put("token", jwtToken);
+        jwtTokenAuthenticationMap.put("accessToken", grantType + " " + accessToken);
+        jwtTokenAuthenticationMap.put("refreshToken",  refreshToken);
         jwtTokenAuthenticationMap.put("authentication", authentication.getAuthorities());
         jwtTokenAuthenticationMap.put("memberInfo", member_id);
-        System.out.println("jwtTokenAuthenticationMap.get(\"memberInfo\") = " + jwtTokenAuthenticationMap.get("memberInfo"));
-
         return jwtTokenAuthenticationMap;
     }
 }

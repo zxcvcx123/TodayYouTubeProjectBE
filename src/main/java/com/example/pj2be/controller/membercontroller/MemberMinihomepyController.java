@@ -108,11 +108,10 @@ public class MemberMinihomepyController {
      return ResponseEntity.badRequest().build();
     }
     @GetMapping("/getCommentList")
-    public ResponseEntity<Map<String, Object>> getCommentList(@RequestBody MiniHomepyCommentDTO miniHomepyCommentDTO){
-     Map<String, Object> commentList = service.getMiniHomepyComment(miniHomepyCommentDTO);
-     if(!commentList.isEmpty()){
-         return ResponseEntity.status(HttpStatus.OK).body(commentList);
-     }
-     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    public Map<String, Object> getCommentList( @RequestParam("homepy_id") Integer homepy_id){
+
+     Map<String, Object> commentList = service.getMiniHomepyComment(homepy_id);
+        System.out.println("commentList = " + commentList);
+         return commentList;
     }
     }

@@ -2,6 +2,8 @@ package com.example.pj2be.service.memberservice;
 
 import com.example.pj2be.domain.member.MemberDTO;
 import com.example.pj2be.mapper.membermapper.MemberMapper;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,5 +29,12 @@ public class MemberLoginService {
 
         }
         return memberDTO;
+    }
+    public void expireJwtCookie(HttpServletResponse response, String cookieName) {
+        Cookie cookie = new Cookie(cookieName, null);
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
     }
 }

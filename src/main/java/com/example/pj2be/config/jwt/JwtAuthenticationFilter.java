@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             String path = req.getServletPath();
             if(path.contains("/api/member")){
                 System.out.println("(JwtAuthenticationFilter: doFilter)유효성 검증 시작 ==========================================");
-                String token = resolveToken(req);
+                String token = resolveToken( getJwtFromCookie(req));
+
                 // 토큰이 존재하는 경우 권한 검사
                 if(token != null && jwtTokenProvider.validateToken(token)){
                     Authentication authentication = jwtTokenProvider.getAuthentication(token);
@@ -38,8 +40,6 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                     System.out.println("(dofilter)권한은? = " + authentication);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
-
-                // 로그인 요청 처리 후, Security Config의 filter 체인에게 전달
 
                 System.out.println( path + " = 유효성 검증 끝 ================================");
             }
@@ -53,12 +53,24 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     }
 
     // 요청 헤더에서 토큰 정보 추출
-    private String resolveToken(HttpServletRequest request){
-        String bearerToken = request.getHeader("Authorization");
-        System.out.println("JwtAuthenticationFilter resolveToken 토큰 추출 결과 = " + bearerToken);
-        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")){
-            return bearerToken.substring(7);
+    private String resolveToken(String token){;
+        if(StringUtils.hasText(token) && token.startsWith("Bearer")){
+            return token.substring(7);
         }
         return null;
     }
+    private String getJwtFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                System.out.println("cookie = " + cookie);
+                if ("jwtAccess".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
 }

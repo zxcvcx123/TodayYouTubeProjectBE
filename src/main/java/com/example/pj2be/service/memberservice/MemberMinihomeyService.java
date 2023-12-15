@@ -112,11 +112,15 @@ public class MemberMinihomeyService {
         String comment = miniHomepyCommentDTO.getComment();
         String imageUrl = miniHomepyCommentDTO.getImage_url();
         int homepyId = miniHomepyCommentDTO.getHomepy_id();
-        return miniHomepyMapper.addMiniHomepyCommentById(memberId, comment, imageUrl, homepyId);
+        String nickname = miniHomepyCommentDTO.getNickname();
+        String roleName = miniHomepyCommentDTO.getRole_name();
+        return miniHomepyMapper.addMiniHomepyCommentById(memberId, comment, imageUrl, homepyId,nickname, roleName );
     }
 
-    public Map<String, Object> getMiniHomepyComment(MiniHomepyCommentDTO miniHomepyCommentDTO) {
-        int homepyId = miniHomepyCommentDTO.getHomepy_id();
-        return miniHomepyMapper.getMiniHomepyCommentByHomepyId(homepyId);
+    public Map<String, Object> getMiniHomepyComment(Integer homepy_id) {
+        Map<String, Object> getComment = new HashMap<>();
+        getComment.put("commentList", miniHomepyMapper.getMiniHomepyCommentByHomepyId(homepy_id));
+
+        return getComment;
     }
 }
