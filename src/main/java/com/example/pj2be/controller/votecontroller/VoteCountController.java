@@ -24,13 +24,16 @@ public class VoteCountController {
     public void voteA(@RequestBody VoteCountDTO voteCountDTO) {
 
 
-        System.out.println("voteCountDTO = " + voteCountDTO);
+        System.out.println("voteA(socket)");
         Integer boardId = voteCountDTO.getVote_board_id();
         String checked = "voteA";
 
         VoteCountDTO check = voteCountService.voteCheck(voteCountDTO, checked);
         VoteCountDTO count = voteCountService.voteGetCount(boardId);
         String toId = voteCountDTO.getVote_member_id();
+
+        System.out.println("voteA(socket) : " + check);
+
         simpMessagingTemplate.convertAndSend("/topic/voteresult", count);
         simpMessagingTemplate.convertAndSend("/queue/votecheck/" + toId, check);
     }
@@ -38,13 +41,16 @@ public class VoteCountController {
     @MessageMapping("/voteb")
     public void voteB(@RequestBody VoteCountDTO voteCountDTO) {
 
-        System.out.println("voteCountDTO = " + voteCountDTO);
+        System.out.println("voteB(socket)");
         Integer boardId = voteCountDTO.getVote_board_id();
         String checked = "voteB";
+
 
         VoteCountDTO check = voteCountService.voteCheck(voteCountDTO, checked);
         VoteCountDTO count = voteCountService.voteGetCount(boardId);
         String toId = voteCountDTO.getVote_member_id();
+
+        System.out.println("voteB(socket) : " + check);
         simpMessagingTemplate.convertAndSend("/topic/voteresult", count);
         simpMessagingTemplate.convertAndSend("/queue/votecheck/" + toId, check);
     }

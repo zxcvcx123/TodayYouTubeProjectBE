@@ -51,6 +51,16 @@ public interface BoardMapper {
         """)
     BoardDTO selectById(Integer id);
 
+
+    // 카테고리만 가져오기
+    @Select("""
+            SELECT name 
+            FROM 
+            category 
+            WHERE name_eng = #{category}
+            """)
+    String boardCategory(String category);
+
     // 게시글 리스트
     @Select("""
             <script>
@@ -100,6 +110,9 @@ public interface BoardMapper {
             </script>
             """)
     List<BoardDTO> selectAll(Integer from, Integer slice, String keyword, String type, String category);
+
+
+
 
     // 게시글 통합검색 리스트
     @Select("""
