@@ -1,10 +1,10 @@
 package com.example.pj2be.controller.admincontroller;
 
+import com.example.pj2be.domain.admin.SuspensionDTO;
+import com.example.pj2be.domain.inquiry.InquiryDTO;
 import com.example.pj2be.service.adminservice.AdminService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -37,5 +37,11 @@ public class AdminController {
     public Map<String, Object> suspensionList() {
 
         return adminService.getSuspensionList();
+    }
+
+    @PutMapping("suspension")
+    public void releaseSuspension(@RequestBody SuspensionDTO dto) {
+
+        adminService.updateSuspension(dto);
     }
 }

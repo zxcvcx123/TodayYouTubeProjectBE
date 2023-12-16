@@ -3,6 +3,7 @@ package com.example.pj2be.mapper.adminmapper;
 import com.example.pj2be.domain.admin.BoardDataDTO;
 import com.example.pj2be.domain.admin.SuspensionDTO;
 import com.example.pj2be.domain.admin.UserDataDTO;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -93,4 +94,10 @@ public interface AdminMapper {
         WHERE suspension.end_date - current_timestamp < 0;
         """)
     List<SuspensionDTO> selectReleaseMember();
+
+    @Delete("""
+        DELETE FROM suspension
+        WHERE id = #{id}
+        """)
+    void deleteSuspension(Integer id);
 }

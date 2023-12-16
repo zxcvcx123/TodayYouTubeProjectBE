@@ -1,11 +1,12 @@
 package com.example.pj2be.service.adminservice;
 
+import com.example.pj2be.domain.admin.SuspensionDTO;
 import com.example.pj2be.mapper.adminmapper.AdminMapper;
+import com.example.pj2be.mapper.membermapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -13,6 +14,7 @@ import java.util.Map;
 public class AdminService {
 
     private final AdminMapper adminMapper;
+    private final MemberMapper memberMapper;
 
     public Map<String, Object> getBoardData() {
         Map<String, Object> map = new HashMap<>();
@@ -44,6 +46,20 @@ public class AdminService {
         map.put("releaseList", adminMapper.selectReleaseMember());
 
         return map;
+
+    }
+
+    // 정지된 회원 정지해제
+    public void updateSuspension(SuspensionDTO dto) {
+
+        System.out.println(dto);
+
+        // 정지해제된 멤버의 role을 아이언 회원으로
+        memberMapper.updateByReleaseId(dto.getMember_id());
+        System.out.println("eeeeeeeeee");
+
+        // 정지해제 Suspension 테이블에서 삭제
+        adminMapper.deleteSuspension(dto.getId());
 
     }
 }
