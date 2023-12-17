@@ -42,11 +42,19 @@ public class BoardController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
+        if(files != null){
+            if(files.length > 5){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+        }
+
 
         // 글쓰기 버튼 클릭했는데, 로그인 아이디가 null로 오는 것 검증, 비로그인 사용자는 401 반환
         if (!IsLoginMember(board.getBoard_member_id())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+
+
 
 
         System.out.println("게시글 작성 category = " + category);
@@ -120,6 +128,12 @@ public class BoardController {
 
         if (MemberChecked(board.getLogin_member_id(), board.getBoard_member_id()) == 3) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        if(files != null){
+            if(files.length > 5){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
         }
 
 
