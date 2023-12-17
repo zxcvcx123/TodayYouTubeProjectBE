@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -61,5 +62,9 @@ public class AdminService {
         // 정지해제 Suspension 테이블에서 삭제
         adminMapper.deleteSuspension(dto.getId());
 
+    }
+
+    public SuspensionDTO getSuspensionMember(String memberId) {
+        return adminMapper.selectSuspensionMember(memberId);
     }
 }

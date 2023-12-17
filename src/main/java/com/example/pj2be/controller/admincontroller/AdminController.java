@@ -6,6 +6,7 @@ import com.example.pj2be.service.adminservice.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -37,6 +38,14 @@ public class AdminController {
     public Map<String, Object> suspensionList() {
 
         return adminService.getSuspensionList();
+    }
+
+    // 정지사용자 정지안내 페이지
+    @GetMapping("suspensionMessage/{member_id}")
+    public SuspensionDTO  suspensionMember(@PathVariable (value = "member_id", required = false) String member_id) {
+
+        System.out.println(member_id);
+        return adminService.getSuspensionMember(member_id);
     }
 
     @PutMapping("suspension")

@@ -100,4 +100,19 @@ public interface AdminMapper {
         WHERE id = #{id}
         """)
     void deleteSuspension(Integer id);
+
+    @Select("""
+        SELECT id,
+               member_id,
+               is_suspended,
+               reason,
+               DATE_FORMAT(start_date, '%Y-%m-%d') as start_date_only,
+               DATE_FORMAT(end_date, '%Y-%m-%d') as end_date_only,
+               period,
+               DATEDIFF( end_date, CURRENT_TIMESTAMP) as remaindate,
+               TIMEDIFF( end_date, CURRENT_TIMESTAMP) as remaintime
+        FROM suspension
+        WHERE suspension.member_id = #{memberId};
+        """)
+    SuspensionDTO selectSuspensionMember(String memberId);
 }
