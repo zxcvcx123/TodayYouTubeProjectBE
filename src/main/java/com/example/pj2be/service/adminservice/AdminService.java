@@ -1,13 +1,13 @@
 package com.example.pj2be.service.adminservice;
 
 import com.example.pj2be.domain.admin.SuspensionDTO;
+import com.example.pj2be.domain.page.PaginationDTO;
 import com.example.pj2be.mapper.adminmapper.AdminMapper;
 import com.example.pj2be.mapper.membermapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -40,11 +40,25 @@ public class AdminService {
     }
 
     // 정지회원 관리 페이지
-    public Map<String, Object> getSuspensionList() {
+    public Map<String, Object> getSuspensionList(Integer page, PaginationDTO paginationDTO) {
         Map<String, Object> map = new HashMap<>();
 
-        map.put("suspensionList", adminMapper.selectSuspensioningMember());
+
+        // 정지중인 회원들 리스트 페이징
+        paginationDTO.setAllPage(adminMapper.selectAllMember());
+        paginationDTO.setCurrentPageNumber(page);
+        paginationDTO.setLimitList(5);
+
+        map.put("pageInfo", paginationDTO);
+
+        int from = paginationDTO.getFrom();
+        int limit = paginationDTO.getLimitList();
+
+        // 정지중인 회원들 리스트 불러오기(페이징)
+        map.put("suspensionList", adminMapper.selectSuspensioningMember(from, limit));
         map.put("releaseList", adminMapper.selectReleaseMember());
+
+        System.out.println("###############" + paginationDTO );
 
         return map;
 

@@ -2,6 +2,7 @@ package com.example.pj2be.controller.admincontroller;
 
 import com.example.pj2be.domain.admin.SuspensionDTO;
 import com.example.pj2be.domain.inquiry.InquiryDTO;
+import com.example.pj2be.domain.page.PaginationDTO;
 import com.example.pj2be.service.adminservice.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -34,10 +35,13 @@ public class AdminController {
 
     }
 
+    // 정지회원 관리 페이지
     @GetMapping("suspension")
-    public Map<String, Object> suspensionList() {
+    public Map<String, Object> suspensionList(@RequestParam (value = "p", defaultValue = "1") Integer page,
+                                              PaginationDTO paginationDTO) {
 
-        return adminService.getSuspensionList();
+        System.out.println("@@@@@@@@@@@@@@@@@@@@" + page + paginationDTO);
+        return adminService.getSuspensionList(page, paginationDTO);
     }
 
     // 정지사용자 정지안내 페이지
@@ -48,6 +52,8 @@ public class AdminController {
         return adminService.getSuspensionMember(member_id);
     }
 
+
+    // 정지된 회원 정지해제
     @PutMapping("suspension")
     public void releaseSuspension(@RequestBody SuspensionDTO dto) {
 

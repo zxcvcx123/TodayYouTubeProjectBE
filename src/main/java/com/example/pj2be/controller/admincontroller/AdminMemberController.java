@@ -18,12 +18,14 @@ public class AdminMemberController {
 
     private final AdminMemberService service;
 
+    // 회원목록 리스트 출력
     @PostMapping("list")
     public Map<String, Object> memberlist(@RequestParam (value = "p", defaultValue = "1") Integer page,
                                           @RequestParam(value = "mid", defaultValue = "") String mid) {
         return service.memberlist(page,mid);
     }
 
+    // 회원정보 클릭시 출력
     @GetMapping("{member_id}")
     public Map<String, Object> memberInfo(@PathVariable String member_id,
                                           @RequestParam (value = "p", defaultValue = "1") Integer page,
@@ -31,6 +33,7 @@ public class AdminMemberController {
         return service.memberInfo(member_id, page, paginationDTO);
     }
 
+    // memberinfodetail에서 회원정지버튼 누를때 실행
     @PutMapping
     public void suspensionStart(@RequestBody SuspensionDTO dto) {
 

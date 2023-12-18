@@ -29,8 +29,6 @@ public class InquiryController {
     @PostMapping("write")
     public ResponseEntity write(@RequestBody InquiryDTO dto) {
 
-//        로그인 객체 되면 수정
-
         if (!service.validate(dto)) {
             return ResponseEntity.badRequest().build();
         }
