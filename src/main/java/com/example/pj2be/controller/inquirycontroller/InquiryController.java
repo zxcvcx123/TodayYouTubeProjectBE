@@ -34,6 +34,7 @@ public class InquiryController {
         if (!service.validate(dto)) {
             return ResponseEntity.badRequest().build();
         }
+
         service.add(dto);
 
         return ResponseEntity.ok().build();

@@ -3,6 +3,7 @@ package com.example.pj2be.service.inquiryservice;
 import com.example.pj2be.domain.answer.AnswerDTO;
 import com.example.pj2be.domain.inquiry.InquiryDTO;
 import com.example.pj2be.mapper.inquirymapper.InquiryMapper;
+import com.example.pj2be.service.fileservice.FileService;
 import com.example.pj2be.service.websocketservice.WebSocketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class InquiryService {
 
     private final InquiryMapper mapper;
     private final WebSocketService webSocketService;
+    private final FileService fileService;
 
     public Map<String, Object> list(Integer page, InquiryDTO dto) {
 
@@ -79,6 +81,15 @@ public class InquiryService {
     public void add(InquiryDTO dto) {
 
         mapper.insert(dto);
+        System.out.println("게시판 아이디: " + dto.getId());
+        /* 본문 ck에디터영역에 실제로 저장된 이미지 소스코드와 게시물ID 보내기 */
+        if (dto.getUuSrc() != null) {
+            fileService.ckS3Update(dto.getUuSrc(), dto.getId());
+
+            // 임시로 저장된 이미지 삭제 ( board_id = 0 인 것 )
+            fileService.ckS3DeleteTempImg();
+        }
+
         System.out.println(dto.getInquiry_member_id() + "유저가 " + "문의게시판에 글을 작성하였습니다.(" + dto.getId() + "번 게시물)" );
     }
 

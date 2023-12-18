@@ -2,6 +2,7 @@ package com.example.pj2be.domain.inquiry;
 
 import com.example.pj2be.utill.ChangeTimeStamp;
 import lombok.Data;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +19,8 @@ public class InquiryDTO {
     private String answerContent;
     private String login_member_id;
     private String role_name;
+    private String[] uuSrc;
+
 
     public String getAgo() {
         return ChangeTimeStamp.getAgo(created_at);
