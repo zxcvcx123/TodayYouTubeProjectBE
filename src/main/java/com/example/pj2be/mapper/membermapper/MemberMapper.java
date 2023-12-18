@@ -103,4 +103,13 @@ public interface MemberMapper {
         WHERE member_id = #{memberId}
         """)
     void changeRoleToSuspension(String memberId);
+
+    @Update("""
+        UPDATE member
+        SET role_id = '2'
+        WHERE member_id = #{member_id}
+        """)
+    void updateByReleaseId(String member_id);
+
 }
+

@@ -23,6 +23,7 @@ public interface MainMapper {
                COUNT(DISTINCT bl.id) countlike,
                COUNT(DISTINCT c.id) count_comment,
                ct.name categoryName,
+               ct.name_eng,
                is_show,
                views
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
@@ -48,6 +49,7 @@ public interface MainMapper {
                COUNT(DISTINCT bl.id) countlike,
                COUNT(DISTINCT c.id) count_comment,
                ct.name categoryName,
+               ct.name_eng,
                is_show,
                views
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
@@ -73,6 +75,7 @@ public interface MainMapper {
                COUNT(DISTINCT bl.id) countlike,
                COUNT(DISTINCT c.id) count_comment,
                ct.name categoryName,
+               ct.name_eng,
                is_show,
                views
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
@@ -98,6 +101,7 @@ public interface MainMapper {
                COUNT(DISTINCT bl.id) countlike,
                COUNT(DISTINCT c.id) count_comment,
                ct.name categoryName,
+               ct.name_eng,
                is_show,
                views
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
