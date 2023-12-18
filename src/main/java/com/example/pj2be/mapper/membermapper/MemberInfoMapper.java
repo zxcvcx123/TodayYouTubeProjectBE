@@ -184,7 +184,7 @@ ORDER BY m.nickname;
                 FROM member_followers
                 WHERE following_id = #{memberId}
             )
-            GROUP BY m.id, m.member_id, m.nickname, m.email, m.phone_number, r.role_name, m.gender, m.birth_date;
+            GROUP BY m.id, m.member_id, m.nickname, m.email, m.phone_number, r.role_name, m.gender, m.birth_date
             ORDER BY m.nickname;
             
             """)
