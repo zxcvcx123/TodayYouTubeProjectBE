@@ -28,11 +28,9 @@ public class BoardService {
         boardMapper.insert(board, category);
 
         if (files != null) {
-
                 for (MultipartFile file : files) {
                     fileService.s3Upload(file, board.getId());
                 }
-
         }
 
         /* 본문 ck에디터영역에 실제로 저장된 이미지 소스코드와 게시물ID 보내기 */

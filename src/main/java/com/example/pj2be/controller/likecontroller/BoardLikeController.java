@@ -26,4 +26,10 @@ public class BoardLikeController {
         return ResponseEntity.ok(service.boardLike(boardLikeDTO));
     }
 
+    @PostMapping("/notlogin")
+    public ResponseEntity<Map<String, Object>> boardCountLikeNotLoginOnly(@RequestBody BoardLikeDTO boardLikeDTO){
+        return ResponseEntity.ok(service.getBoardLike(boardLikeDTO));
+    }
+
+
 }

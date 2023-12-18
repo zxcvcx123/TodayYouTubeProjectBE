@@ -36,8 +36,6 @@ public class BoardLikeService {
         int countlike = mapper.countLikeByBoardId(boardLikeDTO);
 
 
-
-
         return Map.of( "countlike", countlike);
     }
 
