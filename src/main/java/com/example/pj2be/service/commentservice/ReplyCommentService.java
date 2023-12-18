@@ -13,12 +13,12 @@ public class ReplyCommentService {
 
     private final ReplyCommentMapper mapper;
 
-    public void reply_commentAdd(ReplyCommentDTO reply_comment, String member_id) {
-        System.out.println("@@@@@@" + reply_comment.getId() + " 댓글 작성 @@@@@@");
-//        reply_comment.setMember_id("testadmin");
-        System.out.println("reply_comment = " + reply_comment);
-        System.out.println("member_id = " + member_id);
-        mapper.reply_commentInsert(reply_comment, member_id);
+    public void reply_commentAdd(ReplyCommentDTO replyCommentDTO) {
+        System.out.println("@@@@@@" + replyCommentDTO.getId() + " 댓글 작성 @@@@@@");
+
+        System.out.println("replyCommentDTO = " + replyCommentDTO);
+
+        mapper.reply_commentInsert(replyCommentDTO);
     }
 
     public List<ReplyCommentDTO> reply_commentList(Integer comment_id) {
@@ -30,8 +30,22 @@ public class ReplyCommentService {
         mapper.deleteByReply_id(reply_id);
     }
 
-    public boolean reply_commentUpdate(ReplyCommentDTO reply_comment) {
-        System.out.println("@@@@@@" + reply_comment.getId() + " 댓글 업뎃 @@@@@@");
-        return mapper.reply_commentUpdate(reply_comment) == 1;
+    public boolean reply_commentUpdate(ReplyCommentDTO replyCommentDTO) {
+        System.out.println("@@@@@@" + replyCommentDTO.getId() + " 댓글 업뎃 @@@@@@");
+        return mapper.reply_commentUpdate(replyCommentDTO) == 1;
+    }
+
+    //    ================== 투표 게시판 대댓글 ===================
+    public void voteReply_commentAdd(ReplyCommentDTO replyCommentDTO) {
+        System.out.println("@@@@@@" + replyCommentDTO.getComment_id() + " 댓글 작성 @@@@@@");
+
+        System.out.println("replyCommentDTO = " + replyCommentDTO);
+
+        mapper.reply_voteCommentInsert(replyCommentDTO);
+    }
+
+    public List<ReplyCommentDTO> voteReply_commentList(ReplyCommentDTO replyCommentDTO) {
+
+        return mapper.voteReply_commentSelectByComment_id(replyCommentDTO);
     }
 }

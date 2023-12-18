@@ -33,7 +33,6 @@ public class AdminMemberController {
 
     @PutMapping
     public void suspensionStart(@RequestBody SuspensionDTO dto) {
-        System.out.println("dto = " + dto);
 
         service.memberSuspension(dto);
     }

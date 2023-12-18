@@ -16,16 +16,18 @@ public class CommentService {
     private final CommentMapper mapper;
     private final ReplyCommentMapper replyCommentMapper;
 
-    public void commentAdd(CommentDTO comment, String member_id) {
-        System.out.println("@@@@@@" + comment.getId() + " 댓글 작성 @@@@@@");
-//        comment.setMember_id("testadmin");
-        System.out.println("member_id = " + member_id);
-        mapper.commentInsert(comment);
+
+    public void commentAdd(CommentDTO commentDTO, String member_id) {
+        System.out.println("@@@@@@" + commentDTO.getId() + " 댓글 작성 @@@@@@");
+
+        mapper.commentInsert(commentDTO);
     }
 
 
-    public List<CommentDTO> commentList(Integer board_id, String member_id) {
-        return mapper.commentSelectByBoard_id(board_id, member_id);
+    public List<CommentDTO> commentList(Integer board_id, String member_id, CommentDTO commentDTO) {
+
+            return mapper.commentSelectByBoard_id(board_id, member_id, commentDTO);
+
     }
 
 
@@ -38,8 +40,24 @@ public class CommentService {
         mapper.commentDeleteById(comment_id);
     }
 
-    public boolean commentUpdate(CommentDTO comment) {
-        System.out.println("@@@@@@" + comment.getId() + " 댓글 업뎃 @@@@@@");
-        return mapper.commentUpdate(comment) == 1;
+    public boolean commentUpdate(CommentDTO commentDTO) {
+        System.out.println("@@@@@@" + commentDTO.getId() + " 댓글 업뎃 @@@@@@");
+        return mapper.commentUpdate(commentDTO) == 1;
+    }
+
+    //    ================== 투표 게시판 댓글 ===================
+    public void voteCommentAdd(CommentDTO commentDTO, String memberId) {
+
+        System.out.println("@@@@@@" + commentDTO.getId() + " 댓글 작성 @@@@@@");
+
+        commentDTO.setCode("C008");
+        mapper.VoteCommentInsert(commentDTO);
+    }
+
+    public List<CommentDTO> VoteCommentList(CommentDTO commentDTO) {
+
+
+            return mapper.voteCommentSelectByBoard_id(commentDTO);
+
     }
 }

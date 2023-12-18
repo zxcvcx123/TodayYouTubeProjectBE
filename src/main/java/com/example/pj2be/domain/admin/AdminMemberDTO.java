@@ -19,5 +19,6 @@ public class AdminMemberDTO {
     private Integer countboard;
     private Integer countcomment;
     private Integer countcommentreply;
+    private Boolean is_suspended;
 
 }

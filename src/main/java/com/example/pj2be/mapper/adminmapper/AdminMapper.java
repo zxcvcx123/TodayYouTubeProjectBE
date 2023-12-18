@@ -1,7 +1,9 @@
 package com.example.pj2be.mapper.adminmapper;
 
 import com.example.pj2be.domain.admin.BoardDataDTO;
+import com.example.pj2be.domain.admin.SuspensionDTO;
 import com.example.pj2be.domain.admin.UserDataDTO;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -61,4 +63,56 @@ public interface AdminMapper {
         ORDER BY comment_rank;
         """)
     List<UserDataDTO> getUserCommentRankData();
+
+    @Select("""
+        SELECT id,
+               member_id,
+               is_suspended,
+               reason,
+               start_date,
+               end_date,
+               period,
+               DATEDIFF( end_date, CURRENT_TIMESTAMP) as remaindate,
+               TIMEDIFF( end_date, CURRENT_TIMESTAMP) as remaintime
+        FROM suspension
+        WHERE suspension.end_date - current_timestamp > 0;
+        """)
+    List<SuspensionDTO> selectSuspensioningMember();
+
+
+    @Select("""
+        SELECT id,
+               member_id,
+               is_suspended,
+               reason,
+               start_date,
+               end_date,
+               period,
+               DATEDIFF( end_date, CURRENT_TIMESTAMP) as remaindate,
+               TIMEDIFF( end_date, CURRENT_TIMESTAMP) as remaintime
+        FROM suspension
+        WHERE suspension.end_date - current_timestamp < 0;
+        """)
+    List<SuspensionDTO> selectReleaseMember();
+
+    @Delete("""
+        DELETE FROM suspension
+        WHERE id = #{id}
+        """)
+    void deleteSuspension(Integer id);
+
+    @Select("""
+        SELECT id,
+               member_id,
+               is_suspended,
+               reason,
+               DATE_FORMAT(start_date, '%Y-%m-%d') as start_date_only,
+               DATE_FORMAT(end_date, '%Y-%m-%d') as end_date_only,
+               period,
+               DATEDIFF( end_date, CURRENT_TIMESTAMP) as remaindate,
+               TIMEDIFF( end_date, CURRENT_TIMESTAMP) as remaintime
+        FROM suspension
+        WHERE suspension.member_id = #{memberId};
+        """)
+    SuspensionDTO selectSuspensionMember(String memberId);
 }

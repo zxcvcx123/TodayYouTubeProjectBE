@@ -17,5 +17,7 @@ public class CommentDTO {
     private Integer count_comment_like;
     private Boolean likeHeart;
 
+    private String code;
+    private String votePath;
 
 }

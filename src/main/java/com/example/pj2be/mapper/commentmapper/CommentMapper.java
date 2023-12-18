@@ -9,10 +9,10 @@ import java.util.List;
 public interface CommentMapper {
 
     @Insert("""
-             INSERT INTO comment (board_id, comment, member_id) 
-        VALUES (#{board_id}, #{comment}, #{member_id})
+             INSERT INTO comment (board_id, comment, member_id, code) 
+        VALUES (#{board_id}, #{comment}, #{member_id}, #{code})
             """)
-    int commentInsert(CommentDTO comment);
+    int commentInsert(CommentDTO commentDTO);
 
 
     @Select("""
@@ -20,20 +20,18 @@ public interface CommentMapper {
                    c.board_id,
                    c.member_id,
                    c.comment,
-                   c.created_at,
-                   
+                   c.created_at,       
+                   c.code,         
                    m.nickname nickname,
                    (SELECT COUNT(cl.id) FROM comment_like cl WHERE cl.comment_id = c.id) count_comment_like,
                    (SELECT COUNT(cl.id) FROM comment_like cl WHERE cl.comment_id = c.id AND cl.member_id = #{member_id}) likeHeart
                                            
             FROM comment c
                      JOIN member m ON c.member_id = m.member_id
-                     
-                     
-                     
-            WHERE board_id = #{board_id}
+                
+            WHERE board_id = #{board_id} AND code IS NULL 
             """)
-    List<CommentDTO> commentSelectByBoard_id(Integer board_id, String member_id);
+    List<CommentDTO> commentSelectByBoard_id(Integer board_id, String member_id, CommentDTO commentDTO);
 
     @Delete("""
             DELETE FROM comment
@@ -47,5 +45,34 @@ public interface CommentMapper {
             SET comment = #{comment}
             WHERE id = #{id}
             """)
-    int commentUpdate(CommentDTO comment);
+    int commentUpdate(CommentDTO commentDTO);
+
+// ====================== 투표 게시판 댓글 ==============
+    @Insert("""
+            INSERT INTO comment (board_id, comment, member_id, code) 
+            VALUES (#{board_id}, #{comment}, #{member_id}, #{code})
+            """)
+    int VoteCommentInsert(CommentDTO commentDTO);
+
+
+
+    @Select("""
+            SELECT c.id,
+                   c.board_id,
+                   c.member_id,
+                   c.comment,
+                   c.created_at, 
+                   c.code,                  
+                   m.nickname nickname,
+                   
+                   (SELECT COUNT(cl.id) FROM comment_like cl WHERE cl.comment_id = c.id) count_comment_like,
+                   (SELECT COUNT(cl.id) FROM comment_like cl WHERE cl.comment_id = c.id AND cl.member_id = #{member_id}) likeHeart
+
+                                           
+            FROM comment c
+                     JOIN member m ON c.member_id = m.member_id                 
+                                          
+            WHERE board_id = #{board_id} AND c.code = 'C008'
+            """)
+    List<CommentDTO> voteCommentSelectByBoard_id(CommentDTO commentDTO);
 }

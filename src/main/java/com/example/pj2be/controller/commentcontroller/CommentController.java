@@ -20,13 +20,14 @@ public class CommentController {
     private final CommentService service;
 
     @PostMapping("/add")
-    public ResponseEntity commentAdd(@RequestBody CommentDTO comment, String member_id) {
+    public ResponseEntity commentAdd(@RequestBody CommentDTO commentDTO, String member_id) {
 
 
-        if (!IsLoginMember(comment.getMember_id())) {
+        if (!IsLoginMember(commentDTO.getMember_id())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        service.commentAdd(comment, member_id);
+
+        service.commentAdd(commentDTO, member_id);
         System.out.println("member_id = " + member_id);
         return ResponseEntity.ok().build();
     }
@@ -34,7 +35,6 @@ public class CommentController {
     @GetMapping("list")
     public List<CommentDTO> commentList(@RequestParam("board_id") Integer board_id,
                                         @RequestParam(value = "member_id", required = false, defaultValue = "''") String member_id) {
-
 
         return   service.commentList(board_id, member_id);
     }
@@ -49,12 +49,32 @@ public class CommentController {
     }
 
     @PutMapping("edit")
-    public ResponseEntity commentUpdate(@RequestBody CommentDTO comment) {
+    public ResponseEntity commentUpdate(@RequestBody CommentDTO commentDTO) {
 
 
-        service.commentUpdate(comment);
+        service.commentUpdate(commentDTO);
         return ResponseEntity.ok().build();
 
+    }
+
+    // ==================== 투표 게시판 댓글 ======================
+
+    @PostMapping("/vote/add")
+    public ResponseEntity VoteCommentAdd(@RequestBody CommentDTO commentDTO, String member_id) {
+
+
+        if (!IsLoginMember(commentDTO.getMember_id())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        service.voteCommentAdd(commentDTO, member_id);
+
+        return ResponseEntity.ok().build();
+    }
+
+
+    @GetMapping("vote/list")
+    public List<CommentDTO> VoteCommentList(CommentDTO commentDTO) {
+        return service.VoteCommentList(commentDTO);
     }
 }
 
