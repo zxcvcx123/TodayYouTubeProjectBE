@@ -154,4 +154,14 @@ public class InquiryService {
 
 
     }
+
+    public void answerEdit(AnswerDTO dto) {
+        mapper.editAnswer(dto);
+
+
+    }
+
+    public void answerDelete(AnswerDTO dto) {
+        mapper.deleteAnswer(dto);
+    }
 }

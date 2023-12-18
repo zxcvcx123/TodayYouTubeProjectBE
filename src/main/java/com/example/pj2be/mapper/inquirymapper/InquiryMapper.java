@@ -125,4 +125,17 @@ public interface InquiryMapper {
     List<InquiryDTO> selectByMemberId(String id, Integer from);
 
 
+    @Update("""
+        UPDATE answer
+        SET content = #{content}
+        WHERE answer_board_id = #{answer_board_id}
+        """)
+    int editAnswer(AnswerDTO dto);
+
+
+    @Delete("""
+        DELETE FROM answer
+        WHERE answer_board_id = #{answer_board_id}
+        """)
+    int deleteAnswer(AnswerDTO dto);
 }

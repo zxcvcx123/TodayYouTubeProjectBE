@@ -70,4 +70,18 @@ public class InquiryController {
         service.answerAdd(dto);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("answer/edit")
+    public ResponseEntity answerEdit(@RequestBody AnswerDTO dto) {
+        service.answerEdit(dto);
+        return ResponseEntity.ok().build();
+
+    }
+
+    @DeleteMapping("answer/delete")
+    public ResponseEntity deleteAnswer(@RequestBody AnswerDTO dto) {
+        service.answerDelete(dto);
+        return ResponseEntity.ok().build();
+    }
+
 }

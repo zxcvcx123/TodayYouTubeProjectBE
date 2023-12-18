@@ -8,4 +8,5 @@ public class AnswerDTO {
     private Integer answer_board_id;
     private String title;
     private String content;
+    private String role_name;
 }
