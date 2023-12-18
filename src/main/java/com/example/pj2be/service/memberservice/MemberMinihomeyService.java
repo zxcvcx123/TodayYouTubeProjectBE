@@ -123,4 +123,16 @@ public class MemberMinihomeyService {
 
         return getComment;
     }
+
+    public boolean deleteComment(Integer id) {
+        return miniHomepyMapper.deleteCommentById(id);
+    }
+
+    public boolean updateComment(Integer id, String comment) {
+        return miniHomepyMapper.updateCommentById(id, comment);
+    }
+
+    public boolean deleteYoutuberInfo(Integer id) {
+        return miniHomepyMapper.deleteYoutuberInfo(id);
+    }
 }

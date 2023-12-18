@@ -37,11 +37,12 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 String access = (String) token.get("jwtAccess");
                 String refresh = (String) token.get("jwtRefresh");
                 String accessToken = resolveToken(access);
+                System.out.println("accessToken = " + accessToken);
                 String refreshToken = resolveToken(refresh);
 
                 // 토큰이 존재하는 경우 권한 검사
-                if(token != null && jwtTokenProvider.validateToken(access)){
-                    Authentication authentication = jwtTokenProvider.getAuthentication(access);
+                if(accessToken != null && jwtTokenProvider.validateToken(accessToken)){
+                    Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
                     // SecurtiyContext에 인증 정보 설정
                     System.out.println("(dofilter)권한은? = " + authentication);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -77,6 +78,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                     jwt.put("jwtRefresh", cookie.getValue());
                 }
             }
+            return jwt;
         }
         return null;
     }

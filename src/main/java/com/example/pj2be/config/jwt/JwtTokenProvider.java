@@ -38,14 +38,17 @@ public class JwtTokenProvider {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
+        System.out.println("JwtTokenProvider generateToken의 authorities =" + authorities);
         long now = (new Date()).getTime();
 
         // Access 토큰 생성
         Date accessTokenExpiresIn = new Date(now + 180000000); // 테스트 용 시간
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
+                // 클레임명을 auth라는 이름으로 저장, 실제값: GENERAL_MEMBER
                 .claim("auth",authorities)
                 .setExpiration(accessTokenExpiresIn)
+                // 서명 정보 HS256알고리즘
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 

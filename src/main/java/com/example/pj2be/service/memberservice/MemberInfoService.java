@@ -1,9 +1,7 @@
 package com.example.pj2be.service.memberservice;
 
 import com.example.pj2be.config.s3client.AwsConfig;
-import com.example.pj2be.domain.member.MemberLoginDTO;
-import com.example.pj2be.domain.member.MemberProfileImageDTO;
-import com.example.pj2be.domain.member.MemberUpdateDTO;
+import com.example.pj2be.domain.member.*;
 import com.example.pj2be.mapper.membermapper.ProFileMapper;
 import com.example.pj2be.mapper.membermapper.MemberInfoMapper;
 import com.example.pj2be.mapper.membermapper.MemberMapper;
@@ -26,7 +24,11 @@ import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -42,6 +44,8 @@ public class MemberInfoService {
     @Value("${aws.s3.bucket.name}")
     private String awsBucket;
     private final S3Client s3;
+    @Value("${image.file.prefix}")
+    private String urlPrefix;
     public Map<String, Object> getMyBoardList(String member_id, String categoryOrdedBy, String categoryTopics, Integer page) {
 
         Map<String, Object> myBoardListMap = new HashMap<>();
@@ -147,5 +151,51 @@ public class MemberInfoService {
                 .build();
 
         s3.putObject(objectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+    }
+
+    public boolean searchMember(String memberId) {
+        return memberInfoMapper.searchMemberByMemberId(memberId) != null;
+    }
+
+    public boolean addFollowing(MemberFollowDTO memberFollowDTO) {
+        String follower = memberFollowDTO.getFollower_id();
+        String following = memberFollowDTO.getFollowing_id();
+        if(memberInfoMapper.isFollowing(follower, following) != 1){
+            return memberInfoMapper.addFollowing(follower, following);
+        }
+            return false;
+    }
+
+    public Map<String, Object> getFollowList(String memberId) throws UnsupportedEncodingException {
+        Map<String, Object> getFollowList = new HashMap<>();
+        List<MemberDTO> followingList = memberInfoMapper.getFollowingListByMemberId(memberId);
+        for (MemberDTO memberDTO: followingList) {
+            if(memberDTO.getImage_name() != null) {
+                String decodedFileName = memberDTO.getImage_name();
+                String encodedFileName = URLEncoder.encode(decodedFileName, StandardCharsets.UTF_8.toString());
+                String url = urlPrefix + "member-profiles/" + memberDTO.getMember_id() + "/" + encodedFileName;
+                memberDTO.setUrl(url);
+            }
+        }
+
+        List<MemberDTO> followerList = memberInfoMapper.getFollowerListByMemberId(memberId);
+        for (MemberDTO memberDTO: followingList) {
+            if(memberDTO.getImage_name() != null) {
+                String decodedFileName = memberDTO.getImage_name();
+                String encodedFileName = URLEncoder.encode(decodedFileName, StandardCharsets.UTF_8.toString());
+                String url = urlPrefix + "member-profiles/" + memberDTO.getMember_id() + "/" + encodedFileName;
+                memberDTO.setUrl(url);
+            }
+        }
+
+        getFollowList.put("followingList", followingList);
+        getFollowList.put("followerList", followerList);
+
+        return getFollowList;
+    }
+
+    public boolean deleteFollowing(String followingId, String followerId) {
+
+        return memberInfoMapper.deleteFollowing(followingId, followerId);
     }
 }

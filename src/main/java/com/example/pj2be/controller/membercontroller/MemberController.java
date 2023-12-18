@@ -1,10 +1,13 @@
 package com.example.pj2be.controller.membercontroller;
 
 import com.example.pj2be.config.jwt.JwtAuthenticationFilter;
+import com.example.pj2be.config.security.AESEncryption;
+import com.example.pj2be.config.security.KeyManager;
 import com.example.pj2be.config.security.SecurityUtil;
 import com.example.pj2be.domain.member.MemberDTO;
 import com.example.pj2be.domain.member.MemberLoginDTO;
 import com.example.pj2be.domain.member.MemberRole;
+import com.example.pj2be.domain.minihomepy.MiniHomepyCommentDTO;
 import com.example.pj2be.service.memberservice.MemberLoginService;
 import com.example.pj2be.service.memberservice.MemberService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,9 +23,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Base64;
 import java.util.Map;
+
+import static com.example.pj2be.config.security.AESEncryption.*;
 
 @Slf4j
 @RestController
@@ -32,9 +40,10 @@ public class MemberController {
 
     private final MemberService memberService;
      private final MemberLoginService memberLoginService;
+     private final KeyManager keyManager;
     //  로그인
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody MemberLoginDTO memberLoginDTO, BindingResult bindingResult, HttpServletResponse response) throws JsonProcessingException, UnsupportedEncodingException {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody MemberLoginDTO memberLoginDTO, BindingResult bindingResult, HttpServletResponse response) throws Exception {
         log.info("login controller 실행됨");
 
         String member_id = memberLoginDTO.getMember_id();
@@ -48,6 +57,10 @@ public class MemberController {
 
             if( Auth.equals(MemberRole.GENERAL_MEMBER.getValue() )|| Auth.equals(MemberRole.ADMIN.getValue()) ){
                 // TODO: 추후 권한에 따른 로직 설정
+
+                String memberId = jwtTokenAuthentication.get("memberInfo").toString();
+                SecretKey key = keyManager.getSecretKey();
+                String encryptMemberId = AESEncryption.encrypt(memberId, key);
 
                 String accessToken = URLEncoder.encode( jwtTokenAuthentication.get("accessToken").toString(),"UTF-8");
                 Cookie jwtAccess = new Cookie("jwtAccess",accessToken);
@@ -63,12 +76,14 @@ public class MemberController {
                 jwtRefresh.setMaxAge(60 * 60* 24);
                 response.addCookie(jwtRefresh);
 
-                String memberInfo = URLEncoder.encode( jwtTokenAuthentication.get("memberInfo").toString(),"UTF-8");
-                Cookie memberId = new Cookie("_mi", memberInfo);
-                memberId.setHttpOnly(true);
-                memberId.setPath("/");
-                memberId.setMaxAge(60*60*24);
-                response.addCookie(memberId);
+                String memberInfo = encryptMemberId;
+                Cookie _mi = new Cookie("_mi", memberInfo);
+                _mi.setHttpOnly(true);
+                _mi.setPath("/");
+                _mi.setMaxAge(60*60*24);
+                response.addCookie(_mi);
+
+
               return ResponseEntity.ok().build();
                           } else if (Auth.equals(MemberRole.SUSPENSIONMEMBER.getValue())) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -95,6 +110,10 @@ public class MemberController {
                 if ("jwtRefresh".equals(cookie.getName())) {
                     memberLoginService.expireJwtCookie(response, "jwtRefresh");
                 }
+                if ("__Secure".equals(cookie.getName())) {
+                    memberLoginService.expireJwtCookie(response, "__Secure");
+                }
+
             }
             return ResponseEntity.ok().build();
         }
@@ -106,11 +125,17 @@ public class MemberController {
     public ResponseEntity<MemberDTO> loginProvider(HttpServletRequest request) {
         try {
             Cookie[] cookies = request.getCookies();
-
             if (cookies != null) {
+
                 for (Cookie cookie : cookies) {
+//                    if ("jwtRefresh".equals(cookie.getName())) {
+//                        memberLoginService.jwtRefreshTokenValidate(cookie.getValue());
+//                        return ResponseEntity.ok().body(memberDTO);
+//                    }
                     if ("_mi".equals(cookie.getName())) {
-                        MemberDTO memberDTO = memberLoginService.getLoginInfo(cookie.getValue());
+                        SecretKey key = keyManager.getSecretKey();
+                        String memberId = AESEncryption.decrypt(cookie.getValue(), key);
+                        MemberDTO memberDTO = memberLoginService.getLoginInfo(memberId);
                         return ResponseEntity.ok().body(memberDTO);
                     }
                 }
@@ -146,4 +171,5 @@ public class MemberController {
 
         return SecurityUtil.getCurrentMemberId();
     }
+
 }

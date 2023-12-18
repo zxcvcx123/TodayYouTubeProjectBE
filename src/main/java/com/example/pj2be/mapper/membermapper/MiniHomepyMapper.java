@@ -187,7 +187,24 @@ HAVING  b.link LIKE 'https://%' AND b.link LIKE '%youtu%'
     boolean addMiniHomepyCommentById(String memberId, String comment, String imageUrl, int homepyId, String nickname, String role_name);
 
     @Select("""
-            SELECT * FROM mini_homepy_comment WHERE homepy_id = #{homepy_id};
+            SELECT * FROM mini_homepy_comment WHERE homepy_id = #{homepy_id} ORDER BY inserted_at DESC;
             """)
     List<MiniHomepyCommentDTO> getMiniHomepyCommentByHomepyId(int homepyId);
+
+    @Delete("""
+            DELETE FROM mini_homepy_comment WHERE id = #{id}
+            """)
+    boolean deleteCommentById(Integer id);
+
+    @Update("""
+                    UPDATE mini_homepy_comment
+            SET comment = #{comment}
+            WHERE id = #{id}
+    """)
+    boolean updateCommentById(Integer id, String comment);
+
+    @Delete("""
+            DELETE FROM youtuberinfo WHERE id = #{id}
+            """)
+    boolean deleteYoutuberInfo(Integer id);
 }
