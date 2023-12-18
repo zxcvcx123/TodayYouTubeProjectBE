@@ -164,4 +164,5 @@ public class InquiryService {
     public void answerDelete(AnswerDTO dto) {
         mapper.deleteAnswer(dto);
     }
+
 }

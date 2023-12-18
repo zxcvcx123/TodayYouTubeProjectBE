@@ -138,4 +138,5 @@ public interface InquiryMapper {
         WHERE answer_board_id = #{answer_board_id}
         """)
     int deleteAnswer(AnswerDTO dto);
+
 }
