@@ -36,6 +36,7 @@ public interface CommentMapper {
 
     @Delete("""
             DELETE FROM comment
+            
             WHERE id = #{id}
             """)
     int commentDeleteById(Integer comment_id);
