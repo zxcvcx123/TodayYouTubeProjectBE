@@ -4,6 +4,7 @@ import com.example.pj2be.domain.member.MemberDTO;
 import com.example.pj2be.domain.minihomepy.MiniHomepyCommentDTO;
 import com.example.pj2be.domain.member.YoutuberInfoDTO;
 import com.example.pj2be.domain.minihomepy.MiniHomepyDTO;
+import com.example.pj2be.service.memberservice.MemberLoginService;
 import com.example.pj2be.service.memberservice.MemberMinihomeyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -96,6 +97,17 @@ public class MemberMinihomepyController {
         }
      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+
+    @DeleteMapping("/deleteYoutuber")
+    public ResponseEntity deleteYoutuberInfo(@RequestParam("id") Integer id){
+
+        if(id != null){
+            if(service.deleteYoutuberInfo(id)){
+                return ResponseEntity.status(HttpStatus.OK).build();
+            }
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
     @GetMapping("/youtuberinfo/{member_id}")
     public Map<String, Object> getYoutuberInfo(@PathVariable String member_id){
         return service.getYoutuberInfo(member_id);
@@ -113,5 +125,24 @@ public class MemberMinihomepyController {
      Map<String, Object> commentList = service.getMiniHomepyComment(homepy_id);
         System.out.println("commentList = " + commentList);
          return commentList;
+    }
+
+    @DeleteMapping("/comment/delete")
+    public ResponseEntity deleteComment(@RequestParam("id") Integer id){
+     if(service.deleteComment(id)){
+         return ResponseEntity.ok().build();
+     }
+     return ResponseEntity.badRequest().build();
+    }
+    @PatchMapping("/comment/update")
+    public ResponseEntity updateComment(@RequestBody MiniHomepyCommentDTO miniHomepyCommentDTO){
+     int id = miniHomepyCommentDTO.getId();
+     String comment = miniHomepyCommentDTO.getComment();
+        System.out.println("id = " + id);
+     System.out.println("comment = " + comment);
+        if(service.updateComment(id, comment)){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
     }
