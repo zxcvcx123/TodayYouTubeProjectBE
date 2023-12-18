@@ -20,9 +20,10 @@ public interface CommentMapper {
                    c.board_id,
                    c.member_id,
                    c.comment,
-                   c.created_at,       
+                   c.created_at,     
                    c.code,         
                    m.nickname nickname,
+                   (SELECT COUNT(reply_comment.id) FROM reply_comment WHERE reply_comment.comment_id = c.id) reply_count,
                    (SELECT COUNT(cl.id) FROM comment_like cl WHERE cl.comment_id = c.id) count_comment_like,
                    (SELECT COUNT(cl.id) FROM comment_like cl WHERE cl.comment_id = c.id AND cl.member_id = #{member_id}) likeHeart
                                            

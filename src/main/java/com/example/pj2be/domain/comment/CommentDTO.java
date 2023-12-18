@@ -12,12 +12,17 @@ public class CommentDTO {
     private String member_id;
     private String comment;
     private LocalDateTime created_at;
-    private LocalDateTime update_at;
+    private LocalDateTime updated_at;
     private String nickname;
     private Integer count_comment_like;
     private Boolean likeHeart;
 
     private String code;
     private String votePath;
+    private Integer reply_count;
+
+    public String getAgo() {
+        return ChangeTimeStamp.getAgo(created_at);
+    }
 
 }
