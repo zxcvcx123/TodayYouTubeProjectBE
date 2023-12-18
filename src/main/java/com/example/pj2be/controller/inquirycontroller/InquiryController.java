@@ -55,6 +55,8 @@ public class InquiryController {
 
     @PutMapping("edit")
     public ResponseEntity edit(@RequestBody InquiryDTO dto) {
+
+        System.out.println("문의 수정작동");
         dto.setInquiry_member_id("testadmin");
 
         service.update(dto);

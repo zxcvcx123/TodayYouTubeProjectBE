@@ -20,6 +20,8 @@ public class InquiryDTO {
     private String login_member_id;
     private String role_name;
     private String[] uuSrc;
+    private String ck_category;
+    private String category_code;
 
 
     public String getAgo() {

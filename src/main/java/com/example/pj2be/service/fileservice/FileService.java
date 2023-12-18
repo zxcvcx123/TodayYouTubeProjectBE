@@ -160,9 +160,9 @@ public class FileService {
     }
 
     /* 본문 ck에디터영역에 실제로 저장된 이미지의 게시판 번호 업데이트 */
-    public void ckS3Update(String[] uuSrc, Integer boardId) {
+    public void ckS3Update(String[] uuSrc, Integer boardId, String category) {
         for (String src : uuSrc) {
-            fileMapper.ckS3Update(src, boardId);
+            fileMapper.ckS3Update(src, boardId, category);
         }
     }
 
