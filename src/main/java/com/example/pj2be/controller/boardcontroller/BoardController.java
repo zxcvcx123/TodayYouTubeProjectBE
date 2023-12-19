@@ -146,6 +146,11 @@ public class BoardController {
     public ResponseEntity remove(@PathVariable Integer id, @RequestBody BoardDTO board) {
         System.out.println("@@@@@@@@@" + board.getLogin_member_id() + " 사용자가 " + board.getId() + "번 게시글 삭제.");
 
+        if (board.getRole_name().equals("운영자")) {
+            boardService.remove(id);
+            return ResponseEntity.ok().build();
+        }
+
         // 게시글 작성자 id와 로그인 사용자 id를 비교하여 유효성 검증
         if (MemberChecked(board.getLogin_member_id(), board.getBoard_member_id()) == 0) {
             boardService.remove(id);
@@ -165,6 +170,7 @@ public class BoardController {
         }
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+
     }
 
     // 랜덤 게시판 보기
