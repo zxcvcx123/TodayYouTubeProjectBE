@@ -19,4 +19,5 @@ public class VoteCountDTO {
     private Integer checked_vote_a;
     private Integer checked_vote_b;
     private Integer checked_vote_not;
+
 }

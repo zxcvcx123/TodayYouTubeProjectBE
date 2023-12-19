@@ -58,6 +58,19 @@ public class VoteCountService {
         System.out.println("vote check 동작");
 
         System.out.println("조회 값: " + voteCountMapper.voteCheckedInsert(voteCountDTO));
+        
+        // 로그인 사용자 없는 경우 아무값도 없는거 반환
+        if(voteCountDTO.getVote_member_id().isEmpty() || voteCountDTO.getVote_member_id().isBlank()){
+            VoteCountDTO dto = new VoteCountDTO();
+
+            dto.setChecked_vote_a(0);
+            dto.setChecked_vote_b(0);
+            dto.setVoted_a(0);
+            dto.setVoted_b(0);
+
+            return dto;
+        }
+
         if (voteCountMapper.voteCheckedInsert(voteCountDTO) == 0) {
             if (checked == "voteA") {
                 voteCountDTO.setVoted_a(1);
