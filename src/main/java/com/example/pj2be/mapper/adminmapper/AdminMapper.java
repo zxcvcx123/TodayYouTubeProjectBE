@@ -3,6 +3,7 @@ package com.example.pj2be.mapper.adminmapper;
 import com.example.pj2be.domain.admin.BoardDataDTO;
 import com.example.pj2be.domain.admin.SuspensionDTO;
 import com.example.pj2be.domain.admin.UserDataDTO;
+import com.example.pj2be.domain.page.PaginationDTO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -75,9 +76,10 @@ public interface AdminMapper {
                DATEDIFF( end_date, CURRENT_TIMESTAMP) as remaindate,
                TIMEDIFF( end_date, CURRENT_TIMESTAMP) as remaintime
         FROM suspension
-        WHERE suspension.end_date - current_timestamp > 0;
+        WHERE suspension.end_date - current_timestamp > 0
+        LIMIT #{from}, #{limit}
         """)
-    List<SuspensionDTO> selectSuspensioningMember();
+    List<SuspensionDTO> selectSuspensioningMember(Integer from, Integer limit);
 
 
     @Select("""
@@ -115,4 +117,12 @@ public interface AdminMapper {
         WHERE suspension.member_id = #{memberId};
         """)
     SuspensionDTO selectSuspensionMember(String memberId);
+
+    @Select("""
+        SELECT COUNT(id)
+        FROM suspension
+        WHERE suspension.end_date - current_timestamp > 0;
+        """)
+    int selectAllMember();
+
 }
