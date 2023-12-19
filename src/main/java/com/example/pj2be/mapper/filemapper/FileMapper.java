@@ -57,10 +57,11 @@ public interface FileMapper {
     /* 본문 ck에디터영역에 실제로 저장된 이미지의 게시판 번호 업데이트 (임시저장 기본값 : 0) */
     @Update("""
             UPDATE ck_s3 
-            SET board_id = #{boardId}
+            SET board_id = #{boardId},
+                ck_category = #{category}
             WHERE uuid = #{src}
             """)
-    void ckS3Update(String src, Integer boardId);
+    void ckS3Update(String src, Integer boardId, String category);
 
     // board_id = 0 인 임시 이미지 파일 리턴하기
     @Select("""

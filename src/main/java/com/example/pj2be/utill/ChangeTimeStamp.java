@@ -39,7 +39,7 @@ public class ChangeTimeStamp {
         }
     }
 
-//    날짜 시간빼고 출력
+    //    날짜 시간빼고 출력
     public static String withOutTime(LocalDateTime a) {
 
         LocalDateTime justTime = a.withHour(0).withMinute(0).withSecond(0).withNano(0);
@@ -47,4 +47,21 @@ public class ChangeTimeStamp {
 
     }
 
+    // 초, 분, 시간 제거
+    public static Integer voteTime(LocalDateTime a) {
+
+        if (a == null) {
+            return 0;
+        }
+        // 서울 시간
+        LocalDateTime b = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+
+        if (a.isBefore(b.minusDays(1))) {
+            Period between = Period.between(a.toLocalDate(), b.toLocalDate());
+            return (int) between.get(ChronoUnit.DAYS);
+
+        }
+
+        return 1;
+    }
 }

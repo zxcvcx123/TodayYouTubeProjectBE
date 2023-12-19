@@ -3,12 +3,15 @@ package com.example.pj2be.service.inquiryservice;
 import com.example.pj2be.domain.answer.AnswerDTO;
 import com.example.pj2be.domain.inquiry.InquiryDTO;
 import com.example.pj2be.mapper.inquirymapper.InquiryMapper;
+import com.example.pj2be.service.fileservice.FileService;
 import com.example.pj2be.service.websocketservice.WebSocketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -18,6 +21,7 @@ public class InquiryService {
 
     private final InquiryMapper mapper;
     private final WebSocketService webSocketService;
+    private final FileService fileService;
 
     public Map<String, Object> list(Integer page, InquiryDTO dto) {
 
@@ -79,6 +83,16 @@ public class InquiryService {
     public void add(InquiryDTO dto) {
 
         mapper.insert(dto);
+        System.out.println("게시판 아이디: " + dto.getId());
+        /* 본문 ck에디터영역에 실제로 저장된 이미지 소스코드와 게시물ID 보내기 */
+        if (dto.getUuSrc() != null) {
+            dto.setCk_category("C009");
+            fileService.ckS3Update(dto.getUuSrc(), dto.getId(), dto.getCk_category());
+
+            // 임시로 저장된 이미지 삭제 ( board_id = 0 인 것 )
+            fileService.ckS3DeleteTempImg();
+        }
+
         System.out.println(dto.getInquiry_member_id() + "유저가 " + "문의게시판에 글을 작성하였습니다.(" + dto.getId() + "번 게시물)" );
     }
 
@@ -113,6 +127,19 @@ public class InquiryService {
 
     public void update(InquiryDTO dto) {
 
+        if (dto.getUuSrc() != null) {
+            /* BoardEditDTO의 List<String>타입의 uuSrc를 배열에 담는다. */
+
+            if (dto.getUuSrc() != null) {
+                /* 본문 ck에디터영역에 실제로 저장된 이미지 소스코드와 게시물ID 보내기, 업로드 이미지에 게시물id 부여 */
+                String ck_category = "C009";
+                fileService.ckS3Update(dto.getUuSrc(), dto.getId(), ck_category);
+
+                // 임시로 저장된 이미지 삭제 ( board_id = 0 인 것 )
+                fileService.ckS3DeleteTempImg();
+            }
+        }
+
         mapper.update(dto);
     }
 
@@ -127,4 +154,15 @@ public class InquiryService {
 
 
     }
+
+    public void answerEdit(AnswerDTO dto) {
+        mapper.editAnswer(dto);
+
+
+    }
+
+    public void answerDelete(AnswerDTO dto) {
+        mapper.deleteAnswer(dto);
+    }
+
 }

@@ -35,7 +35,8 @@ public class BoardService {
 
         /* 본문 ck에디터영역에 실제로 저장된 이미지 소스코드와 게시물ID 보내기 */
         if (uuSrc != null) {
-            fileService.ckS3Update(uuSrc, board.getId());
+            String ck_category = "C002";
+            fileService.ckS3Update(uuSrc, board.getId(), ck_category);
 
             // 임시로 저장된 이미지 삭제 ( board_id = 0 인 것 )
             fileService.ckS3DeleteTempImg();
@@ -131,7 +132,8 @@ public class BoardService {
 
             if (uuSrc != null) {
                 /* 본문 ck에디터영역에 실제로 저장된 이미지 소스코드와 게시물ID 보내기, 업로드 이미지에 게시물id 부여 */
-                fileService.ckS3Update(uuSrc, board.getId());
+                String ck_category = "C002";
+                fileService.ckS3Update(uuSrc, board.getId(), ck_category);
 
                 // 임시로 저장된 이미지 삭제 ( board_id = 0 인 것 )
                 fileService.ckS3DeleteTempImg();

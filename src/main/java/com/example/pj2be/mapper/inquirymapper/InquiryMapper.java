@@ -49,7 +49,8 @@ public interface InquiryMapper {
                 i.created_at,
                 i.updated_at,
                 i.answer_status,
-                a.content answerContent
+                a.content answerContent,
+                i.inquiry_category as category_code
         FROM inquiry i JOIN inquirycategory ic on ic.id = i.inquiry_category
          LEFT JOIN youtube.answer a on i.id = a.answer_board_id
         WHERE i.id = #{id}
@@ -67,10 +68,10 @@ public interface InquiryMapper {
 
     @Update("""
         UPDATE inquiry
-        SET id = #{id},
-            title = #{title},
+        SET title = #{title},
             content = #{content},
             inquiry_category = #{inquiry_category}
+        WHERE id = #{id}
         """)
     int update(InquiryDTO dto);
 
@@ -123,5 +124,19 @@ public interface InquiryMapper {
         """)
     List<InquiryDTO> selectByMemberId(String id, Integer from);
 
+
+    @Update("""
+        UPDATE answer
+        SET content = #{content}
+        WHERE answer_board_id = #{answer_board_id}
+        """)
+    int editAnswer(AnswerDTO dto);
+
+
+    @Delete("""
+        DELETE FROM answer
+        WHERE answer_board_id = #{answer_board_id}
+        """)
+    int deleteAnswer(AnswerDTO dto);
 
 }
