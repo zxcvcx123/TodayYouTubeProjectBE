@@ -42,7 +42,8 @@ public class BoardController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("제목, 내용에 공백이 있는지 확인해주세요.");
         }
 
-        if(uuSrc.length > 5){
+
+        if(uuSrc != null && uuSrc.length > 5){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("본문에 첨부한 이미지 개수를 초과했습니다. (최대 5개)");
         }
 
