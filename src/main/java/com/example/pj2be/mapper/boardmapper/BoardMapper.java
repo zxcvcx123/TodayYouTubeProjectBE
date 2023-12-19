@@ -209,9 +209,9 @@ public interface BoardMapper {
                         LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
                         LEFT JOIN comment c ON b.id = c.board_id
                              JOIN category ON b.board_category_code = category.code
-            WHERE b.title like #{keyword} OR
-                  b.content like #{keyword} 
-                   AND b.is_show = true
+            WHERE (b.title like #{keyword} OR
+                  b.content like #{keyword}) 
+                   AND b.is_show = '1'
         """)
     int selectMainAllpage(String keyword, String category);
 
