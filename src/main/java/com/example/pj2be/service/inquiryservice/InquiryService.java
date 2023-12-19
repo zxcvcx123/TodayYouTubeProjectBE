@@ -163,6 +163,10 @@ public class InquiryService {
 
     public void answerDelete(AnswerDTO dto) {
         mapper.deleteAnswer(dto);
+        InquiryDTO inquiryDTO = new InquiryDTO();
+        inquiryDTO.setId(dto.getAnswer_board_id());
+        inquiryDTO.setAnswer_status("답변진행중");
+        mapper.updateAnswerState(inquiryDTO);
     }
 
 }

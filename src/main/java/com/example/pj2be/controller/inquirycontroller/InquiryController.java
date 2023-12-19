@@ -97,7 +97,10 @@ public class InquiryController {
 
     @PostMapping("answer")
     public ResponseEntity answer(@RequestBody AnswerDTO dto) {
-        System.out.println("dto = " + dto);
+
+        if (!dto.getRole_name().equals("운영자")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         service.answerAdd(dto);
         return ResponseEntity.ok().build();
@@ -105,6 +108,11 @@ public class InquiryController {
 
     @PutMapping("answer/edit")
     public ResponseEntity answerEdit(@RequestBody AnswerDTO dto) {
+
+        if (!dto.getRole_name().equals("운영자")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         service.answerEdit(dto);
         return ResponseEntity.ok().build();
 
@@ -112,6 +120,11 @@ public class InquiryController {
 
     @DeleteMapping("answer/delete")
     public ResponseEntity deleteAnswer(@RequestBody AnswerDTO dto) {
+
+        if (!dto.getRole_name().equals("운영자")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         service.answerDelete(dto);
         return ResponseEntity.ok().build();
     }
