@@ -34,7 +34,7 @@ public class FileController {
 
         if(file.getSize() >= 500) {
 
-            if (imgFile <= 5) {
+            if (imgFile < 6) {
                 return ResponseEntity.ok(fileService.ckS3Upload(file));
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
