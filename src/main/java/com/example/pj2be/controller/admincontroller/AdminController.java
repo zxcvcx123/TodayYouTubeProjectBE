@@ -5,6 +5,8 @@ import com.example.pj2be.domain.inquiry.InquiryDTO;
 import com.example.pj2be.domain.page.PaginationDTO;
 import com.example.pj2be.service.adminservice.AdminService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,7 +42,6 @@ public class AdminController {
     public Map<String, Object> suspensionList(@RequestParam (value = "p", defaultValue = "1") Integer page,
                                               PaginationDTO paginationDTO) {
 
-        System.out.println("@@@@@@@@@@@@@@@@@@@@" + page + paginationDTO);
         return adminService.getSuspensionList(page, paginationDTO);
     }
 
@@ -55,8 +56,13 @@ public class AdminController {
 
     // 정지된 회원 정지해제
     @PutMapping("suspension")
-    public void releaseSuspension(@RequestBody SuspensionDTO dto) {
+    public ResponseEntity releaseSuspension(@RequestBody SuspensionDTO dto) {
+
+        if (!dto.getRole_name().equals("운영자")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         adminService.updateSuspension(dto);
+        return ResponseEntity.ok().build();
     }
 }

@@ -84,8 +84,10 @@ public interface AdminMemberMapper {
                 b.created_at,
                 COUNT(b.id) countlike,
                 b.views,
-                b.is_show
+                b.is_show,
+                c.name_eng
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
+        LEFT JOIN youtube.category c on b.board_category_code = c.code
         WHERE board_member_id = #{memberId}
         GROUP BY b.id, b.created_at
         ORDER BY b.created_at DESC

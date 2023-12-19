@@ -77,6 +77,7 @@ public interface AdminMapper {
                TIMEDIFF( end_date, CURRENT_TIMESTAMP) as remaintime
         FROM suspension
         WHERE suspension.end_date - current_timestamp > 0
+        ORDER BY remaindate
         LIMIT #{from}, #{limit}
         """)
     List<SuspensionDTO> selectSuspensioningMember(Integer from, Integer limit);
