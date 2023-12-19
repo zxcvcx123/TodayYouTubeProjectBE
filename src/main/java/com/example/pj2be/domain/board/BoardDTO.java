@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class BoardDTO {
@@ -50,6 +51,13 @@ public class BoardDTO {
     // ---------- 시간 포맷 변경 ----------
     public String getAgo() {
         return ChangeTimeStamp.getAgo(updated_at);
+    }
+
+    // 메인 key 겹쳐서 uuid로 뿌려주기
+    public String getUuid(){
+
+        String uuid = String.valueOf(UUID.randomUUID());
+        return uuid;
     }
 
 
