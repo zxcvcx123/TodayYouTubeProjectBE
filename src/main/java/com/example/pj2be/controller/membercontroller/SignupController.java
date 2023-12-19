@@ -24,6 +24,9 @@ public class SignupController {
         @PostMapping
         public ResponseEntity signup(@Valid @RequestBody MemberDTO memberDTO,
                                      BindingResult bindingResult) {
+
+            memberDTO.setPhone_number("010-0000-0000");
+
             if (bindingResult.hasErrors()) {
                 System.out.println(" bindingerror! ");
                 return ResponseEntity.badRequest().build();
