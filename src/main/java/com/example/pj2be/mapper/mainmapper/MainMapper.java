@@ -119,7 +119,7 @@ public interface MainMapper {
                    b.updated_at
             FROM board b
             JOIN category c ON b.board_category_code = c.code
-            WHERE board_category_code = 'C002'
+            WHERE board_category_code = 'C002' AND b.is_show = 1
             ORDER BY b.created_at DESC
             LIMIT 0, 5 ;
             """)
@@ -130,7 +130,7 @@ public interface MainMapper {
                    b.updated_at
             FROM board b
             JOIN category c ON b.board_category_code = c.code
-            WHERE board_category_code = 'C003'
+            WHERE board_category_code = 'C003' AND b.is_show = 1
             ORDER BY b.created_at DESC
             LIMIT 0, 5 ;
             """)
@@ -141,7 +141,7 @@ public interface MainMapper {
                    b.updated_at
             FROM board b
             JOIN category c ON b.board_category_code = c.code
-            WHERE board_category_code = 'C004'
+            WHERE board_category_code = 'C004' AND b.is_show = 1
             ORDER BY b.created_at DESC
             LIMIT 0, 5 ;
             """)
@@ -152,7 +152,7 @@ public interface MainMapper {
                    b.updated_at
             FROM board b
             JOIN category c ON b.board_category_code = c.code
-            WHERE board_category_code = 'C005'
+            WHERE board_category_code = 'C005' AND b.is_show = 1
             ORDER BY b.created_at DESC
             LIMIT 0, 5 ;
             """)
@@ -163,7 +163,7 @@ public interface MainMapper {
                    b.updated_at
             FROM board b
             JOIN category c ON b.board_category_code = c.code
-            WHERE board_category_code = 'C006'
+            WHERE board_category_code = 'C006' AND b.is_show = 1
             ORDER BY b.created_at DESC
             LIMIT 0, 5 ;
             """)
@@ -174,7 +174,7 @@ public interface MainMapper {
                    b.updated_at
             FROM board b
             JOIN category c ON b.board_category_code = c.code
-            WHERE board_category_code = 'C007'
+            WHERE board_category_code = 'C007' AND b.is_show = 1
             ORDER BY b.created_at DESC
             LIMIT 0, 5 ;
             """)
@@ -185,6 +185,7 @@ public interface MainMapper {
                    b.updated_at
             FROM board b
             JOIN boardlike bl ON b.id = bl.board_id
+            WHERE b.is_show = 1
             GROUP BY b.id, b.views
             ORDER BY COUNT(DISTINCT bl.id) DESC, b.views DESC
             LIMIT 5;
@@ -195,6 +196,7 @@ public interface MainMapper {
             SELECT title, b.id, b.created_at,
                    b.updated_at
             FROM board b
+            WHERE b.is_show = 1
             ORDER BY b.views DESC, b.created_at DESC
             LIMIT 0, 5;
             """)
