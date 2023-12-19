@@ -39,12 +39,16 @@ public class BoardController {
 
         // BoardDTO title, content 유효성 검증 실패시 에러(400) 반환
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("제목, 내용에 공백이 있는지 확인해주세요.");
+        }
+
+        if(uuSrc.length > 5){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("본문에 첨부한 이미지 개수를 초과했습니다. (최대 5개)");
         }
 
         if(files != null){
             if(files.length > 5){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("파일 최대 개수를 초과했습니다. (최대 5개)");
             }
         }
 
@@ -53,8 +57,6 @@ public class BoardController {
         if (!IsLoginMember(board.getBoard_member_id())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
-
 
 
         System.out.println("게시글 작성 category = " + category);
