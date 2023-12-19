@@ -198,4 +198,9 @@ public class MemberInfoService {
 
         return memberInfoMapper.deleteFollowing(followingId, followerId);
     }
+
+    public boolean isMemberFollowing(String loginId, String memberId) {
+        System.out.println("memberInfoMapper.isFollowing(loginId, memberId) != 1 => "+memberInfoMapper.isFollowing(loginId, memberId));
+        return memberInfoMapper.isFollowing(loginId, memberId) != 1;
+    }
 }

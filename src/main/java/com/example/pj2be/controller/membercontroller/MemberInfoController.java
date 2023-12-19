@@ -119,4 +119,10 @@ public class MemberInfoController {
         }
         return null;
     }
-}
+
+    @GetMapping("/isMemberFollowing")
+    public boolean isMemberFollowing(@RequestParam("loginId") String loginId,
+                                     @RequestParam("memberId") String memberId){
+
+        return memberInfoService.isMemberFollowing(loginId, memberId);
+    }}
