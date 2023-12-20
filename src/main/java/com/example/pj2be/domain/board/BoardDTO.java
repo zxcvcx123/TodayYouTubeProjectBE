@@ -49,6 +49,9 @@ public class BoardDTO {
     private Integer rownum;
 
     // ---------- 시간 포맷 변경 ----------
+    private Boolean isYouTubeLink;
+
+    // ---------- 시간 포맷 변경 ----------
     public String getAgo() {
         return ChangeTimeStamp.getAgo(updated_at);
     }

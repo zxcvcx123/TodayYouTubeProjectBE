@@ -13,12 +13,13 @@ public interface BoardMapper {
     // 게시글 저장
     // TODO : 코드, 멤버ID 등 작성시 로그인 정보와 연동 되도록 하기.
     @Insert("""
-        INSERT INTO board (title, link, content, board_category_code, board_member_id)
+        INSERT INTO board (title, link, content, board_category_code, board_member_id, isYouTubeLink)
         VALUES (#{board.title}, 
                 #{board.link}, 
                 #{board.content}, 
                 (SELECT code FROM category WHERE name_eng = #{category.name_eng} ),
-                #{board.board_member_id}
+                #{board.board_member_id},
+                #{board.isYouTubeLink}
                 )
         """)
     @Options(useGeneratedKeys = true, keyProperty = "board.id")
@@ -154,6 +155,7 @@ public interface BoardMapper {
             SET title = #{title},
                 link = #{link},
                 content = #{content},
+                isYouTubeLink = #{isYouTubeLink},
                 updated_at = CURRENT_TIMESTAMP
             WHERE id = #{id}
             """)
