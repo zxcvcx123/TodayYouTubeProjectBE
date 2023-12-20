@@ -35,7 +35,7 @@ public interface AdminMemberMapper {
             JOIN youtube.roles r on m.role_id = r.role_id
             WHERE member_id LIKE #{mid}
             ORDER BY r.role_id, created_at DESC
-            LIMIT #{from}, 20;
+            LIMIT #{from}, 10;
             """)
     List<AdminMemberDTO> selectAllMember(Integer from, String mid);
 
