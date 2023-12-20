@@ -88,6 +88,7 @@ public class MemberController {
         return ResponseEntity.internalServerError().build();
     }
 
+
 //    // 로그인 유지
     @PostMapping("/loginProvider")
     public ResponseEntity<MemberDTO> loginProvider(HttpServletRequest request, HttpServletResponse response) {
@@ -127,6 +128,7 @@ public class MemberController {
         }catch (NullPointerException e){
             memberDTO.setPassword(null);
         }
+        memberLoginService.resolveExpiredJwtCookie(request, response);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
