@@ -182,7 +182,7 @@ public interface MainMapper {
 
     @Select("""
             SELECT b.title, b.id, b.created_at,
-                   b.updated_at
+                   b.updated_at, COUNT(DISTINCT bl.id) AS countlike
             FROM board b
             JOIN boardlike bl ON b.id = bl.board_id
             WHERE b.is_show = 1
@@ -194,7 +194,7 @@ public interface MainMapper {
 
     @Select("""
             SELECT title, b.id, b.created_at,
-                   b.updated_at
+                   b.updated_at, b.views
             FROM board b
             WHERE b.is_show = 1
             ORDER BY b.views DESC, b.created_at DESC
