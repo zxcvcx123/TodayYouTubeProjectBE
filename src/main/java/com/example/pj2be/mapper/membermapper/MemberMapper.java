@@ -102,7 +102,7 @@ public interface MemberMapper {
         SET role_id = '11'
         WHERE member_id = #{memberId}
         """)
-    void changeRoleToSuspension(String memberId);
+    int changeRoleToSuspension(String memberId);
 
     @Update("""
         UPDATE member

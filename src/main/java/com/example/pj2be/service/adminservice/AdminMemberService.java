@@ -7,6 +7,8 @@ import com.example.pj2be.mapper.adminmapper.AdminMemberMapper;
 import com.example.pj2be.mapper.membermapper.MemberMapper;
 import com.example.pj2be.utill.ChangeTimeStamp;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -103,7 +105,7 @@ public class AdminMemberService {
     }
 
     // 회원 정지 진행중
-    public void memberSuspension(SuspensionDTO suspensionDTO) {
+    public ResponseEntity memberSuspension(SuspensionDTO suspensionDTO) {
 //        LocalDateTime endDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         int suspensionDay = 4;
 
@@ -115,16 +117,21 @@ public class AdminMemberService {
             suspensionDay = 999;
         }
 
+        // 회원 이미 정지 상태라면(role변경쿼리 return이 0이라면) --> badRequest
+        if (memberMapper.changeRoleToSuspension(suspensionDTO.getMember_id()) == 0) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        else {
 
-        // 정지 테이블에 추가
-        mapper.insertSuspensionStart(suspensionDTO, suspensionDay);
+            // 회원 테이블의 role을 11번 '정지회원'으로 변경
+            memberMapper.changeRoleToSuspension(suspensionDTO.getMember_id());
 
-        // 회원 테이블의 role을 11번 '정지회원'으로 변경
-        memberMapper.changeRoleToSuspension(suspensionDTO.getMember_id());
+            // 정지 테이블에 추가
+            mapper.insertSuspensionStart(suspensionDTO, suspensionDay);
+            System.out.println(suspensionDTO.getMember_id() + "회원이 " + suspensionDTO.getPeriod() + "일간 정지되었습니다. => 사유(" + suspensionDTO.getReason() +")");
 
-        System.out.println(suspensionDTO.getMember_id() + "회원이 " + suspensionDTO.getPeriod() + "일간 정지되었습니다. => 사유(" + suspensionDTO.getReason() +")");
-        System.out.println(suspensionDTO.getEnd_date());
-        System.out.println(suspensionDTO);
+            return ResponseEntity.ok().build();
+        }
     }
 
 }

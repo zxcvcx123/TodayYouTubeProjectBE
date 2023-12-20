@@ -45,10 +45,10 @@ public class AdminMemberController {
             return ResponseEntity.badRequest().build();
         }
         if (!dto.getRole_name().equals("운영자")) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        service.memberSuspension(dto);
-        return ResponseEntity.ok().build();
+        return service.memberSuspension(dto);
+
     }
 }

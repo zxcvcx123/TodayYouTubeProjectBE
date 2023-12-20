@@ -32,8 +32,6 @@ public class InquiryService {
         // 전체페이지, 보여줄페이지 수, 왼쪽끝페이지, 오른쪽끝페이지, 담페이지, 이전페이지,
         int countAll;
 
-        System.out.println("dto = " + dto);
-
         if (dto.getRole_name().equals("운영자")) {
             countAll = mapper.selectAllpage();
         } else {
@@ -73,6 +71,8 @@ public class InquiryService {
             map.put("inquiryList", mapper.selectByMemberId(dto.getLogin_member_id(), from));
             map.put("pageInfo", pageInfo);
         }
+
+        map.put("inquiryNotice", mapper.selectInquiryNotice());
 
 
 

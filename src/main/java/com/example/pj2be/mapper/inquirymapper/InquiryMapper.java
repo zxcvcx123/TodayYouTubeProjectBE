@@ -139,4 +139,18 @@ public interface InquiryMapper {
         """)
     int deleteAnswer(AnswerDTO dto);
 
+
+    @Select("""
+        SELECT i.id,
+               ic.category as inquiry_category,
+               i.title,
+               i.content,
+               i.inquiry_member_id,
+               i.created_at,
+               i.updated_at,
+               i.answer_status
+        FROM inquiry i JOIN inquirycategory ic ON ic.id = i.inquiry_category
+        WHERE inquiry_category = 5;
+        """)
+    List<InquiryDTO> selectInquiryNotice();
 }
