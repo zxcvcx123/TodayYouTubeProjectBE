@@ -127,6 +127,7 @@ public class MemberController {
         }catch (NullPointerException e){
             memberDTO.setPassword(null);
         }
+        memberLoginService.resolveExpiredJwtCookie(request, response);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
