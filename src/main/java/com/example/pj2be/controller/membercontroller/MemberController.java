@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -47,6 +48,7 @@ public class MemberController {
     //  로그인
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody MemberLoginDTO memberLoginDTO, BindingResult bindingResult, HttpServletResponse response) throws Exception {
+        try{
         log.info("login controller 실행됨");
 
         String member_id = memberLoginDTO.getMember_id();
@@ -73,6 +75,8 @@ public class MemberController {
                 return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
             }
 
+        }}catch (BadCredentialsException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.internalServerError().build() ;
     }
@@ -87,6 +91,7 @@ public class MemberController {
         };
         return ResponseEntity.internalServerError().build();
     }
+
 
 //    // 로그인 유지
     @PostMapping("/loginProvider")
@@ -127,6 +132,7 @@ public class MemberController {
         }catch (NullPointerException e){
             memberDTO.setPassword(null);
         }
+        memberLoginService.resolveExpiredJwtCookie(request, response);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
