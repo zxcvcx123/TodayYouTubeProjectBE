@@ -38,10 +38,10 @@ public class AdminMemberService {
         countAll = mapper.selectAll("%" + mid + "%");
 
         int lastPageNumber = (countAll - 1) / 10 + 1;
-        int startPageNumber = (page - 1) / 10 * 10 + 1;
-        int endPageNumber = (startPageNumber + (10 - 1));
+        int startPageNumber = (page - 1) / 5 * 5 + 1;
+        int endPageNumber = (startPageNumber + (5 - 1));
         endPageNumber = Math.min(endPageNumber, lastPageNumber);
-        int prevPageNumber = startPageNumber - 10;
+        int prevPageNumber = startPageNumber - 5;
         int nextPageNumber = endPageNumber + 1;
         int initialPage = 1;
 
