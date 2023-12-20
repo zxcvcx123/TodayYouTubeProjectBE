@@ -22,6 +22,7 @@ public interface InquiryMapper {
                 a.content answerContent
          FROM inquiry i JOIN inquirycategory ic ON ic.id = i.inquiry_category
          LEFT JOIN youtube.answer a on i.id = a.answer_board_id
+         WHERE i.inquiry_category NOT LIKE '5'
          ORDER BY i.id DESC
          LIMIT #{from}, 10
         """)
@@ -95,6 +96,7 @@ public interface InquiryMapper {
     @Select("""
         SELECT COUNT(*)
         FROM inquiry
+        WHERE inquiry_category NOT LIKE '5';
         """)
     int selectAllpage();
 
