@@ -38,7 +38,6 @@ public class MemberSecurityService implements UserDetailsService {
         }
 
         MemberDTO member = _member.get();
-        System.out.println("로그인 시도한 사용자 = " + member);
         List<GrantedAuthority> authorities = new ArrayList<>();
         if (member.getRole_id() == 1) {
             authorities.add(new SimpleGrantedAuthority(MemberRole.ADMIN.getValue()));
@@ -48,6 +47,9 @@ public class MemberSecurityService implements UserDetailsService {
             System.out.println("loadUserByUsername 실행됨 -> 권한 등록 : "+ authorities);
         }else if(member.getRole_id() == 11) {
             authorities.add(new SimpleGrantedAuthority(MemberRole.SUSPENSIONMEMBER.getValue()));
+            System.out.println("loadUserByUsername 실행됨 -> 권한 등록 : "+ authorities);
+        }else if(member.getRole_id() == 12) {
+            authorities.add(new SimpleGrantedAuthority(MemberRole.WITHDRAWAL.getValue()));
             System.out.println("loadUserByUsername 실행됨 -> 권한 등록 : "+ authorities);
         }
 

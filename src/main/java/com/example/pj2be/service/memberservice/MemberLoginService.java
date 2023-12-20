@@ -1,16 +1,21 @@
 package com.example.pj2be.service.memberservice;
 
 import com.example.pj2be.config.jwt.JwtTokenProvider;
+import com.example.pj2be.domain.member.JwtToken;
 import com.example.pj2be.domain.member.MemberDTO;
 import com.example.pj2be.mapper.membermapper.MemberMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +46,20 @@ public class MemberLoginService {
         cookie.setPath("/");
         response.addCookie(cookie);
     }
+    public Map<String, Object> refreshAccessToken(String refreshToken) throws Exception {
+        if (!jwtTokenProvider.validateToken(refreshToken)) {
+            throw new RuntimeException("유효하지 않은 Refresh Token입니다.");
+        }
 
+        String memberId = jwtTokenProvider.getAuthentication(refreshToken).getName();
+        Authentication authentication = new UsernamePasswordAuthenticationToken(memberId, null);
+        JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
+
+        Map<String, Object> newTokens = new HashMap<>();
+        newTokens.put("accessToken", jwtToken.getAccessToken());
+        newTokens.put("refreshToken", refreshToken);
+        return newTokens;
+    }
     public boolean jwtRefreshTokenValidate(String jwtRefresh){
     return false;
     }

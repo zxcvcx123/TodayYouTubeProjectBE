@@ -31,7 +31,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         try{
             HttpServletRequest req = (HttpServletRequest) request;
             String path = req.getServletPath();
-            if(path.contains("/api/member")){
+            if(path.contains("/api/admin")){
                 System.out.println("(JwtAuthenticationFilter: doFilter)유효성 검증 시작 ==========================================");
                 Map<String, Object> token = getJwtFromCookie(req);
                 String access = (String) token.get("jwtAccess");
@@ -46,6 +46,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                     // SecurtiyContext에 인증 정보 설정
                     System.out.println("(dofilter)권한은? = " + authentication);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                    System.out.println("SecurityContextHolder.getContext().getAuthentication(); " + SecurityContextHolder.getContext().getAuthentication());
+
                 }
 
                 System.out.println( path + " = 유효성 검증 끝 ================================");

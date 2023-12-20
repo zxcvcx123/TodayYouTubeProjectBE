@@ -111,5 +111,11 @@ public interface MemberMapper {
         """)
     void updateByReleaseId(String member_id);
 
+    @Update("""
+        UPDATE member
+        SET role_id = '12'
+        WHERE member_id = #{memberId}
+        """)
+    boolean withdrawalByMemberId(String memberId);
 }
 

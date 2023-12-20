@@ -41,10 +41,10 @@ public class MemberInfoController {
         return myBoardList;
     }
     @GetMapping("/searchMember")
-    public ResponseEntity<MemberDTO> searchMember(@RequestParam("member_id") String member_id){
-        System.out.println("member_id = " + member_id);
-        if(memberInfoService.searchMember(member_id)){
-            MemberDTO memberDTO = memberLoginService.getLoginInfo((member_id));
+    public ResponseEntity<MemberDTO> searchMember(@RequestParam("nickname") String nickname){
+        String memberId = memberInfoService.searchMember(nickname);
+        if(memberId!=null){
+            MemberDTO memberDTO = memberLoginService.getLoginInfo((memberId));
             return ResponseEntity.ok().body(memberDTO);
         }
         return ResponseEntity.badRequest().build();
