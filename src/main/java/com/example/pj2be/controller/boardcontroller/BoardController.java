@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.example.pj2be.utill.MemberAccess.IsLoginMember;
@@ -47,11 +48,13 @@ public class BoardController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("본문에 첨부한 이미지 개수를 초과했습니다. (최대 5개)");
         }
 
+
         if (files != null) {
             if (files.length > 5) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("파일 최대 개수를 초과했습니다. (최대 5개)");
             }
         }
+
 
 
         // 글쓰기 버튼 클릭했는데, 로그인 아이디가 null로 오는 것 검증, 비로그인 사용자는 401 반환
@@ -108,7 +111,8 @@ public class BoardController {
     //@PreAuthorize("isAuthenticated() and ((#board.getBoard_member_id() == #login_member_id) and hasRole('ROLE_GENERAL_MEMBER'))")
     @PutMapping("edit")
     public ResponseEntity edit(BoardDTO board,
-                               @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files) throws Exception {
+                               @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files,
+                               @RequestParam(value = "editUploadFiles", required = false) Integer editFiles)  throws Exception {
         System.out.println(board.getId() + "번 게시물 수정 시작 (컨트롤러)");
         System.out.println("게시글을 작성했던 사용자 아이디 = " + board.getBoard_member_id());
         System.out.println("로그인 중인 사용자 아이디 = " + board.getLogin_member_id());
@@ -121,11 +125,17 @@ public class BoardController {
             return ResponseEntity.ok().build();
         }
 
+        // 파일 유효성
         if (files != null) {
-            if (files.length > 5) {
+            if (files.length + editFiles > 5) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
+        }
 
+        if(files == null){
+            if(editFiles > 5){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
         }
 
 
