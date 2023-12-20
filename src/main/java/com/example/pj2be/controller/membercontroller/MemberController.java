@@ -88,6 +88,7 @@ public class MemberController {
         return ResponseEntity.internalServerError().build();
     }
 
+
 //    // 로그인 유지
     @PostMapping("/loginProvider")
     public ResponseEntity<MemberDTO> loginProvider(HttpServletRequest request, HttpServletResponse response) {
