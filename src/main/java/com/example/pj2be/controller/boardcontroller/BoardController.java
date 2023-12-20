@@ -43,12 +43,12 @@ public class BoardController {
         }
 
 
-        if(uuSrc != null && uuSrc.length > 5){
+        if (uuSrc != null && uuSrc.length > 5) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("본문에 첨부한 이미지 개수를 초과했습니다. (최대 5개)");
         }
 
-        if(files != null){
-            if(files.length > 5){
+        if (files != null) {
+            if (files.length > 5) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("파일 최대 개수를 초과했습니다. (최대 5개)");
             }
         }
@@ -79,7 +79,7 @@ public class BoardController {
 
         System.out.println("@@@@@@@@@@@category = " + category);
 
-            return boardService.list(page, keyword, type, slice, category);
+        return boardService.list(page, keyword, type, slice, category);
 
 
     }
@@ -121,6 +121,14 @@ public class BoardController {
             return ResponseEntity.ok().build();
         }
 
+        if (files != null) {
+            if (files.length > 5) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+
+        }
+
+
         if (MemberChecked(board.getLogin_member_id(), board.getBoard_member_id()) == 1) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -132,13 +140,6 @@ public class BoardController {
         if (MemberChecked(board.getLogin_member_id(), board.getBoard_member_id()) == 3) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-
-        if(files != null){
-            if(files.length > 5){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-            }
-        }
-
 
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -181,7 +182,7 @@ public class BoardController {
     @GetMapping("random")
     public Map<String, Object> randomView() {
 
-      return boardService.randomGet();
+        return boardService.randomGet();
 
     }
 
