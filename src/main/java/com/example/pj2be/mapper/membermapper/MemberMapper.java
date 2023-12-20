@@ -1,10 +1,7 @@
 package com.example.pj2be.mapper.membermapper;
 
 import com.example.pj2be.domain.member.MemberDTO;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.Optional;
 
@@ -117,5 +114,22 @@ public interface MemberMapper {
         WHERE member_id = #{memberId}
         """)
     boolean withdrawalByMemberId(String memberId);
+
+    @Insert("""
+            INSERT INTO member_login_valid (member_id, password) 
+            VALUES (#{memberId},#{encryptPassword})
+            """)
+    void updateMemberLoginInfoForValid(String memberId, String encryptPassword);
+
+    @Select("""
+            SELECT password FROM member_login_valid
+            """)
+    String getMemberLoginValidInfo(String memberId);
+
+    @Delete("""
+            DELETE FROM member_login_valid WHERE member_id = #{memberId}
+            """)
+    boolean deleteMemberLoginInfoForValid(String memberId);
 }
+
 
