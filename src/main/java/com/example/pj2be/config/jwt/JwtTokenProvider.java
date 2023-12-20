@@ -39,10 +39,11 @@ public class JwtTokenProvider {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
         System.out.println("JwtTokenProvider generateToken의 authorities =" + authorities);
+        System.out.println("authentication = " + authentication);
         long now = (new Date()).getTime();
 
         // Access 토큰 생성
-        Date accessTokenExpiresIn = new Date(now + 180000000); // 테스트 용 시간
+        Date accessTokenExpiresIn = new Date(now + 3600000);
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 // 클레임명을 auth라는 이름으로 저장, 실제값: GENERAL_MEMBER
@@ -55,7 +56,7 @@ public class JwtTokenProvider {
 
         // Refresh 토큰 생성
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + 360000000)) // 테스트 용 시간
+                .setExpiration(new Date(now + 86400000))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
@@ -131,4 +132,18 @@ public class JwtTokenProvider {
             return e.getClaims();
         }
     }
+
+    public boolean validateAccessExpired(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+        }catch(ExpiredJwtException e){
+            return true;
+        }
+        return false;
+        }
+
+
 }

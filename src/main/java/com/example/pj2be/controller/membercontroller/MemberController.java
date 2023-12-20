@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.Map;
 
 import static com.example.pj2be.config.security.AESEncryption.*;
@@ -51,42 +53,20 @@ public class MemberController {
         String password = memberLoginDTO.getPassword();
 
         if(!bindingResult.hasErrors()){
-            Map jwtTokenAuthentication = memberService.login(member_id, password);
+            Map<String, Object> jwtTokenAuthentication = memberService.login(member_id, password);
             // 권한 정보
             String tmp = jwtTokenAuthentication.get("authentication").toString();
             String Auth = String.valueOf(tmp.substring(1, tmp.length()-1));
 
             if( Auth.equals(MemberRole.GENERAL_MEMBER.getValue() )|| Auth.equals(MemberRole.ADMIN.getValue()) ){
                 // TODO: 추후 권한에 따른 로직 설정
-
-                String memberId = jwtTokenAuthentication.get("memberInfo").toString();
-                SecretKey key = keyManager.getSecretKey();
-                String encryptMemberId = AESEncryption.encrypt(memberId, key);
-
-                String accessToken = URLEncoder.encode( jwtTokenAuthentication.get("accessToken").toString(),"UTF-8");
-                Cookie jwtAccess = new Cookie("jwtAccess",accessToken);
-                jwtAccess.setHttpOnly(true);
-                jwtAccess.setPath("/");
-                jwtAccess.setMaxAge(60 * 60* 24);
-                response.addCookie(jwtAccess);
-
-                String refreshToken = URLEncoder.encode( jwtTokenAuthentication.get("refreshToken").toString(),"UTF-8");
-                Cookie jwtRefresh = new Cookie("jwtRefresh",refreshToken);
-                jwtRefresh.setHttpOnly(true);
-                jwtRefresh.setPath("/");
-                jwtRefresh.setMaxAge(60 * 60* 24);
-                response.addCookie(jwtRefresh);
-
-                String memberInfo = encryptMemberId;
-                Cookie _mi = new Cookie("_mi", memberInfo);
-                _mi.setHttpOnly(true);
-                _mi.setPath("/");
-                _mi.setMaxAge(60*60*24);
-                response.addCookie(_mi);
-
-
-              return ResponseEntity.ok().build();
-                          } else if (Auth.equals(MemberRole.SUSPENSIONMEMBER.getValue())) {
+                if(memberService.setTokenInHttpOnlyCookie(jwtTokenAuthentication, response)) {
+                    memberService.deleteMemberLoginInfoForValid(member_id);
+                    memberService.setMemberLoginInfoForValid(member_id, password);
+                    return ResponseEntity.ok().build();
+                }
+            }
+            else if (Auth.equals(MemberRole.SUSPENSIONMEMBER.getValue())) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
             } else if (Auth.equals(MemberRole.WITHDRAWAL.getValue())) {
@@ -100,54 +80,97 @@ public class MemberController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request,
                                     HttpServletResponse response){
-        Cookie[] cookies = request.getCookies();
-
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("jwtAccess".equals(cookie.getName())) {
-                    memberLoginService.expireJwtCookie(response, "jwtAccess");
-                }
-                if ("_mi".equals(cookie.getName())) {
-                    memberLoginService.expireJwtCookie(response, "_mi");
-                }
-                if ("jwtRefresh".equals(cookie.getName())) {
-                    memberLoginService.expireJwtCookie(response, "jwtRefresh");
-                }
-                if ("__Secure".equals(cookie.getName())) {
-                    memberLoginService.expireJwtCookie(response, "__Secure");
-                }
-
-            }
+        if(memberLoginService.resolveExpiredJwtCookie(request, response)){
+            MemberDTO memberDTO = validateCookies(request);
+            memberService.deleteMemberLoginInfoForValid(memberDTO.getMember_id());
             return ResponseEntity.ok().build();
-        }
+        };
         return ResponseEntity.internalServerError().build();
     }
 
 //    // 로그인 유지
     @PostMapping("/loginProvider")
-    public ResponseEntity<MemberDTO> loginProvider(HttpServletRequest request) {
+    public ResponseEntity<MemberDTO> loginProvider(HttpServletRequest request, HttpServletResponse response) {
+        MemberDTO memberDTO = validateCookies(request);
+        Map<String, Object> token = getJwtFromCookie(request);
+        String access = (String) token.get("jwtAccess");
+        String refresh = (String) token.get("jwtRefresh");
+        String accessToken = resolveToken(access);
+        try {
+            if (memberService.isTokenExpired(accessToken)) {
+                if (!memberService.isTokenExpired(refresh)) {
+                    try {
+                        if (memberDTO.getMember_id() != null) {
+                            Map<String, Object> jwtTokenAuthentication = memberService.login(memberDTO.getMember_id(), memberDTO.getPassword());
+                            memberDTO.setPassword(null);
+                            memberService.setTokenInHttpOnlyCookie(jwtTokenAuthentication, response);
+                        }
+                    } catch (NullPointerException e) {
+
+                    }
+                } else {
+                    if (memberLoginService.resolveExpiredJwtCookie(request, response)) {
+                        if (memberDTO.getMember_id() != null) {
+                            memberService.deleteMemberLoginInfoForValid(memberDTO.getMember_id());
+                            memberDTO.setMember_id(null);
+                        }
+                    }
+
+                }
+            }
+        }catch (Exception e){}
+        try{
+            if(memberDTO != null ){
+                memberDTO.setPassword(null);
+                return ResponseEntity.ok().body(memberDTO);
+            }
+        }catch (NullPointerException e){
+            memberDTO.setPassword(null);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    private String resolveToken(String token){;
+        if(StringUtils.hasText(token) && token.startsWith("Bearer")){
+            return token.substring(7);
+        }
+        return null;
+    }
+    private Map<String, Object> getJwtFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        Map<String, Object> jwt = new HashMap<>();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("jwtAccess".equals(cookie.getName())) {
+                    jwt.put("jwtAccess",cookie.getValue());
+                }
+                if("jwtRefresh".equals(cookie.getName())){
+                    jwt.put("jwtRefresh", cookie.getValue());
+                }
+            }
+            return jwt;
+        }
+        return null;
+    }
+    private MemberDTO validateCookies(HttpServletRequest request) {
         try {
             Cookie[] cookies = request.getCookies();
             if (cookies != null) {
-
                 for (Cookie cookie : cookies) {
-//                    if ("jwtRefresh".equals(cookie.getName())) {
-//                        memberLoginService.jwtRefreshTokenValidate(cookie.getValue());
-//                        return ResponseEntity.ok().body(memberDTO);
-//                    }
                     if ("_mi".equals(cookie.getName())) {
                         SecretKey key = keyManager.getSecretKey();
                         String memberId = AESEncryption.decrypt(cookie.getValue(), key);
                         MemberDTO memberDTO = memberLoginService.getLoginInfo(memberId);
-                        return ResponseEntity.ok().body(memberDTO);
+                        String password =AESEncryption.decrypt(memberService.getMemberLoginValidInfo(memberId), key);
+                        memberDTO.setPassword(password);
+                        return memberDTO;
+
                     }
                 }
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
-        } catch (Exception e) {
+        }catch (Exception e){
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        return null;
     }
 
         // 회원 정보
