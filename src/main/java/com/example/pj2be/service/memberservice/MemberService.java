@@ -49,4 +49,9 @@ public class MemberService {
         jwtTokenAuthenticationMap.put("memberInfo", member_id);
         return jwtTokenAuthenticationMap;
     }
+
+    public boolean withdrawalMember(String memberId) {
+        System.out.println("memberId = " + memberId);
+        return memberMapper.withdrawalByMemberId(memberId);
+    }
 }

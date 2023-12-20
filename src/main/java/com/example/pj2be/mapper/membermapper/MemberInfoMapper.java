@@ -87,9 +87,9 @@ public interface MemberInfoMapper {
     String getPasswordByMemberId(String member_id);
 
     @Select("""
-            SELECT member_id FROM member WHERE member_id = #{memberId}
+            SELECT member_id FROM member WHERE nickname = #{nickname}
             """)
-    String searchMemberByMemberId(String memberId);
+    String searchMemberByMemberId(String nickname);
 
     @Select("""
             SELECT COUNT(id) FROM member_followers WHERE follower_id = #{follower} AND following_id = #{following}

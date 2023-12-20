@@ -7,6 +7,7 @@ import com.example.pj2be.config.security.SecurityUtil;
 import com.example.pj2be.domain.member.MemberDTO;
 import com.example.pj2be.domain.member.MemberLoginDTO;
 import com.example.pj2be.domain.member.MemberRole;
+import com.example.pj2be.domain.member.MemberUpdateDTO;
 import com.example.pj2be.domain.minihomepy.MiniHomepyCommentDTO;
 import com.example.pj2be.service.memberservice.MemberLoginService;
 import com.example.pj2be.service.memberservice.MemberService;
@@ -88,6 +89,8 @@ public class MemberController {
                           } else if (Auth.equals(MemberRole.SUSPENSIONMEMBER.getValue())) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
+            } else if (Auth.equals(MemberRole.WITHDRAWAL.getValue())) {
+                return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
             }
 
         }
@@ -165,6 +168,16 @@ public class MemberController {
         }
         return ResponseEntity.internalServerError().build();
     }
+
+    @PostMapping("/withdrawal")
+    public ResponseEntity withdrawal(@RequestBody MemberUpdateDTO memberUpdateDTO){
+        String memberId = memberUpdateDTO.getMember_id();
+        if(memberService.withdrawalMember(memberId)){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.internalServerError().build();
+    }
+
     // 테스트
     @PostMapping("/test")
     public String test() {

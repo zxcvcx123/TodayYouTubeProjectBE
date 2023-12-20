@@ -153,8 +153,8 @@ public class MemberInfoService {
         s3.putObject(objectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
     }
 
-    public boolean searchMember(String memberId) {
-        return memberInfoMapper.searchMemberByMemberId(memberId) != null;
+    public String searchMember(String nickname) {
+        return memberInfoMapper.searchMemberByMemberId(nickname);
     }
 
     public boolean addFollowing(MemberFollowDTO memberFollowDTO) {

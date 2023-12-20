@@ -12,10 +12,7 @@ public class MemberUpdateDTO {
         @NotEmpty
         private String member_id;
         private String password;
-        @NotEmpty
         private String nickname;
-        @NotEmpty
         private String email;
-        @NotEmpty
         private String phone_number;
 }
