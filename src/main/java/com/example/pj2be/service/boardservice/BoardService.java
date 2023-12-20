@@ -162,7 +162,7 @@ public class BoardService {
         System.out.println("@@@@@@@@@@@@@@@@@@ " + id + "번 게시글 조회수 증가.");
     }
 
-
+    // 랜덤 추천
     public Map<String, Object> randomGet() {
 
         Random random = new Random();
