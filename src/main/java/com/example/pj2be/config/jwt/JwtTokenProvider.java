@@ -43,7 +43,7 @@ public class JwtTokenProvider {
         long now = (new Date()).getTime();
 
         // Access 토큰 생성
-        Date accessTokenExpiresIn = new Date(now + 1); // 테스트 용 시간
+        Date accessTokenExpiresIn = new Date(now + 3600000);
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 // 클레임명을 auth라는 이름으로 저장, 실제값: GENERAL_MEMBER
@@ -56,7 +56,7 @@ public class JwtTokenProvider {
 
         // Refresh 토큰 생성
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + 30000000)) // 테스트 용 시간
+                .setExpiration(new Date(now + 86400000))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
