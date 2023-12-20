@@ -30,6 +30,7 @@ public class MemberLoginService {
     /*멤버의 프로필 정보 가져오기*/
     public MemberDTO getLoginInfo(String member_id) {
         MemberDTO memberDTO = memberMapper.findLoginInfoByMemberId(member_id);
+
         try {
             String decodedFileName = memberDTO.getImage_name();
             String encodedFileName = URLEncoder.encode(decodedFileName, StandardCharsets.UTF_8.toString());
