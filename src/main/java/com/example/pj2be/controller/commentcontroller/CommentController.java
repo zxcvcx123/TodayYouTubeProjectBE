@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.example.pj2be.utill.MemberAccess.IsLoginMember;
-import static com.example.pj2be.utill.MemberAccess.MemberChecked;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -28,7 +28,6 @@ public class CommentController {
         }
 
         service.commentAdd(commentDTO, member_id);
-        System.out.println("member_id = " + member_id);
         return ResponseEntity.ok().build();
     }
 
@@ -40,9 +39,10 @@ public class CommentController {
     }
 
     @DeleteMapping("{comment_id}")
-    public ResponseEntity commentRemove(@PathVariable Integer comment_id, CommentDTO comment) {
+    public ResponseEntity commentRemove(@PathVariable Integer comment_id, CommentDTO commentDTO) {
 
         service.commentRemove(comment_id);
+
         return ResponseEntity.ok().build();
 
 
@@ -51,8 +51,8 @@ public class CommentController {
     @PutMapping("edit")
     public ResponseEntity commentUpdate(@RequestBody CommentDTO commentDTO) {
 
-
         service.commentUpdate(commentDTO);
+
         return ResponseEntity.ok().build();
 
     }

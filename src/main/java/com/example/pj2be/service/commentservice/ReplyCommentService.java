@@ -14,9 +14,7 @@ public class ReplyCommentService {
     private final ReplyCommentMapper mapper;
 
     public void reply_commentAdd(ReplyCommentDTO replyCommentDTO) {
-        System.out.println("@@@@@@" + replyCommentDTO.getId() + " 댓글 작성 @@@@@@");
-
-        System.out.println("replyCommentDTO = " + replyCommentDTO);
+        System.out.println("@@@@@@ 대댓글 추가한 member_id = " + replyCommentDTO.getMember_id() + " 댓글번호 :" + replyCommentDTO.getComment_id()+ "  @@@@@@") ;
 
         mapper.reply_commentInsert(replyCommentDTO);
     }
@@ -37,9 +35,9 @@ public class ReplyCommentService {
 
     //    ================== 투표 게시판 대댓글 ===================
     public void voteReply_commentAdd(ReplyCommentDTO replyCommentDTO) {
-        System.out.println("@@@@@@" + replyCommentDTO.getComment_id() + " 댓글 작성 @@@@@@");
+        System.out.println("@@@@@@ 대댓글 추가한 member_id = " + replyCommentDTO.getMember_id() + " 댓글번호 :" + replyCommentDTO.getComment_id()+ "  @@@@@@");
 
-        System.out.println("replyCommentDTO = " + replyCommentDTO);
+
 
         mapper.reply_voteCommentInsert(replyCommentDTO);
     }

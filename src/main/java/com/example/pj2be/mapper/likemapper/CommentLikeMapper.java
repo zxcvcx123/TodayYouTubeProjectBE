@@ -29,4 +29,10 @@ public interface CommentLikeMapper {
             WHERE comment_id = #{comment_id}
             """)
     int countByCommentId(Integer comment_id);
+
+    @Delete("""
+            DELETE FROM comment_like
+            WHERE comment_id = #{comment_id}
+            """)
+    int DeleteByCommentId(Integer commentId);
 }

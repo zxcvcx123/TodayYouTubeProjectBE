@@ -36,7 +36,7 @@ public class ReplyCommentController {
     }
 
     @DeleteMapping("{reply_id}")
-    public ResponseEntity reply_commentRemove(@PathVariable Integer reply_id) {
+    public ResponseEntity reply_commentRemove(@PathVariable Integer reply_id, ReplyCommentDTO replyCommentDTO) {
 
         service.reply_commentRemove(reply_id);
         return ResponseEntity.ok().build();
@@ -44,6 +44,8 @@ public class ReplyCommentController {
 
     @PutMapping("edit")
     public ResponseEntity reply_commentUpdate(@RequestBody ReplyCommentDTO replyCommentDTO) {
+
+
         service.reply_commentUpdate(replyCommentDTO);
         return ResponseEntity.ok().build();
     }
