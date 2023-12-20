@@ -185,7 +185,7 @@ public interface MainMapper {
                    b.updated_at, COUNT(DISTINCT bl.id) AS countlike
             FROM board b
             JOIN boardlike bl ON b.id = bl.board_id
-            WHERE b.is_show = 1
+            WHERE b.is_show = 1 AND board_category_code != 'C001'
             GROUP BY b.id, b.views
             ORDER BY COUNT(DISTINCT bl.id) DESC, b.views DESC
             LIMIT 5;
@@ -196,7 +196,7 @@ public interface MainMapper {
             SELECT title, b.id, b.created_at,
                    b.updated_at, b.views
             FROM board b
-            WHERE b.is_show = 1
+            WHERE b.is_show = 1 AND board_category_code != 'C001'
             ORDER BY b.views DESC, b.created_at DESC
             LIMIT 0, 5;
             """)
