@@ -21,7 +21,6 @@ public class MemberDTO {
     private String nickname;
     @NotEmpty
     private String email;
-    @NotEmpty
     private String phone_number;
     private String gender;
     private LocalDate birth_date;

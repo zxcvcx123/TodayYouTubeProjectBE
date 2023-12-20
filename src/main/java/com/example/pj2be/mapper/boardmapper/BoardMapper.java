@@ -137,8 +137,8 @@ public interface BoardMapper {
                         LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
                         LEFT JOIN comment c ON b.id = c.board_id
                              JOIN category ct ON b.board_category_code = ct.code
-            WHERE b.title like #{keyword} OR
-                  b.content like #{keyword} 
+            WHERE (b.title like #{keyword} OR
+                  b.content like #{keyword})
                    AND b.is_show = true
             GROUP BY b.id
             ORDER BY rownum DESC
@@ -204,7 +204,7 @@ public interface BoardMapper {
 
     // 전체 통합검색 게시글 수 조회
     @Select("""
-            SELECT COUNT(b.id)
+            SELECT COUNT(DISTINCT b.id)
             FROM board b 
                         LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
                         LEFT JOIN comment c ON b.id = c.board_id
