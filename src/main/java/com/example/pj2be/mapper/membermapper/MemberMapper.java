@@ -53,7 +53,6 @@ public interface MemberMapper {
 
 
     @Select("""
-        
                  SELECT 
                  (SELECT COUNT(bl2.id) 
                  FROM boardlike bl2 
@@ -122,7 +121,7 @@ public interface MemberMapper {
     void updateMemberLoginInfoForValid(String memberId, String encryptPassword);
 
     @Select("""
-            SELECT password FROM member_login_valid
+            SELECT password FROM member_login_valid WHERE member_id = #{memberId}
             """)
     String getMemberLoginValidInfo(String memberId);
 
