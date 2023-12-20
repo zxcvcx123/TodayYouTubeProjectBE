@@ -4,6 +4,7 @@ import com.example.pj2be.utill.ChangeTimeStamp;
 import lombok.Data;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -26,5 +27,9 @@ public class InquiryDTO {
 
     public String getAgo() {
         return ChangeTimeStamp.getAgo(created_at);
+    }
+
+    public String getWithOutTime() {
+        return ChangeTimeStamp.withOutTime(created_at);
     }
 }
