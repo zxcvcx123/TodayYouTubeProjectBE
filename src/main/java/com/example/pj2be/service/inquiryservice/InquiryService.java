@@ -72,6 +72,7 @@ public class InquiryService {
             map.put("pageInfo", pageInfo);
         }
 
+        // 문의게시판 공지사항글 가져오기
         map.put("inquiryNotice", mapper.selectInquiryNotice());
 
 
