@@ -29,7 +29,7 @@ public interface MainMapper {
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
                      LEFT JOIN comment c ON b.id = c.board_id
                      LEFT JOIN youtube.category ct on ct.code = b.board_category_code
-        WHERE b.created_at >= #{startDay} AND b.created_at <= #{endDay} AND b.link LIKE '%https://%' AND is_show = 1
+        WHERE b.created_at >= #{startDay} AND b.created_at <= #{endDay} AND b.link LIKE '%https://%' AND is_show = 1 AND b.board_category_code not LIKE 'C001'
         GROUP BY b.id, views, b.created_at
         ORDER BY countlike desc, b.views desc, b.created_at, b.id
         LIMIT 4 OFFSET 1;
@@ -55,7 +55,7 @@ public interface MainMapper {
         FROM board b LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
                      LEFT JOIN comment c ON b.id = c.board_id
                      LEFT JOIN youtube.category ct on ct.code = b.board_category_code
-        WHERE b.created_at >= #{startDay} AND b.created_at <= #{endDay} AND b.link LIKE '%https://%' AND is_show = 1
+        WHERE b.created_at >= #{startDay} AND b.created_at <= #{endDay} AND b.link LIKE '%https://%' AND is_show = 1 AND b.board_category_code not LIKE 'C001'
         GROUP BY b.id, views, b.created_at 
         ORDER BY countlike desc, b.views desc, b.created_at, b.id
         LIMIT 0, 1 ;
