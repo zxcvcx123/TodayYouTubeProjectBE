@@ -37,11 +37,11 @@ public class AdminMemberService {
 
         countAll = mapper.selectAll("%" + mid + "%");
 
-        int lastPageNumber = (countAll - 1) / 20 + 1;
-        int startPageNumber = (page - 1) / 20 * 20 + 1;
-        int endPageNumber = (startPageNumber + (20 - 1));
+        int lastPageNumber = (countAll - 1) / 10 + 1;
+        int startPageNumber = (page - 1) / 10 * 10 + 1;
+        int endPageNumber = (startPageNumber + (10 - 1));
         endPageNumber = Math.min(endPageNumber, lastPageNumber);
-        int prevPageNumber = startPageNumber - 20;
+        int prevPageNumber = startPageNumber - 10;
         int nextPageNumber = endPageNumber + 1;
         int initialPage = 1;
 
@@ -60,7 +60,7 @@ public class AdminMemberService {
             pageInfo.put("lastPageNumber", lastPageNumber);
         }
 
-        int from = (page - 1) * 20;
+        int from = (page - 1) * 10;
         map.put("pageInfo", pageInfo);
 
         map.put("memberList", mapper.selectAllMember(from, "%" + mid + "%"));

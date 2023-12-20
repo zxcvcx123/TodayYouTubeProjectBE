@@ -4,6 +4,7 @@ import com.example.pj2be.utill.ChangeTimeStamp;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 public class ReportDTO {
@@ -25,6 +26,13 @@ public class ReportDTO {
     private String category_name;
     public String getAgo() {
         return ChangeTimeStamp.getAgo(report_date);
+    }
+
+    // 메인 key 겹쳐서 uuid로 뿌려주기
+    public String getUuid(){
+
+        String uuid = String.valueOf(UUID.randomUUID());
+        return uuid;
     }
 
 }
