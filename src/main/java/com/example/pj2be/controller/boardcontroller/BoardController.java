@@ -75,7 +75,7 @@ public class BoardController {
             @RequestParam(value = "t", defaultValue = "all") String type,
             @RequestParam(value = "k", defaultValue = "") String keyword,
             @RequestParam(value = "s", defaultValue = "10") Integer slice,
-            @RequestParam(value = "category", defaultValue = "notice") String category) {
+            @RequestParam(value = "category", defaultValue = "sports") String category) {
 
         System.out.println("@@@@@@@@@@@category = " + category);
 
