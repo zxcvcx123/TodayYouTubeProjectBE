@@ -74,6 +74,7 @@ public class BoardController {
     // 페이징 수정했음, 검색카테고리 수정
     @GetMapping("list")
     public Map<String, Object> list(
+
             @RequestParam(value = "p", defaultValue = "1") Integer page,
             @RequestParam(value = "t", defaultValue = "all") String type,
             @RequestParam(value = "k", defaultValue = "") String keyword,
