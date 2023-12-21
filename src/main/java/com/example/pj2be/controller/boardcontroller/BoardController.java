@@ -48,7 +48,6 @@ public class BoardController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("본문에 첨부한 이미지 개수를 초과했습니다. (최대 5개)");
         }
 
-
         if (files != null) {
             if (files.length > 5) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("파일 최대 개수를 초과했습니다. (최대 5개)");
