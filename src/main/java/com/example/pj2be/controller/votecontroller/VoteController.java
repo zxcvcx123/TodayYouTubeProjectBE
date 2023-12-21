@@ -73,6 +73,7 @@ public class VoteController {
                 System.out.println("운영자");
                 voteService.voteBoardDelete(voteDTO);
                 System.out.println("삭제 완료");
+                return ResponseEntity.ok().build();
             }
 
             if (MemberChecked(voteDTO.getLogin_memeber_id(), voteDTO.getVote_member_id()) == 0) {
@@ -81,6 +82,7 @@ public class VoteController {
                 System.out.println("삭제 완료");
                 return ResponseEntity.ok().build();
             }
+
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 

@@ -75,11 +75,11 @@ public class VoteService {
     //
     public boolean voteBoardDelete(VoteDTO voteDTO) {
 
-        if(voteMapper.voteCheckDelete(voteDTO) == 1) {
-            if (voteMapper.voteCountDelete(voteDTO) == 1){
-                return  voteMapper.voteBoardDelete(voteDTO) == 1;
-            }
-        }
-            return false;
+        voteMapper.voteCheckDelete(voteDTO);
+        voteMapper.voteCountDelete(voteDTO);
+
+        return  voteMapper.voteBoardDelete(voteDTO) == 1;
+
+
     }
 }

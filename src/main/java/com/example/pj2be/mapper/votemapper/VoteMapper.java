@@ -102,9 +102,10 @@ public interface VoteMapper {
 
     @Delete("""
             DELETE FROM youtube.vote
-            WHERE id = #{id} AND vote_member_id = #{vote_member_id}
+            WHERE id = #{id}
             """)
     Integer voteBoardDelete(VoteDTO voteDTO);
+
 
     @Delete("""
             DELETE FROM youtube.vote_count
