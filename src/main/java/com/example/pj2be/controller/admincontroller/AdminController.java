@@ -45,14 +45,6 @@ public class AdminController {
         return adminService.getSuspensionList(page, paginationDTO);
     }
 
-    // 정지사용자 정지안내 페이지
-    @GetMapping("suspensionMessage/{member_id}")
-    public SuspensionDTO  suspensionMember(@PathVariable (value = "member_id", required = false) String member_id) {
-
-        System.out.println(member_id);
-        return adminService.getSuspensionMember(member_id);
-    }
-
 
     // 정지된 회원 정지해제
     @PutMapping("suspension")
