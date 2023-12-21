@@ -75,11 +75,10 @@ public interface MemberInfoMapper {
             UPDATE member 
             SET nickname = #{nickname},
                 email = #{email},
-                password = #{password},
-                phone_number = #{phone_number}
+                password = #{password}
             WHERE member_id = #{member_id}
             """)
-    boolean updateMemberInformation(String member_id, String nickname, String email, String password, String phone_number);
+    boolean updateMemberInformation(String member_id, String nickname, String email, String password);
 
     @Select("""
             SELECT password FROM member WHERE member_id = #{member_id}

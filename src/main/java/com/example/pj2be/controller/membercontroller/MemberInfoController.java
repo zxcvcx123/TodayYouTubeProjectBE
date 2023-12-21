@@ -76,8 +76,10 @@ public class MemberInfoController {
                 } catch (EmptyResultDataAccessException e){
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
                 }
+                memberInfoService.updateMemberInformation(memberUpdateDTO);
                 return ResponseEntity.status(HttpStatus.OK).build();
             }
+
             if(memberInfoService.updateMemberInformation(memberUpdateDTO)){
                 return ResponseEntity.status(HttpStatus.OK).build();
             }

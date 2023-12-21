@@ -83,6 +83,7 @@ public class MemberInfoService {
     }
 
     public boolean updateMemberInformation(@Valid MemberUpdateDTO memberUpdateDTO) {
+
         if(memberUpdateDTO.getPassword().length() >= 8){
             String member_id = memberUpdateDTO.getMember_id();
             String nickname = memberUpdateDTO.getNickname();
@@ -90,12 +91,12 @@ public class MemberInfoService {
             String phoneNumber = memberUpdateDTO.getPhone_number();
             if(memberUpdateDTO.getPassword().equals(getPasswordByMemberId(memberUpdateDTO.getMember_id()))){
                 String password = memberUpdateDTO.getPassword();
-                return memberInfoMapper.updateMemberInformation(member_id, nickname, email, password,  phoneNumber);
+                return memberInfoMapper.updateMemberInformation(member_id, nickname, email, password);
             }else {
                 if (validateMemberPassword(memberUpdateDTO.getMember_id(), memberUpdateDTO.getPassword())) {
                     memberUpdateDTO.setPassword(passwordEncoder.encode(memberUpdateDTO.getPassword()));
                     String password = memberUpdateDTO.getPassword();
-                    return memberInfoMapper.updateMemberInformation(member_id, nickname, email, password, phoneNumber);
+                    return memberInfoMapper.updateMemberInformation(member_id, nickname, email, password);
                 }
             }
         }
