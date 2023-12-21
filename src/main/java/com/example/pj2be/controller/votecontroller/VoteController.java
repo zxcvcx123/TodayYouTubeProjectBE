@@ -69,8 +69,8 @@ public class VoteController {
         // 로그인 정보 있는지 없는지 유무 확인
         if (IsLoginMember(voteDTO.getLogin_memeber_id())) {
 
-            if (voteDTO.getRolename().equals("관리자")){
-                System.out.println("관리자");
+            if (voteDTO.getRolename().equals("운영자")){
+                System.out.println("운영자");
                 voteService.voteBoardDelete(voteDTO);
                 System.out.println("삭제 완료");
             }
