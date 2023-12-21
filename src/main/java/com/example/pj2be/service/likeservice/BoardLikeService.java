@@ -31,7 +31,6 @@ public class BoardLikeService {
 
     public Map<String, Object> getBoardLike(BoardLikeDTO boardLikeDTO) {
 
-
         // 게시글 좋아요 갯수
         int countlike = mapper.countLikeByBoardId(boardLikeDTO);
 

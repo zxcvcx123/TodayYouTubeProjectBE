@@ -46,30 +46,43 @@ public class WebSocketController {
 
 
     /* ========== 좋아요 ========== */
-    @MessageMapping("/like/")
-    @SendTo("/topic/like")
-    public Map<String, Object> like(BoardLikeDTO boardLikeDTO) {
 
-        return boardLikeService.getBoardLike(boardLikeDTO);
+    // 특정 누군가에게만 받고 특정 누군가에게만 전달 가능
+    // 웹소켓 통신의 @PathVariable => @DestinationVariable 으로
+    @MessageMapping("/like/{userId}")
+    public void like(@DestinationVariable String userId,
+                     BoardLikeDTO boardLikeDTO) {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("like", boardLikeService.boardLike(boardLikeDTO).get("like"));
+        map.put("memberId", boardLikeDTO.getMember_id());
+        Map<String, Object> countlike = boardLikeService.getBoardLike(boardLikeDTO);
+
+//        System.out.println("좋아요수");
+//        System.out.println(countlike);
+//        System.out.println("===================");
+//        System.out.println("눌렀는지 확인 (1 이면 누름)");
+//        System.out.println(map);
+
+        simpMessagingTemplate.convertAndSend("/topic/like", countlike);
+        simpMessagingTemplate.convertAndSend("/queue/like/" + userId, map);
 
     }
 
 
     // 특정 누군가에게만 받고 특정 누군가에게만 전달 가능
     // 웹소켓 통신의 @PathVariable => @DestinationVariable 으로
-    @MessageMapping("/like/add/{userId}")
-    @SendTo("/queue/like/{userId}")
-    public Map<String, Object> addLike(@DestinationVariable String userId,
-                                       BoardLikeDTO boardLikeDTO) {
+//    @MessageMapping("/like/add/{userId}")
+//    public Map<String, Object> addLike(@DestinationVariable String userId,
+//                                       BoardLikeDTO boardLikeDTO) {
+//
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("like", boardLikeService.boardLike(boardLikeDTO).get("like"));
+//        map.put("memberId", boardLikeDTO.getMember_id());
+//        System.out.println("보내는 데이터: " + map);
+//        return map;
+//    }
 
-        System.out.println("특정 웹소켓: " + boardLikeDTO);
-        System.out.println("특정 웹소켓 계정: " + userId);
-        Map<String, Object> map = new HashMap<>();
-        map.put("like", boardLikeService.boardLike(boardLikeDTO).get("like"));
-        map.put("memberId", boardLikeDTO.getMember_id());
-        System.out.println("보내는 데이터: " + map);
-        return map;
-    }
     /* ========================== */
 
 
@@ -88,25 +101,29 @@ public class WebSocketController {
         // 받을 사람 ID
         String toId = alarmDTO.getReceiver_member_id();
 
+        // 알람 본문
         simpMessagingTemplate.convertAndSend("/queue/comment/alarm/" + toId, list);
 
-    }
-
-    // 댓글알람개수
-    @MessageMapping("/comment/sendalarm/count/{userId}")
-    public void receiverCommentAlarmCount(@DestinationVariable String userId,
-                                          @RequestBody AlarmDTO alarmDTO) {
-
-        // 알림 최신 개수
-        Integer count = webSocketService.getAlarmCount(alarmDTO.getReceiver_member_id());
-
-        // 받을 사람 ID
-        String toId = alarmDTO.getReceiver_member_id();
-
-        // 받을 소켓주소 + ID로 데이터 넘겨주기
+        // 알람 개수
         simpMessagingTemplate.convertAndSend("/queue/comment/alarm/count/" + toId, count);
 
     }
+
+//    // 댓글알람개수
+//    @MessageMapping("/comment/sendalarm/count/{userId}")
+//    public void receiverCommentAlarmCount(@DestinationVariable String userId,
+//                                          @RequestBody AlarmDTO alarmDTO) {
+//
+//        // 알림 최신 개수
+//        Integer count = webSocketService.getAlarmCount(alarmDTO.getReceiver_member_id());
+//
+//        // 받을 사람 ID
+//        String toId = alarmDTO.getReceiver_member_id();
+//
+//        // 받을 소켓주소 + ID로 데이터 넘겨주기
+//        simpMessagingTemplate.convertAndSend("/queue/comment/alarm/count/" + toId, count);
+//
+//    }
 
     // 초기에 알람목록 가져오기 (ajax)
     @PostMapping("api/websocket/alarmlist")
