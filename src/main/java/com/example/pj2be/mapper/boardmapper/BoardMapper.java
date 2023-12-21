@@ -92,7 +92,7 @@ public interface BoardMapper {
                     AND (
                         b.title like #{keyword} OR
                         b.content like #{keyword} OR
-                        b.board_member_id like #{keyword}
+                        m.nickname like #{keyword}
                     )
                 </if>
                 <if test="type == 'title'">
@@ -101,8 +101,8 @@ public interface BoardMapper {
                 <if test="type == 'content'">
                      AND b.content like #{keyword}
                 </if>
-                <if test="type == 'board_member_id'">
-                     AND b.board_member_id like #{keyword}
+                <if test="type == 'nickname'">
+                     AND m.nickname like #{keyword}
                 </if>
                 <if test="category != null">
                     AND category.name_eng = #{category}
@@ -179,12 +179,14 @@ public interface BoardMapper {
         SELECT COUNT(*)
         FROM board b
             JOIN category c on c.code = b.board_category_code
+            JOIN member m on b.board_member_id = m.member_id
+
         <where>
             <if test="type == 'all'">
                 AND (
                     b.title like #{keyword} OR
                     b.content like #{keyword} OR
-                    b.board_member_id like #{keyword}
+                    m.nickname like #{keyword}
                 )
             </if>
             <if test="type == 'title'">
@@ -193,8 +195,8 @@ public interface BoardMapper {
             <if test="type == 'content'">
                 AND b.content like #{keyword}
             </if>
-            <if test="type == 'board_member_id'">
-                AND b.board_member_id like #{keyword}
+            <if test="type == 'nickname'">
+                AND m.nickname like #{keyword}
             </if>
             <if test="category != null">
                 AND (b.board_category_code = c.code AND c.name_eng = #{category})
