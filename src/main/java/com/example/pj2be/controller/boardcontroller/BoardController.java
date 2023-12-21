@@ -55,8 +55,6 @@ public class BoardController {
             }
         }
 
-
-
         // 글쓰기 버튼 클릭했는데, 로그인 아이디가 null로 오는 것 검증, 비로그인 사용자는 401 반환
         if (!IsLoginMember(board.getBoard_member_id())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
