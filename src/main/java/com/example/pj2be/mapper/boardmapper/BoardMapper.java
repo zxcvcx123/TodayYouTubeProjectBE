@@ -80,11 +80,13 @@ public interface BoardMapper {
                     COUNT(DISTINCT bl.id) countlike,
                     COUNT(DISTINCT c.id) count_comment,
                     is_show,
-                    views
+                    views,
+                    m.nickname
             FROM board b 
                         LEFT JOIN youtube.boardlike bl on b.id = bl.board_id
                         LEFT JOIN comment c ON b.id = c.board_id
                              JOIN category ON b.board_category_code = category.code
+                             JOIN member m on b.board_member_id = m.member_id
             <where>
                 <if test="type == 'all'">
                     AND (
