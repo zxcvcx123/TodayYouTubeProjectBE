@@ -109,7 +109,7 @@ public class BoardController {
     @PutMapping("edit")
     public ResponseEntity edit(BoardDTO board,
                                @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files,
-                               @RequestParam(value = "editUploadFiles", required = false) Integer editFiles)  throws Exception {
+                               @RequestParam(value = "editUploadFiles", required = false) Integer editFiles) throws Exception {
         System.out.println(board.getId() + "번 게시물 수정 시작 (컨트롤러)");
         System.out.println("게시글을 작성했던 사용자 아이디 = " + board.getBoard_member_id());
         System.out.println("로그인 중인 사용자 아이디 = " + board.getLogin_member_id());
@@ -129,8 +129,8 @@ public class BoardController {
             }
         }
 
-        if(files == null){
-            if(editFiles > 5){
+        if (files == null) {
+            if (editFiles > 5) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
         }
