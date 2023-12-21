@@ -185,7 +185,6 @@ public class BoardController {
     }
 
     // 랜덤 게시판 보기
-    @Transactional
     @GetMapping("random")
     public Map<String, Object> randomView() {
 
