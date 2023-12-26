@@ -5,7 +5,6 @@ import com.example.pj2be.domain.like.BoardLikeDTO;
 import com.example.pj2be.domain.member.MemberDTO;
 import com.example.pj2be.domain.socket.ChatDTO;
 import com.example.pj2be.mapper.WebSocktMapper.WebSocketMapper;
-import com.example.pj2be.service.inquiryservice.InquiryService;
 import com.example.pj2be.service.likeservice.BoardLikeService;
 import com.example.pj2be.service.websocketservice.WebSocketService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +12,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,36 +53,21 @@ public class WebSocketController {
     public void like(@DestinationVariable String userId,
                      BoardLikeDTO boardLikeDTO) {
 
+        // 좋아요 유무 판단 및 좋아요 데이터 넘겨주기
+        // 좋아요 되어 있는 상태일 때 누르면 취소
+        // 좋아요 안되어 있는 상태일 때 누르면 좋아요
         Map<String, Object> map = new HashMap<>();
         map.put("like", boardLikeService.boardLike(boardLikeDTO).get("like"));
         map.put("memberId", boardLikeDTO.getMember_id());
+
+        // 최신화된 좋아요 수
         Map<String, Object> countlike = boardLikeService.getBoardLike(boardLikeDTO);
 
-//        System.out.println("좋아요수");
-//        System.out.println(countlike);
-//        System.out.println("===================");
-//        System.out.println("눌렀는지 확인 (1 이면 누름)");
-//        System.out.println(map);
-
+        // 각 구독 주소로 데이터 담아서 뿌려주기
         simpMessagingTemplate.convertAndSend("/topic/like", countlike);
         simpMessagingTemplate.convertAndSend("/queue/like/" + userId, map);
 
     }
-
-
-    // 특정 누군가에게만 받고 특정 누군가에게만 전달 가능
-    // 웹소켓 통신의 @PathVariable => @DestinationVariable 으로
-//    @MessageMapping("/like/add/{userId}")
-//    public Map<String, Object> addLike(@DestinationVariable String userId,
-//                                       BoardLikeDTO boardLikeDTO) {
-//
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("like", boardLikeService.boardLike(boardLikeDTO).get("like"));
-//        map.put("memberId", boardLikeDTO.getMember_id());
-//        System.out.println("보내는 데이터: " + map);
-//        return map;
-//    }
-
     /* ========================== */
 
 
